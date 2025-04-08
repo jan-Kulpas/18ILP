@@ -1,0 +1,539 @@
+[
+  {
+    "id": "3",
+    "tracks": [
+      ["SW","R1"],
+      ["S","R1"]
+    ],
+    "color": [
+      "YELLOW"
+    ],
+    "cities": [
+      {"value": 10}
+    ],
+    "upgrades": []
+  },
+  {
+    "id": "5",
+    "tracks": [
+      ["SW","R1"],
+      ["S","R1"]
+    ],
+    "color": [
+      "YELLOW"
+    ],
+    "cities": [
+      {"value": 20, "size": 1}
+    ],
+    "upgrades": ["12","14","15","205","206"]
+  },
+  {
+    "id": "6",
+    "tracks": [
+      ["NW","R1"],
+      ["S","R1"]
+    ],
+    "color": [
+      "YELLOW"
+    ],
+    "cities": [
+      {"value": 20, "size": 1}
+    ],
+    "upgrades": ["12","13","14","15","205","206"]
+  },
+  {
+    "id": "7",
+    "tracks": [
+      ["SW","S"]
+    ],
+    "color": [
+      "YELLOW"
+    ],
+    "upgrades": ["26","27","28","29"]
+  },
+  {
+    "id": "8",
+    "tracks": [
+      ["NW","S"]
+    ],
+    "color": [
+      "YELLOW"
+    ],
+    "upgrades": ["16","19","23","24","25","28","29"]
+  },
+  {
+    "id": "9",
+    "tracks": [
+      ["N","S"]
+    ],
+    "color": [
+      "YELLOW"
+    ],
+    "upgrades": ["19","20","23","24","26","27"]
+  },
+  {
+    "id": "12",
+    "tracks": [
+      ["S","R1"],
+      ["SW","R1"],
+      ["NW","R1"]
+    ],
+    "color": [
+      "GREEN"
+    ],
+    "cities": [
+      {"value": 30, "size": 1}
+    ],
+    "upgrades": ["448","611"]
+  },
+  {
+    "id": "13",
+    "tracks": [
+      ["NE","R1"],
+      ["S","R1"],
+      ["NW","R1"]
+    ],
+    "color": [
+      "GREEN"
+    ],
+    "cities": [
+      {"value": 30, "size": 1}
+    ],
+    "upgrades": ["611"]
+  },
+  {
+    "id": "14",
+    "tracks": [
+      ["NE","R1"],
+      ["S","R1"],
+      ["SW","R1"],
+      ["N","R1"]
+    ],
+    "color": [
+      "GREEN"
+    ],
+    "cities": [
+      {"value": 30, "size": 2}
+    ],
+    "upgrades": ["611"]
+  },
+  {
+    "id": "15",
+    "tracks": [
+      ["S","R1"],
+      ["SW","R1"],
+      ["NW","R1"],
+      ["N","R1"]
+    ],
+    "color": [
+      "GREEN"
+    ],
+    "cities": [
+      {"value": 30, "size": 2}
+    ],
+    "upgrades": ["448","611"]
+  },
+  {
+    "id": "16",
+    "tracks": [
+      ["S","NW"],
+      ["SW","N"]
+    ],
+    "color": [
+      "GREEN"
+    ],
+    "upgrades": []
+  },
+  {
+    "id": "19",
+    "tracks": [
+      ["NW","NE"],
+      ["S","N"]
+    ],
+    "color": [
+      "GREEN"
+    ],
+    "upgrades": ["45","46"]
+  },
+  {
+    "id": "20",
+    "tracks": [
+      ["SW","NE"],
+      ["S","N"]
+    ],
+    "color": [
+      "GREEN"
+    ],
+    "upgrades": ["47"]
+  },
+  {
+    "id": "23",
+    "tracks": [
+      ["S","NE"],
+      ["S","N"]
+    ],
+    "color": [
+      "GREEN"
+    ],
+    "upgrades": ["41","45","47"]
+  },
+  {
+    "id": "24",
+    "tracks": [
+      ["S","NW"],
+      ["S","N"]
+    ],
+    "color": [
+      "GREEN"
+    ],
+    "upgrades": ["42","46","47"]
+  },
+  {
+    "id": "25",
+    "tracks": [
+      ["S","NW"],
+      ["S","NE"]
+    ],
+    "color": [
+      "GREEN"
+    ],
+    "upgrades": ["40","45","46"]
+  },
+  {
+    "id": "26",
+    "tracks": [
+      ["S","SE"],
+      ["S","N"]
+    ],
+    "color": [
+      "GREEN"
+    ],
+    "upgrades": ["42","45"]
+  },
+  {
+    "id": "27",
+    "tracks": [
+      ["S","SW"],
+      ["S","N"]
+    ],
+    "color": [
+      "GREEN"
+    ],
+    "upgrades": ["41","46"]
+  },
+  {
+    "id": "28",
+    "tracks": [
+      ["S","NE"],
+      ["S","SE"]
+    ],
+    "color": [
+      "GREEN"
+    ],
+    "upgrades": ["46"]
+  },
+  {
+    "id": "29",
+    "tracks": [
+      ["S","NW"],
+      ["S","SW"]
+    ],
+    "color": [
+      "GREEN"
+    ],
+    "upgrades": ["45"]
+  },
+  {
+    "id": "39",
+    "tracks": [
+      ["S","NW"],
+      ["S","SW"],
+      ["SW","NW"]
+    ],
+    "color": [
+      "BROWN"
+    ],
+    "upgrades": []
+  },
+  {
+    "id": "40",
+    "tracks": [
+      ["S","NW"],
+      ["S","NE"],
+      ["NW","NE"]
+    ],
+    "color": [
+      "BROWN"
+    ],
+    "upgrades": []
+  },
+  {
+    "id": "41",
+    "tracks": [
+      ["S","N"],
+      ["S","SW"],
+      ["SW","N"]
+    ],
+    "color": [
+      "BROWN"
+    ],
+    "upgrades": []
+  },
+  {
+    "id": "42",
+    "tracks": [
+      ["S","N"],
+      ["S","SE"],
+      ["SE","N"]
+    ],
+    "color": [
+      "BROWN"
+    ],
+    "upgrades": []
+  },
+  {
+    "id": "45",
+    "tracks": [
+      ["S","N"],
+      ["S","NE"],
+      ["NW","N"],
+      ["NW","NE"]
+    ],
+    "color": [
+      "BROWN"
+    ],
+    "upgrades": []
+  },
+  {
+    "id": "46",
+    "tracks": [
+      ["S","N"],
+      ["S","NW"],
+      ["NE","N"],
+      ["NW","NE"]
+    ],
+    "color": [
+      "BROWN"
+    ],
+    "upgrades": []
+  },
+  {
+    "id": "47",
+    "tracks": [
+      ["S","N"],
+      ["S","NE"],
+      ["SW","NE"],
+      ["SW","N"]
+    ],
+    "color": [
+      "BROWN"
+    ],
+    "upgrades": []
+  },
+  {
+    "id": "57",
+    "tracks": [
+      ["S","R1"],
+      ["N","R1"]
+    ],
+    "color": [
+      "YELLOW"
+    ],
+    "cities": [
+      {"value": 20, "size": 1}
+    ],
+    "upgrades": ["14","15"]
+  },
+  {
+    "id": "58",
+    "tracks": [
+      ["S","R1"],
+      ["NW","R1"]
+    ],
+    "color": [
+      "YELLOW"
+    ],
+    "cities": [
+      {"value": 10}
+    ],
+    "upgrades": []
+  },
+  {
+    "id": "205",
+    "tracks": [
+      ["N","R1"],
+      ["S","R1"],
+      ["SW","R1"]
+    ],
+    "color": [
+      "GREEN"
+    ],
+    "cities": [
+      {"value": 30, "size": 1}
+    ],
+    "upgrades": ["448","611"]
+  },
+  {
+    "id": "206",
+    "tracks": [
+      ["N","R1"],
+      ["S","R1"],
+      ["SE","R1"]
+    ],
+    "color": [
+      "GREEN"
+    ],
+    "cities": [
+      {"value": 30, "size": 1}
+    ],
+    "upgrades": ["448","611"]
+  },
+  {
+    "id": "437",
+    "tracks": [
+      ["S","R1"],
+      ["NW","R1"]
+    ],
+    "color": [
+      "YELLOW"
+    ],
+    "cities": [
+      {"value": 30}
+    ],
+    "label": ["Port"],
+    "upgrades": []
+  },
+  {
+    "id": "438",
+    "tracks": [
+      ["S","R1"],
+      ["NW","R1"]
+    ],
+    "color": [
+      "YELLOW"
+    ],
+    "cities": [
+      {"value": 40, "size": 1}
+    ],
+    "label": ["H"],
+    "upgrades": ["439"]
+  },
+  {
+    "id": "439",
+    "tracks": [
+      ["S","R1"],
+      ["NW","R1"],
+      ["NE","R1"]
+    ],
+    "color": [
+      "GREEN"
+    ],
+    "cities": [
+      {"value": 60, "size": 2}
+    ],
+    "label": ["H"],
+    "upgrades": ["492"]
+  },
+  {
+    "id": "440",
+    "tracks": [
+      ["S","R1"],
+      ["NW","R1"],
+      ["SW","R1"]
+    ],
+    "color": [
+      "GREEN"
+    ],
+    "cities": [
+      {"value": 40, "size": 2}
+    ],
+    "label": ["T"],
+    "upgrades": ["466"]
+  },
+  {
+    "id": "448",
+    "tracks": [
+      ["S","R1"],
+      ["NW","R1"],
+      ["SW","R1"],
+      ["N","R1"]
+    ],
+    "color": [
+      "BROWN"
+    ],
+    "cities": [
+      {"value": 40, "size": 2}
+    ],
+    "upgrades": []
+  },
+  {
+    "id": "465",
+    "tracks": [
+      ["S","R1"],
+      ["NW","R1"],
+      ["SW","R1"],
+      ["N","R1"]
+    ],
+    "color": [
+      "BROWN"
+    ],
+    "cities": [
+      {"value": 60, "size": 3}
+    ],
+    "label": ["K"],
+    "upgrades": []
+  },
+  {
+    "id": "466",
+    "tracks": [
+      ["S","R1"],
+      ["NW","R1"],
+      ["SW","R1"]
+    ],
+    "color": [
+      "BROWN"
+    ],
+    "cities": [
+      {"value": 60, "size": 2}
+    ],
+    "label": ["T"],
+    "upgrades": []
+  },
+  {
+    "id": "492",
+    "tracks": [
+      ["S","R1"],
+      ["NW","R1"],
+      ["SW","R1"],
+      ["N","R1"],
+      ["NE","R1"],
+      ["SE","R1"]
+    ],
+    "color": [
+      "BROWN"
+    ],
+    "cities": [
+      {"value": 80, "size": 3}
+    ],
+    "label": ["H"],
+    "upgrades": []
+  },
+  {
+    "id": "611",
+    "tracks": [
+      ["S","R1"],
+      ["NW","R1"],
+      ["SW","R1"],
+      ["N","R1"],
+      ["NE","R1"]
+    ],
+    "color": [
+      "BROWN"
+    ],
+    "cities": [
+      {"value": 40, "size": 2}
+    ],
+    "label": [],
+    "upgrades": []
+  }
+]

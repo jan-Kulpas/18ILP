@@ -4,7 +4,6 @@ from enum import Enum, Flag
 from dataclasses import asdict, dataclass, field, is_dataclass
 from typing import Any, Self
 
-
 class Direction(Enum):
     NE = 1
     SE = 2
@@ -46,7 +45,7 @@ class City:
     size: int
 
 
-@dataclass(frozen=True)
+@dataclass(eq=True, frozen=True)
 class Tile:
     """
     Represents a single tile.
@@ -54,20 +53,24 @@ class Tile:
     Note that this doesn't contain info on the position on board but the contents of the tile.
     """
 
-    id: str
-    tracks: list[tuple[Direction, Direction]]
-    color: Color
-    cities: list[City | Town] = field(default_factory=list)
-    label: str | None = None
-    upgrades: list[str] = field(default_factory=list)
+    id: str = field()
+    tracks: list[tuple[Direction, Direction]] = field(compare=False)
+    color: Color = field()
+    cities: list[City | Town] = field(default_factory=list, compare=False)
+    label: str | None = field(default=None, compare=False)
+    upgrades: list[str] = field(default_factory=list, compare=False)
 
     @property
     def json(self):
         return json.dumps(self, cls=_TileEncoder)
 
     @classmethod
-    def from_json(cls, string) -> Self:
-        return json.loads(string, object_hook=decode_tile)
+    def from_json(cls, string: str) -> Self:
+        return json.loads(string, object_hook=_decode_tile)
+
+    @classmethod
+    def from_dict(cls, dict: dict) -> Self:
+        return cls.from_json(json.dumps(dict))
 
 
 class _TileEncoder(json.JSONEncoder):
@@ -88,7 +91,7 @@ class _TileEncoder(json.JSONEncoder):
         return super().default(obj)
 
 
-def decode_tile(dct: dict) -> Any:
+def _decode_tile(dct: dict) -> Any:
     if "value" in dct:
         if "size" in dct:
             return City(value=dct["value"], size=dct["size"])
@@ -99,7 +102,8 @@ def decode_tile(dct: dict) -> Any:
             id=dct["id"],
             tracks=[(Direction[pair[0]], Direction[pair[1]]) for pair in dct["tracks"]],
             color=Color(sum([Color[name].value for name in dct["color"]])),
-            cities=dct["cities"],
-            label=dct["label"],
+            cities=dct["cities"] if "cities" in dct else [],
+            label=dct["label"] if "label" in dct else None,
             upgrades=dct["upgrades"],
         )
+
