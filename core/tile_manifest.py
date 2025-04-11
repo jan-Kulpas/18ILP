@@ -1,13 +1,9 @@
 import csv
 from pprint import pprint
-from tile import *
+from core.tile import *
 
-TILE_DB_PATH = "data/tiles.json"
 TILE_MANIFEST_PATH = "data/{}/manifest.csv"
 
-TILES: dict[str, Tile] = {tile["id"]: Tile.from_dict(tile) for tile in json.load(open(TILE_DB_PATH))}
-
-pprint(TILES)
 
 class TileManifest:
     def __init__(self, year: str) -> None:
@@ -24,5 +20,3 @@ class TileManifest:
 
     def __repr__(self) -> str:
         return repr(self._tiles)
-
-    
