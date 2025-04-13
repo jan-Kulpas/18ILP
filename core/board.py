@@ -26,7 +26,7 @@ class Board:
         self.preprinted_tiles: dict[str, Tile] = self._load_preprinted(data)
         self._board: dict[Hex, Field] = self._load_board(data)
 
-        #// print(self.preprinted_tiles)
+        # // print(self.preprinted_tiles)
 
     def items(self) -> ItemsView[Hex, Field]:
         return self._board.items()
@@ -43,9 +43,9 @@ class Board:
                 length = chunk[1]
                 for row in range(start, start + length * 2, 2):
                     hex = Hex.from_string(f"{column}{row}")
-                    #// print(f"{column}{row} -> {hex}")
+                    # // print(f"{column}{row} -> {hex}")
                     map[hex] = Field(Tile.blank())
-        
+
         # Add preprinted tiles at specified locations
         for coord, tile_id in preprinted_locations.items():
             hex = Hex.from_string(coord)
@@ -53,11 +53,9 @@ class Board:
             map[hex].tile = tile
 
         return map
-    
+
     def _load_preprinted(self, data: dict[str, Any]) -> dict[str, Any]:
-        return {
-            tile["id"]: Tile.from_dict(tile) for tile in data["tiles"]
-        }
+        return {tile["id"]: Tile.from_dict(tile) for tile in data["tiles"]}
 
     def __getitem__(self, key: Hex) -> Field:
         return self._board[key]

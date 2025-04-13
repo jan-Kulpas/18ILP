@@ -24,9 +24,9 @@ class Hex:
     @classmethod
     def from_doubled(cls, x: int, y: int) -> Hex:
         """Creates a Hex from Double-Height coordinates"""
-        #TODO: Move out the offset to renderer to make 0th hex match 
+        # TODO: Move out the offset to renderer to make 0th hex match
         q = x
-        r = (y - x) // 2 + 1 #! Offset makes Doubled(0,0) mismatch with Cubic(0,0,0)!
+        r = (y - x) // 2 + 1  #! Offset makes Doubled(0,0) mismatch with Cubic(0,0,0)!
         return cls(q, r, -q - r)
 
     @classmethod
@@ -86,7 +86,7 @@ class Hex:
     def neighbour(self, dir: Direction) -> Hex:
         """
         Returns a Hex neighbouring this Hex in the specified direction.
-        
+
         Raises:
             ValueError: Direction should point outside of the hex.
         """
@@ -107,7 +107,8 @@ class Hex:
         return [
             self.center
             + QPointF(
-                SIZE * math.cos(math.pi / 3 * (i-1)), SIZE * math.sin(math.pi / 3 * (i-1))
+                SIZE * math.cos(math.pi / 3 * (i - 1)),
+                SIZE * math.sin(math.pi / 3 * (i - 1)),
             )
             for i in range(6)
         ]
@@ -115,6 +116,7 @@ class Hex:
     @property
     def midpoints(self) -> list[QPointF]:
         """Midpoint pixel of a Hex edge. 0th index is the upper edge. Goes clockwise."""
+
         def lerp(a: QPointF, b: QPointF, t: float) -> QPointF:
             return a + (b - a) * t
 

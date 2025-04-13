@@ -14,14 +14,13 @@ WIDTH = 1200
 HEIGHT = 800
 
 
-
 class Window(QWidget):
     def __init__(self, game: Game):
         super().__init__()
 
         # Window settings
         self.setWindowTitle("18xx-router")
-        self.setGeometry(100, 100, WIDTH, HEIGHT) # On-screen margin and size
+        self.setGeometry(100, 100, WIDTH, HEIGHT)  # On-screen margin and size
 
         # Add closing when focused on window instead of IDE
         self.shortcut = QShortcut(QKeySequence("Ctrl+C"), self)
@@ -31,14 +30,16 @@ class Window(QWidget):
 
     def paintEvent(self, event):
         painter = QPainter(self)
-        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing, False)
 
         # Background
         painter.fillRect(self.rect(), QColor("#f8f9fa"))
 
+        renderer = Renderer(painter)
+
         # Draw the entire board
         for hex, field in self.game.board.items():
-            Renderer.draw_tile(painter, hex, field.tile)
+            renderer.draw_tile(hex, field.tile)
 
     def mousePressEvent(self, event):
         pos = event.pos()

@@ -5,6 +5,8 @@ from enum import Enum, Flag
 from dataclasses import asdict, dataclass, field, is_dataclass
 from typing import Any
 
+type Track = tuple[Direction, Direction]
+
 
 class Direction(Enum):
     """
@@ -50,18 +52,22 @@ class Color(Flag):
     GRAY = 8
     RED = 16
 
+
 # TODO: Make a parent class for these three
 @dataclass(frozen=True)
 class Town:
     """A town. Revenue center which cannot hold any stations"""
+
     value: int = 10
 
 
 @dataclass(frozen=True)
 class City:
     """A city. Revenue center which can hold a number of stations"""
+
     value: int
     size: int
+
 
 # Todo: Handle offboard locations
 # @dataclass(frozen=True)
@@ -86,7 +92,7 @@ class Tile:
     """
 
     id: str = field()
-    tracks: list[tuple[Direction, Direction]] = field(compare=False)
+    tracks: list[Track] = field(compare=False)
     color: Color = field()
     cities: list[City | Town] = field(default_factory=list, compare=False)
     label: str | None = field(default=None, compare=False)
@@ -95,14 +101,14 @@ class Tile:
     @classmethod
     def blank(cls) -> Tile:
         return cls("0", [], Color.BLANK, upgrades=["7", "8", "9"])
-    
+
     # @classmethod
     # def from_id(cls, id: str) -> Tile:
     #     return TILES[id]
 
     @classmethod
     def from_json(cls, string: str) -> Tile:
-        
+
         return json.loads(string, object_hook=_decode_tile)
 
     @classmethod
