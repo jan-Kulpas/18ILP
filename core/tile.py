@@ -8,8 +8,7 @@ from typing import Any
 
 class Direction(Enum):
     """
-    Enum representing direction in which a track may go
-    i.e. edges of a hex or revenue centers located on it.
+    Direction in which a track may go, i.e. edges of a hex or revenue centers located on it.
     """
 
     N = 0
@@ -19,14 +18,24 @@ class Direction(Enum):
     SW = 4
     NW = 5
     # Revenue center indexes
-    R1 = -1
-    R2 = -2
-    R3 = -3
-    R4 = -4
-    R5 = -5
-    R6 = -6
+    R1 = 6
+    R2 = 7
+    R3 = 8
+    R4 = 9
+    R5 = 10
+    R6 = 11
     # Center for Lawsonian tiles:
-    C = -7
+    C = 12
+
+    @property
+    def outside(self) -> bool:
+        """Checks if direction points to a tile border"""
+        return self.value >= 0 and self.value <= 5
+
+    @property
+    def inside(self) -> bool:
+        """Checks if direction points to a city or a junction within a tile"""
+        return not self.outside
 
 
 class Color(Flag):
@@ -41,16 +50,23 @@ class Color(Flag):
     GRAY = 8
     RED = 16
 
-
+# TODO: Make a parent class for these three
 @dataclass(frozen=True)
 class Town:
+    """A town. Revenue center which cannot hold any stations"""
     value: int = 10
 
 
 @dataclass(frozen=True)
 class City:
+    """A city. Revenue center which can hold a number of stations"""
     value: int
     size: int
+
+# Todo: Handle offboard locations
+# @dataclass(frozen=True)
+# class Offboard:
+#    idk
 
 
 @dataclass(eq=True, frozen=True)
@@ -79,18 +95,23 @@ class Tile:
     @classmethod
     def blank(cls) -> Tile:
         return cls("0", [], Color.BLANK, upgrades=["7", "8", "9"])
-
-    @property
-    def json(self):
-        return json.dumps(self, cls=_TileEncoder)
+    
+    # @classmethod
+    # def from_id(cls, id: str) -> Tile:
+    #     return TILES[id]
 
     @classmethod
     def from_json(cls, string: str) -> Tile:
+        
         return json.loads(string, object_hook=_decode_tile)
 
     @classmethod
     def from_dict(cls, dict: dict) -> Tile:
         return cls.from_json(json.dumps(dict))
+
+    @property
+    def json(self):
+        return json.dumps(self, cls=_TileEncoder)
 
 
 class _TileEncoder(json.JSONEncoder):

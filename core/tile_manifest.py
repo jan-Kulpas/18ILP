@@ -6,6 +6,7 @@ TILE_MANIFEST_PATH = "data/{}/manifest.csv"
 
 
 class TileManifest:
+    """Tile Manifest is responsible for keeping track which tiles and how many of them are availble to be placed in game."""
     def __init__(self, year: str) -> None:
         self.year: str = year
         self._tiles: dict[Tile, int] = self._load_tiles()

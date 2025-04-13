@@ -24,21 +24,27 @@ class Hex:
     @classmethod
     def from_doubled(cls, x: int, y: int) -> Hex:
         """Creates a Hex from Double-Height coordinates"""
-        print(x)
+        #TODO: Move out the offset to renderer to make 0th hex match 
         q = x
-        r = (y - x) // 2 + 1
+        r = (y - x) // 2 + 1 #! Offset makes Doubled(0,0) mismatch with Cubic(0,0,0)!
         return cls(q, r, -q - r)
 
     @classmethod
     def from_string(cls, s: str) -> Hex:
         """
         Creates a Hex from a string describing Double-Height coordinates.
+
         e.g. Hex.from_string("C4") is equivalent to Hex.from_doubled(3,4).
         Column A is considered index 1.
+
+        Params:
+            s (str): Double-Height coordinate. Letter part signifies the column and number signifies the row.
+        Raises:
+            ValueError: Input string did not map to a valid coordinate.
         """
         match = re.fullmatch(r"([A-Z]+)(\d+)", s)
         if not match:
-            raise ValueError(f"Invalid format: {s}")
+            raise ValueError(f"Input string did not map to a valid coordinate: {s}")
 
         col_str, row_str = match.groups()
 
@@ -77,31 +83,42 @@ class Hex:
 
         return Hex(q, r, s)
 
-    def neighbour(self, dir: Direction):
+    def neighbour(self, dir: Direction) -> Hex:
+        """
+        Returns a Hex neighbouring this Hex in the specified direction.
+        
+        Raises:
+            ValueError: Direction should point outside of the hex.
+        """
+        if not dir.outside:
+            raise ValueError(f"Direction should point outside of the hex: {dir}")
         return self + UNITS[dir.value]
 
     @property
     def center(self) -> QPointF:
+        """The center pixel of the Hex."""
         x = SIZE * (3 / 2 * self.q)
         y = SIZE * (math.sqrt(3) / 2 * self.q + math.sqrt(3) * self.r)
         return QPointF(x, y)
 
     @property
     def corners(self) -> list[QPointF]:
+        """Corner pixels of the Hex. 0th index is first corner clockwise from midnight."""
         return [
             self.center
             + QPointF(
-                SIZE * math.cos(math.pi / 3 * i), SIZE * math.sin(math.pi / 3 * i)
+                SIZE * math.cos(math.pi / 3 * (i-1)), SIZE * math.sin(math.pi / 3 * (i-1))
             )
             for i in range(6)
         ]
 
     @property
     def midpoints(self) -> list[QPointF]:
+        """Midpoint pixel of a Hex edge. 0th index is the upper edge. Goes clockwise."""
         def lerp(a: QPointF, b: QPointF, t: float) -> QPointF:
             return a + (b - a) * t
 
-        return [lerp(self.corners[i], self.corners[(i + 1) % 6], 0.5) for i in range(6)]
+        return [lerp(self.corners[i], self.corners[(i - 1) % 6], 0.5) for i in range(6)]
 
     def __add__(self, other: Hex) -> Hex:
         return Hex(self.q + other.q, self.r + other.r, self.s + other.s)
@@ -111,6 +128,7 @@ class Hex:
         row = 2 * self.r + self.q
         return f"Hex({chr(ord('A')+col-1)}{row-1})"
 
+
 UNITS = [
     Hex(0, -1, 1),
     Hex(1, -1, 0),
@@ -119,5 +137,3 @@ UNITS = [
     Hex(-1, 1, 0),
     Hex(-1, 0, 1),
 ]
-
-print(Hex.from_cubic_float(1.4, 3.1, 6.7))
