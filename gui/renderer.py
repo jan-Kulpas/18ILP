@@ -1,13 +1,5 @@
-from PyQt6.QtGui import (
-    QPainter,
-    QPen,
-    QColor,
-    QBrush,
-    QPainterPath,
-    QShortcut,
-    QKeySequence,
-)
-from PyQt6.QtCore import Qt, QPointF
+from PyQt6.QtGui import QPainter, QPen, QColor, QBrush, QPainterPath, QImage
+from PyQt6.QtCore import Qt, QPoint, QPointF, QSize
 
 from core.tile import *
 from core.game import *
@@ -27,15 +19,43 @@ def lerp(a: QPointF, b: QPointF, t: float) -> QPointF:
     return a + (b - a) * t
 
 
+# TODO: Add support for drawing only a hex bounding box
+# TODO: Add bounding box calculation to Hex.
+class BufferedPainter:
+    def __init__(
+        self,
+        main_painter: QPainter,
+        size: QSize,
+        position: QPoint = QPoint(0, 0),
+    ):
+        self.main_painter = main_painter
+        self.size = size
+        self.position = position
+        self.img = QImage(size, QImage.Format.Format_ARGB32_Premultiplied)
+        self.img.fill(Qt.GlobalColor.transparent)
+
+    def __enter__(self):
+        self.painter = QPainter(self.img)
+        self.painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+        return self.painter
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.painter.end()
+        self.main_painter.drawImage(self.position, self.img)
+
+
 class Renderer:
     painter: QPainter
+    size: QSize
 
-    def __init__(self, painter: QPainter) -> None:
+    def __init__(self, painter: QPainter, size: QSize) -> None:
         self.painter = painter
+        self.size = size
 
     def draw_tile(self, hex: Hex, tile: Tile) -> None:
         self._draw_hex(hex, TILE_COLORS[tile.color])
 
+        # TODO: Split it into tile groups based on city they are going to
         self._draw_track_group(hex, tile.tracks)
 
     def _draw_hex(self, hex: Hex, color: QColor) -> None:
@@ -45,10 +65,6 @@ class Renderer:
         self.painter.drawPolygon(*hex.corners)
         self.painter.drawText(hex.center, str(hex))
 
-        # #? remove later
-        # painter.drawText(hex.corners[0], str(0))
-        # painter.drawText(hex.midpoints[0], str(0))
-
     def _draw_track_group(self, hex: Hex, group: list[Track]) -> None:
         track_pens = [
             QPen(QColor("#FFFFFF"), 8),
@@ -56,17 +72,17 @@ class Renderer:
         ]
         paths = [self._calculate_path(hex, track) for track in group]
 
-        for pen in track_pens:
-            for path in paths:
-                self.painter.setPen(pen)
-                self.painter.drawPath(path)
+        with BufferedPainter(self.painter, self.size) as buffer:
+            for pen in track_pens:
+                for path in paths:
+                    buffer.setPen(pen)
+                    buffer.drawPath(path)
 
     def _calculate_path(self, hex: Hex, track: Track) -> QPainterPath:
         e1, e2 = track
 
-        # Set endpoint position based on whether it goes to hex edge or a city
-        p1 = hex.midpoints[e1.value] if e1.value <= 5 else hex.center
-        p2 = hex.midpoints[e2.value] if e2.value <= 5 else hex.center
+        p1 = hex.track_exit(e1)
+        p2 = hex.track_exit(e2)
         middle = lerp(p1, p2, 0.5)
 
         # Pull control point towards center to make it actually curvy
