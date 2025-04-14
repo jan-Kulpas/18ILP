@@ -10,8 +10,10 @@ from core.tile import Direction
 
 SIZE = 50
 
+
 def lerp(a: QPointF, b: QPointF, t: float) -> QPointF:
-            return a + (b - a) * t
+    return a + (b - a) * t
+
 
 @dataclass(eq=True, frozen=True)
 class Hex:
@@ -120,11 +122,11 @@ class Hex:
         """Midpoint pixel of a Hex edge. 0th index is the upper edge. Goes clockwise."""
 
         return [lerp(self.corners[i], self.corners[(i - 1) % 6], 0.5) for i in range(6)]
-    
+
     @property
     def citypoints(self) -> list[QPointF]:
         return [lerp(self.midpoints[i], self.center, 0.5) for i in range(6)]
-    
+
     def track_exit(self, dir: Direction):
         # ! This ties the city position to the json data which should be avoided.
         if dir.outside:

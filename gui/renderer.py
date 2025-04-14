@@ -1,3 +1,5 @@
+from collections import defaultdict
+from itertools import zip_longest
 from PyQt6.QtGui import QPainter, QPen, QColor, QBrush, QPainterPath, QImage
 from PyQt6.QtCore import Qt, QPoint, QPointF, QSize
 
@@ -14,6 +16,9 @@ TILE_COLORS = {
     Color.RED: QColor("#E6262D"),
 }
 
+CITY_RADIUS = 12
+TOWN_RADIUS = 7
+
 
 def lerp(a: QPointF, b: QPointF, t: float) -> QPointF:
     return a + (b - a) * t
@@ -27,19 +32,19 @@ class BufferedPainter:
         main_painter: QPainter,
         size: QSize,
         position: QPoint = QPoint(0, 0),
-    ):
+    ) -> None:
         self.main_painter = main_painter
         self.size = size
         self.position = position
         self.img = QImage(size, QImage.Format.Format_ARGB32_Premultiplied)
         self.img.fill(Qt.GlobalColor.transparent)
 
-    def __enter__(self):
+    def __enter__(self) -> QPainter:
         self.painter = QPainter(self.img)
         self.painter.setRenderHint(QPainter.RenderHint.Antialiasing)
         return self.painter
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
+    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
         self.painter.end()
         self.main_painter.drawImage(self.position, self.img)
 
@@ -55,15 +60,25 @@ class Renderer:
     def draw_tile(self, hex: Hex, tile: Tile) -> None:
         self._draw_hex(hex, TILE_COLORS[tile.color])
 
-        # TODO: Split it into tile groups based on city they are going to
-        self._draw_track_group(hex, tile.tracks)
+        groups = self._group_tracks(tile.tracks)
+
+        # ?: maybe do this at some point
+        # ?: or split tile.tracks into tile.segments with baked in towns?
+        # ! This is really ugly and could be improved by making track into a class with a getCity method
+        for group, city in zip_longest(groups, tile.cities):
+            if group:
+                self._draw_track_group(hex, group)
+            if city:
+                self._draw_city(hex, city, group)
+
+        label_location = lerp(hex.center, hex.corners[-1], 0.65) - QPointF(5, 0)
+        self.painter.drawText(label_location, tile.label)
 
     def _draw_hex(self, hex: Hex, color: QColor) -> None:
         brush = QBrush(color)
         self.painter.setBrush(brush)
         self.painter.setPen(QPen(Qt.GlobalColor.black, 2))
         self.painter.drawPolygon(*hex.corners)
-        self.painter.drawText(hex.center, str(hex))
 
     def _draw_track_group(self, hex: Hex, group: list[Track]) -> None:
         track_pens = [
@@ -94,3 +109,64 @@ class Renderer:
         path.quadTo(ctrl, p2)
 
         return path
+
+    def _group_tracks(self, tracks: list[Track]) -> list[list[Track]]:
+        outside: list[Track] = []
+        inside = defaultdict(list)
+        for a, b in tracks:
+            if a.outside and b.outside:
+                outside.append(
+                    (a, b)
+                )  # ! Does not properly allow for rendering bridges on cityless tiles.
+            else:
+                inside_dir = a if a.inside else b  # only one will be inside
+                inside[inside_dir].append((a, b))
+
+        sorted_inside = [
+            inside[dir] for dir in sorted(inside.keys(), key=lambda d: d.value)
+        ]
+        if len(outside) > 0:
+            sorted_inside.append(outside)
+
+        return sorted_inside
+
+    def _draw_city(self, hex: Hex, city: Town | City, group: list[Track]) -> None:
+        location = hex.track_exit(Direction.C)
+
+        if group:
+            a, b = group[0]
+            location = hex.track_exit(a) if a.inside else hex.track_exit(b)
+
+        if isinstance(city, Town):
+            self.painter.setBrush(QBrush(Qt.GlobalColor.black))
+            self.painter.drawEllipse(location, TOWN_RADIUS, TOWN_RADIUS)
+        elif isinstance(city, City):
+            self.painter.setBrush(QBrush(Qt.GlobalColor.white))
+            points = []
+            if city.size == 1:
+                points = [location]
+            elif city.size == 2:
+                points = [
+                    QPointF(location.x() - CITY_RADIUS, location.y()),
+                    QPointF(location.x() + CITY_RADIUS, location.y()),
+                ]
+            elif city.size == 3:
+                points = [
+                    QPointF(
+                        location.x() - CITY_RADIUS, location.y() + CITY_RADIUS * 0.5
+                    ),
+                    QPointF(
+                        location.x() + CITY_RADIUS, location.y() + CITY_RADIUS * 0.5
+                    ),
+                    QPointF(location.x(), location.y() - CITY_RADIUS * 1.2),
+                ]
+            else:
+                points = []
+
+            for pt in points:
+                self.painter.drawEllipse(pt, CITY_RADIUS, CITY_RADIUS)
+
+        # ? Consider doing this after rewrite to Tile.Segment
+        # ! The values will overlap if there are two cities!!!
+        value_location = lerp(hex.center, hex.corners[0], 0.65) - QPointF(5, 0)
+        self.painter.drawText(value_location, str(city.value))
