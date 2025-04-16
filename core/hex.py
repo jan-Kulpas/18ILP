@@ -119,15 +119,21 @@ class Hex:
 
     @property
     def midpoints(self) -> list[QPointF]:
-        """Midpoint pixel of a Hex edge. 0th index is the upper edge. Goes clockwise."""
+        """Midpoint pixels of Hex edges. 0th index is the upper edge. Goes clockwise."""
 
         return [lerp(self.corners[i], self.corners[(i - 1) % 6], 0.5) for i in range(6)]
 
     @property
     def citypoints(self) -> list[QPointF]:
+        """Center pixels of cities R1-R6 on the tile, 0th index is first point clockwise starting *with* midnight."""
         return [lerp(self.midpoints[i], self.center, 0.5) for i in range(6)]
 
     def track_exit(self, dir: Direction):
+        """
+        Returns either a midpoint, a citypoint or the hex center based on Direction.
+
+        The ending pixel of a track path.
+        """
         # ! This ties the city position to the json data which should be avoided.
         if dir.outside:
             return self.midpoints[dir.value]

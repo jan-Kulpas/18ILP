@@ -8,7 +8,9 @@ MANIFEST_PATH = "data/{}/manifest.json"
 
 
 class Manifest:
-    """Tile Manifest is responsible for keeping track which tiles and how many of them are availble to be placed in game."""
+    """
+    The Manifest is responsible for keeping track of the components available in the game
+    """
 
     def __init__(self, year: str) -> None:
         self.year: str = year

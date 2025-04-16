@@ -8,6 +8,19 @@ from core.train import Train
 
 @dataclass(frozen=True)
 class Railway:
+    """
+    A player entity. Collects trains and runs them during their turn.
+
+    The maximum possible revenue from a given train depends on which Railway
+    it belongs to as that influences which stations are passable.
+
+    Attributes:
+        name(str): ID of the Railway.
+        home(Hex): Coordinates of the city/town that will contain the first station when it gets floated.
+        trains(list[Train]): List of Trains belonging to this Railway.
+        floated(bool): Whether the railway is active or not.
+    """
+
     name: str = field()
     home: Hex = field()
     trains: list[Train] = field(default_factory=list, compare=False)

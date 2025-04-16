@@ -27,6 +27,16 @@ def lerp(a: QPointF, b: QPointF, t: float) -> QPointF:
 # TODO: Add support for drawing only a hex bounding box
 # TODO: Add bounding box calculation to Hex.
 class BufferedPainter:
+    """
+    A helper class that takes in a QPainter and
+    returns another painter that draws to a transparent image instead.
+    
+    Upon exiting the with block, the image is automatically combined with the main painter's canvas.
+
+    This is done to avoid an issue where the background color 
+    bleeds into the drawn object when painting directly
+    """
+
     def __init__(
         self,
         main_painter: QPainter,
@@ -58,6 +68,7 @@ class Renderer:
         self.size = size
 
     def draw_tile(self, hex: Hex, tile: Tile) -> None:
+        """Draws a given Tile on the given Hex along with all its features."""
         self._draw_hex(hex, TILE_COLORS[tile.color])
 
         groups = self._group_tracks(tile.tracks)
@@ -75,12 +86,14 @@ class Renderer:
         self.painter.drawText(label_location, tile.label)
 
     def _draw_hex(self, hex: Hex, color: QColor) -> None:
+        """Draws a Tile background in the given color"""
         brush = QBrush(color)
         self.painter.setBrush(brush)
         self.painter.setPen(QPen(Qt.GlobalColor.black, 2))
         self.painter.drawPolygon(*hex.corners)
 
     def _draw_track_group(self, hex: Hex, group: list[Track]) -> None:
+        """Draws a list of tracks together so that the outlines don't overlap."""
         track_pens = [
             QPen(QColor("#FFFFFF"), 8),
             QPen(QColor("#000000"), 4),
@@ -94,6 +107,7 @@ class Renderer:
                     buffer.drawPath(path)
 
     def _calculate_path(self, hex: Hex, track: Track) -> QPainterPath:
+        """Returns a path along which a given Track should be drawn."""
         e1, e2 = track
 
         p1 = hex.track_exit(e1)
@@ -111,6 +125,8 @@ class Renderer:
         return path
 
     def _group_tracks(self, tracks: list[Track]) -> list[list[Track]]:
+        """Groups tracks going to the same town into batches that will get drawn together."""
+
         outside: list[Track] = []
         inside = defaultdict(list)
         for a, b in tracks:
@@ -131,6 +147,7 @@ class Renderer:
         return sorted_inside
 
     def _draw_city(self, hex: Hex, city: Town | City, group: list[Track]) -> None:
+        """Draws a city or a town on the hex."""
         location = hex.track_exit(Direction.C)
 
         if group:

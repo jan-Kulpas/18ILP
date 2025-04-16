@@ -5,6 +5,7 @@ from enum import Enum, Flag
 from dataclasses import asdict, dataclass, field, is_dataclass
 from typing import Any
 
+# TODO: Replace with Segment containing root city and branching outside edges.
 type Track = tuple[Direction, Direction]
 
 
@@ -56,14 +57,25 @@ class Color(Flag):
 # TODO: Make a parent class for these three
 @dataclass(frozen=True)
 class Town:
-    """A town. Revenue center which cannot hold any stations"""
+    """
+    A town. Revenue center which cannot hold any stations
+
+    Attributes:
+        value(int): Money earned for visiting the city.
+    """
 
     value: int = 10
 
 
 @dataclass(frozen=True)
 class City:
-    """A city. Revenue center which can hold a number of stations"""
+    """
+    A city. Revenue center which can hold a number of stations
+
+    Attributes:
+        value(int): Money earned for visiting the city.
+        size(int): The amount of stations that can be maximally present in the city,
+    """
 
     value: int
     size: int
@@ -78,7 +90,7 @@ class City:
 @dataclass(eq=True, frozen=True)
 class Tile:
     """
-    Represents a single tile.
+    A single tile that can be placed on the board.
 
     Note that this doesn't contain info on the position on board but the contents of the tile.
 
