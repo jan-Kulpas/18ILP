@@ -6,6 +6,7 @@ from PyQt6.QtCore import Qt, QPoint, QPointF, QSize
 from core.tile import *
 from core.game import *
 from core.hex import Hex
+from gui.helpers import lerp
 
 TILE_COLORS = {
     Color.BLANK: QColor("#E6E6E6"),
@@ -20,20 +21,16 @@ CITY_RADIUS = 12
 TOWN_RADIUS = 7
 
 
-def lerp(a: QPointF, b: QPointF, t: float) -> QPointF:
-    return a + (b - a) * t
-
-
 # TODO: Add support for drawing only a hex bounding box
 # TODO: Add bounding box calculation to Hex.
 class BufferedPainter:
     """
     A helper class that takes in a QPainter and
     returns another painter that draws to a transparent image instead.
-    
+
     Upon exiting the with block, the image is automatically combined with the main painter's canvas.
 
-    This is done to avoid an issue where the background color 
+    This is done to avoid an issue where the background color
     bleeds into the drawn object when painting directly
     """
 

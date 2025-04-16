@@ -1,15 +1,17 @@
+from __future__ import annotations
 from collections import namedtuple
 from pprint import pprint
 
 from core.railway import Train
 from core.tile import *
+from tools.exceptions import RuleError
 
 MANIFEST_PATH = "data/{}/manifest.json"
 
 
-class Manifest:
+class Bank:
     """
-    The Manifest is responsible for keeping track of the components available in the game
+    The Bank is responsible for keeping track of the components available in the game
     """
 
     def __init__(self, year: str) -> None:
@@ -20,6 +22,16 @@ class Manifest:
 
         self.tiles: dict[str, int] = self._load_tiles(data)
         self.trains: dict[str, int] = self._load_trains(data)
+
+    def take_tile(self, tile: Tile) -> None:
+        if self.tiles[tile.id] == 0:
+            raise RuleError("There are no more copies of this tile in the Bank.")
+        self.tiles[tile.id] -= 1
+
+    def take_train(self, train: Train) -> None:
+        if self.trains[train.id] == 0:
+            raise RuleError("There are no more copies of this train in the Bank.")
+        self.trains[train.id] -= 1
 
     def _load_tiles(self, data: dict[str, Any]) -> dict[str, int]:
         return {key: int(value) for key, value in data["tiles"].items()}

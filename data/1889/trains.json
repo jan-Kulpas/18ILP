@@ -4,7 +4,7 @@
         "range": 2,
         "phase": {
             "color": "YELLOW",
-            "limit": "4"
+            "limit": 4
         }
     },
     {
@@ -12,7 +12,7 @@
         "range": 3,
         "phase": {
             "color": "GREEN",
-            "limit": "4"
+            "limit": 4
         }
     },
     {
@@ -20,7 +20,7 @@
         "range": 4,
         "phase": {
             "color": "GREEN",
-            "limit": "3",
+            "limit": 3,
             "rusts": "2"
         }
     },
@@ -29,7 +29,7 @@
         "range": 5,
         "phase": {
             "color": "BROWN",
-            "limit": "2"
+            "limit": 2
         }
     },
     {
@@ -37,7 +37,7 @@
         "range": 6,
         "phase": {
             "color": "BROWN",
-            "limit": "2",
+            "limit": 2,
             "rusts": "3"
         }
     },
@@ -46,7 +46,7 @@
         "diesel": true,
         "phase": {
             "color": "GRAY",
-            "limit": "2",
+            "limit": 2,
             "rusts": "4"
         }
     }

@@ -7,12 +7,9 @@ from dataclasses import dataclass
 from PyQt6.QtCore import QPoint, QPointF
 
 from core.tile import Direction
+from gui.helpers import lerp
 
 SIZE = 50
-
-
-def lerp(a: QPointF, b: QPointF, t: float) -> QPointF:
-    return a + (b - a) * t
 
 
 @dataclass(eq=True, frozen=True)

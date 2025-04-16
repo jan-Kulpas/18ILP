@@ -6,7 +6,7 @@ from core.hex import Hex
 from core.train import Train
 
 
-@dataclass(frozen=True)
+@dataclass()
 class Railway:
     """
     A player entity. Collects trains and runs them during their turn.
