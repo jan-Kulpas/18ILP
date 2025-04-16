@@ -1,7 +1,7 @@
 from collections import namedtuple
 from pprint import pprint
 
-from core.railroad import Train
+from core.railway import Train
 from core.tile import *
 
 MANIFEST_PATH = "data/{}/manifest.json"

@@ -1,8 +1,9 @@
 from collections import namedtuple
 from pprint import pprint
 
-from core.railroad import Train
+from core.railway import Train
 from core.tile import *
+from core.train import Phase
 
 TILE_DB_PATH = "data/tiles.json"
 TRAIN_DB_PATH = "data/{}/trains.json"
@@ -16,6 +17,7 @@ class Database:
 
         self.tiles: dict[str, Tile] = self._load_tiles()
         self.trains: dict[str, Train] = self._load_trains()
+        self.phases: dict[str, Phase] = self._load_phases()
 
     def _load_tiles(self) -> dict[str, Tile]:
         return {
@@ -25,6 +27,20 @@ class Database:
     def _load_trains(self) -> dict[str, Train]:
         return {
             train["id"]: Train.from_dict(train)
+            for train in json.load(
+                open(TRAIN_DB_PATH.format(self.year)),
+            )
+        }
+
+    # ? Consider doing a list for ordering
+    def _load_phases(self) -> dict[str, Phase]:
+        return {
+            train["id"]: Phase.from_dict(
+                {
+                    "id": train["id"],
+                    **train["phase"],
+                }
+            )
             for train in json.load(
                 open(TRAIN_DB_PATH.format(self.year)),
             )

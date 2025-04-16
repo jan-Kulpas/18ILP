@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from typing import Any, ItemsView
 
 from core.hex import Hex
+from core.railway import Railway
 from core.tile import Tile
 
 BOARD_PATH = "data/{}/board.json"
@@ -30,6 +31,12 @@ class Board:
 
     def items(self) -> ItemsView[Hex, Field]:
         return self._board.items()
+
+    def load_railways(self) -> list[Railway]:
+        with open(BOARD_PATH.format(self.year)) as file:
+            data: dict[str, Any] = json.load(file)
+
+        return [Railway.from_dict(dct) for dct in data["railways"]]
 
     def _load_board(self, data: dict[str, Any]) -> dict[Hex, Field]:
         shape: dict[str, list[list[int]]] = data["shape"]

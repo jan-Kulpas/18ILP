@@ -230,5 +230,35 @@
         "K4": "0M5",
         "K8": "0M1",
         "L7": "0P8"
-    }
+    },
+    "railways": [
+      {
+        "name": "TR",
+        "home": "F9"
+      },
+      {
+        "name": "KO",
+        "home": "K4"
+      },
+      {
+        "name": "UR",
+        "home": "B7"
+      },
+      {
+        "name": "KU",
+        "home": "C10"
+      },
+      {
+        "name": "AR",
+        "home": "K8"
+      },
+      {
+        "name": "IR",
+        "home": "E2"
+      },
+      {
+        "name": "SR",
+        "home": "I2"
+      }
+    ]
 }

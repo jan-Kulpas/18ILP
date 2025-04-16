@@ -1,7 +1,8 @@
 from __future__ import annotations
 from dataclasses import dataclass, field
 import json
-from typing import Any
+
+from core.tile import Color
 
 
 @dataclass(frozen=True)
@@ -15,11 +16,13 @@ class Train:
 
     @classmethod
     def from_json(cls, string: str) -> Train:
-        return json.loads(string, object_hook=_decode_train)
+        dict = json.loads(string)
+        return Train.from_dict(dict)
 
     @classmethod
     def from_dict(cls, dict: dict) -> Train:
-        return cls.from_json(json.dumps(dict))
+        keys = ["id", "range", "diesel"]
+        return Train(**{k: dict[k] for k in keys if k in dict})
 
     # TODO: Implement to_json() when needed
     # @property
@@ -27,7 +30,22 @@ class Train:
     #     pass
 
 
-def _decode_train(dct: dict) -> Any:
-    if "id" in dct:
-        keys = ["id", "range", "diesel"]
-        return Train(**{k: dct[k] for k in keys if k in dct})
+# ! order=True compares the ID which just happens to work for 1889 but may not for others!
+# ? consider adding a postinit field that would be a counter of added phases and compare based on that
+# ? or just add a list of previous items
+@dataclass(frozen=True, order=True)
+class Phase:
+    id: str = field()
+    color: Color = field()
+    limit: int = field()
+    rusts: str | None = field(default=None)
+
+    @classmethod
+    def from_json(cls, string: str) -> Phase:
+        dict = json.loads(string)
+        return cls.from_dict(dict)
+
+    @classmethod
+    def from_dict(cls, dict: dict) -> Phase:
+        dict["color"] = Color[dict["color"]]
+        return cls(**dict)
