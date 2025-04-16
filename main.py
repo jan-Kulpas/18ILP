@@ -53,8 +53,6 @@ if __name__ == "__main__":
     window = Window(game)
     window.show()
 
-    # print(game.board)
-
     # hack borrowing allow_interrupt from matplotlib to unlock Ctrl+C from terminal
     with _allow_interrupt_qt(app):
         sys.exit(app.exec())

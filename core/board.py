@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from typing import Any, ItemsView
 
 from core.hex import Hex
-from core.tile import TILES, Tile
+from core.tile import Tile
 
 BOARD_PATH = "data/{}/board.json"
 

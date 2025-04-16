@@ -108,7 +108,6 @@ class Tile:
 
     @classmethod
     def from_json(cls, string: str) -> Tile:
-
         return json.loads(string, object_hook=_decode_tile)
 
     @classmethod
@@ -149,14 +148,5 @@ def _decode_tile(dct: dict) -> Any:
             id=dct["id"],
             tracks=[(Direction[pair[0]], Direction[pair[1]]) for pair in dct["tracks"]],
             color=Color(sum([Color[name].value for name in dct["color"]])),
-            cities=dct["cities"] if "cities" in dct else [],
-            label=dct["label"] if "label" in dct else None,
-            upgrades=dct["upgrades"],
+            **{k: dct[k] for k in ["cities", "label", "upgrades"] if k in dct},
         )
-
-
-TILE_DB_PATH = "data/tiles.json"
-
-TILES: dict[str, Tile] = {
-    tile["id"]: Tile.from_dict(tile) for tile in json.load(open(TILE_DB_PATH))
-}

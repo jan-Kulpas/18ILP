@@ -1,0 +1,53 @@
+[
+    {
+        "id": "2",
+        "range": 2,
+        "phase": {
+            "color": "YELLOW",
+            "limit": "4"
+        }
+    },
+    {
+        "id": "3",
+        "range": 3,
+        "phase": {
+            "color": "GREEN",
+            "limit": "4"
+        }
+    },
+    {
+        "id": "4",
+        "range": 4,
+        "phase": {
+            "color": "GREEN",
+            "limit": "3",
+            "rusts": "2"
+        }
+    },
+    {
+        "id": "5",
+        "range": 5,
+        "phase": {
+            "color": "BROWN",
+            "limit": "2"
+        }
+    },
+    {
+        "id": "6",
+        "range": 6,
+        "phase": {
+            "color": "BROWN",
+            "limit": "2",
+            "rusts": "3"
+        }
+    },
+    {
+        "id": "D",
+        "diesel": true,
+        "phase": {
+            "color": "GRAY",
+            "limit": "2",
+            "rusts": "4"
+        }
+    }
+]
