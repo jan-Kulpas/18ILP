@@ -106,6 +106,4 @@ if __name__ == "__main__":
 
     game.load_save("save.json")
 
-    print(game.phase)
-    pprint(game.railways)
-    print(game.bank.trains)
+    pprint(Database().tiles)

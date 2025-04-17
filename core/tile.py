@@ -6,42 +6,27 @@ from enum import Enum, Flag
 from dataclasses import asdict, dataclass, field, is_dataclass
 from typing import Any
 
-from core.revenue_center import City, RevenueCenter, Town
-
-# TODO: Replace with Segment containing root city and branching outside edges.
-type Track = tuple[Direction, Direction]
-
+from core.settlement import City, Settlement, Town
 
 class Direction(Enum):
     """
     Direction in which a track may go, i.e. edges of a hex or revenue centers located on it.
     """
-
     N = 0
     NE = 1
     SE = 2
     S = 3
     SW = 4
     NW = 5
-    # Revenue center indexes
-    R1 = 6
-    R2 = 7
-    R3 = 8
-    R4 = 9
-    R5 = 10
-    R6 = 11
-    # Center for Lawsonian tiles:
-    C = 12
 
-    @property
-    def outside(self) -> bool:
-        """Checks if direction points to a tile border"""
-        return self.value >= 0 and self.value <= 5
-
-    @property
-    def inside(self) -> bool:
-        """Checks if direction points to a city or a junction within a tile"""
-        return not self.outside
+class SettlementLocation(Enum):
+    C = 0 # Center for Lawsonian tiles
+    R1 = 1
+    R2 = 2
+    R3 = 3
+    R4 = 4
+    R5 = 5
+    R6 = 6
 
 
 class Color(Flag):
@@ -56,6 +41,27 @@ class Color(Flag):
     GRAY = 8
     RED = 16
 
+@dataclass(frozen=True)
+class Segment:
+    tracks: list[Direction] = field(default_factory=list)
+    settlement: Settlement | None = field(default=None)
+    location: SettlementLocation | None = field(default=None)
+    
+    @classmethod
+    def from_json(cls, string: str) -> Segment:
+        dict = json.loads(string)
+        return Segment.from_dict(dict)
+    
+    @classmethod
+    def from_dict(cls, dict: dict) -> Segment:
+        if "tracks" in dict:
+            dict["tracks"] = [Direction[dir] for dir in dict["tracks"]]
+        if "settlement" in dict:
+            dict["settlement"] = Settlement.from_dict(dict["settlement"])
+        if "location" in dict:
+            dict["location"] = SettlementLocation[dict["location"]]
+        
+        return Segment(**dict)
 
 @dataclass(eq=True, frozen=True)
 class Tile:
@@ -74,15 +80,14 @@ class Tile:
     """
 
     id: str = field()
-    tracks: list[Track] = field(compare=False)
     color: Color = field()
-    cities: list[RevenueCenter] = field(default_factory=list, compare=False)
+    segments: list[Segment] = field(default_factory=list)
     label: str | None = field(default=None, compare=False)
     upgrades: list[str] = field(default_factory=list, compare=False)
 
     @classmethod
     def blank(cls) -> Tile:
-        return cls("0", [], Color.BLANK, upgrades=["7", "8", "9"])
+        return cls("0", Color.BLANK, upgrades=["7", "8", "9"])
 
     @classmethod
     def from_id(cls, id: str) -> Tile:
@@ -98,12 +103,14 @@ class Tile:
     @classmethod
     def from_dict(cls, dict: dict) -> Tile:
         if "cities" in dict:
-            dict["cities"] = [RevenueCenter.from_dict(city_dict) for city_dict in dict["cities"]]
+            dict["cities"] = [Settlement.from_dict(city_dict) for city_dict in dict["cities"]]
+        if "segments" in dict:
+            dict["segments"] = [Segment.from_dict(segment) for segment in dict["segments"]]
+        
         return Tile(
             id=dict["id"],
-            tracks=[(Direction[pair[0]], Direction[pair[1]]) for pair in dict["tracks"]],
             color=Color(sum([Color[name].value for name in dict["color"]])),
-            **{k: dict[k] for k in ["cities", "label", "upgrades"] if k in dict},
+            **{k: dict[k] for k in ["segments", "label", "upgrades"] if k in dict},
         )
 
     

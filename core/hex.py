@@ -87,12 +87,7 @@ class Hex:
     def neighbour(self, dir: Direction) -> Hex:
         """
         Returns a Hex neighbouring this Hex in the specified direction.
-
-        Raises:
-            ValueError: Direction should point outside of the hex.
         """
-        if not dir.outside:
-            raise ValueError(f"Direction should point outside of the hex: {dir}")
         return self + UNITS[dir.value]
 
     @property
@@ -123,21 +118,21 @@ class Hex:
     @property
     def citypoints(self) -> list[QPointF]:
         """Center pixels of cities R1-R6 on the tile, 0th index is first point clockwise starting *with* midnight."""
-        return [lerp(self.midpoints[i], self.center, 0.5) for i in range(6)]
+        return [self.center] + [lerp(self.midpoints[i], self.center, 0.5) for i in range(6)]
 
-    def track_exit(self, dir: Direction):
-        """
-        Returns either a midpoint, a citypoint or the hex center based on Direction.
+    # def track_exit(self, dir: Direction):
+    #     """
+    #     Returns either a midpoint, a citypoint or the hex center based on Direction.
 
-        The ending pixel of a track path.
-        """
-        # ! This ties the city position to the json data which should be avoided.
-        if dir.outside:
-            return self.midpoints[dir.value]
-        elif dir == Direction.C:
-            return self.center
-        else:
-            return self.citypoints[dir.value - 6]
+    #     The ending pixel of a track path.
+    #     """
+    #     # ! This ties the city position to the json data which should be avoided.
+    #     if dir.outside:
+    #         return self.midpoints[dir.value]
+    #     elif dir == Direction.C:
+    #         return self.center
+    #     else:
+    #         return self.citypoints[dir.value - 6]
 
     def __add__(self, other: Hex) -> Hex:
         return Hex(self.q + other.q, self.r + other.r, self.s + other.s)

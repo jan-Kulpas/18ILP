@@ -68,16 +68,9 @@ class Renderer:
         """Draws a given Tile on the given Hex along with all its features."""
         self._draw_hex(hex, TILE_COLORS[tile.color])
 
-        groups = self._group_tracks(tile.tracks)
+        for segment in tile.segments:
+            self._draw_segment(hex, segment)
 
-        # ?: maybe do this at some point
-        # ?: or split tile.tracks into tile.segments with baked in towns?
-        # ! This is really ugly and could be improved by making track into a class with a getCity method
-        for group, city in zip_longest(groups, tile.cities):
-            if group:
-                self._draw_track_group(hex, group)
-            if city:
-                self._draw_city(hex, city, group)
 
         label_location = lerp(hex.center, hex.corners[-1], 0.65) - QPointF(5, 0)
         self.painter.drawText(label_location, tile.label)
@@ -89,13 +82,18 @@ class Renderer:
         self.painter.setPen(QPen(Qt.GlobalColor.black, 2))
         self.painter.drawPolygon(*hex.corners)
 
-    def _draw_track_group(self, hex: Hex, group: list[Track]) -> None:
-        """Draws a list of tracks together so that the outlines don't overlap."""
+    def _draw_segment(self, hex: Hex, segment: Segment) -> None:
         track_pens = [
             QPen(QColor("#FFFFFF"), 8),
             QPen(QColor("#000000"), 4),
         ]
-        paths = [self._calculate_path(hex, track) for track in group]
+
+        if segment.location:
+            paths = [self._calculate_path(hex, track, segment.location) for track in segment.tracks]
+        elif segment.tracks:
+            paths = [self._calculate_path(hex, segment.tracks[0], segment.tracks[1])]
+        else:
+            paths = []
 
         with BufferedPainter(self.painter, self.size) as buffer:
             for pen in track_pens:
@@ -103,12 +101,18 @@ class Renderer:
                     buffer.setPen(pen)
                     buffer.drawPath(path)
 
-    def _calculate_path(self, hex: Hex, track: Track) -> QPainterPath:
-        """Returns a path along which a given Track should be drawn."""
-        e1, e2 = track
+        if segment.settlement and segment.location:
+                self._draw_settlement(hex, segment.settlement, segment.location)  
 
-        p1 = hex.track_exit(e1)
-        p2 = hex.track_exit(e2)
+    def _calculate_path(self, hex: Hex, e1: Direction, e2: Direction | SettlementLocation) -> QPainterPath:
+        """Returns a path along which a given Track should be drawn."""
+        p1 = hex.midpoints[e1.value]
+        match e2:
+            case Direction():
+                p2 = hex.midpoints[e2.value]
+            case SettlementLocation():
+                print(e2.value)
+                p2 = hex.citypoints[e2.value]
         middle = lerp(p1, p2, 0.5)
 
         # Pull control point towards center to make it actually curvy
@@ -121,58 +125,32 @@ class Renderer:
 
         return path
 
-    def _group_tracks(self, tracks: list[Track]) -> list[list[Track]]:
-        """Groups tracks going to the same town into batches that will get drawn together."""
-
-        outside: list[Track] = []
-        inside = defaultdict(list)
-        for a, b in tracks:
-            if a.outside and b.outside:
-                outside.append(
-                    (a, b)
-                )  # ! Does not properly allow for rendering bridges on cityless tiles.
-            else:
-                inside_dir = a if a.inside else b  # only one will be inside
-                inside[inside_dir].append((a, b))
-
-        sorted_inside = [
-            inside[dir] for dir in sorted(inside.keys(), key=lambda d: d.value)
-        ]
-        if len(outside) > 0:
-            sorted_inside.append(outside)
-
-        return sorted_inside
-
-    def _draw_city(self, hex: Hex, city: RevenueCenter, group: list[Track]) -> None:
+    def _draw_settlement(self, hex: Hex, settlement: Settlement, location: SettlementLocation) -> None:
         """Draws a city or a town on the hex."""
-        location = hex.track_exit(Direction.C)
+        center = hex.citypoints[location.value]
 
-        if group:
-            a, b = group[0]
-            location = hex.track_exit(a) if a.inside else hex.track_exit(b)
-
-        if isinstance(city, Town):
+        if isinstance(settlement, Town):
             self.painter.setBrush(QBrush(Qt.GlobalColor.black))
-            self.painter.drawEllipse(location, TOWN_RADIUS, TOWN_RADIUS)
-        elif isinstance(city, City):
+            self.painter.drawEllipse(center, TOWN_RADIUS, TOWN_RADIUS)
+        elif isinstance(settlement, City):
             self.painter.setBrush(QBrush(Qt.GlobalColor.white))
             points = []
-            if city.size == 1:
-                points = [location]
-            elif city.size == 2:
+            if settlement.size == 1:
+                points = [center]
+            elif settlement.size == 2:
                 points = [
-                    QPointF(location.x() - CITY_RADIUS, location.y()),
-                    QPointF(location.x() + CITY_RADIUS, location.y()),
+                    QPointF(center.x() - CITY_RADIUS, center.y()),
+                    QPointF(center.x() + CITY_RADIUS, center.y()),
                 ]
-            elif city.size == 3:
+            elif settlement.size == 3:
                 points = [
                     QPointF(
-                        location.x() - CITY_RADIUS, location.y() + CITY_RADIUS * 0.5
+                        center.x() - CITY_RADIUS, center.y() + CITY_RADIUS * 0.5
                     ),
                     QPointF(
-                        location.x() + CITY_RADIUS, location.y() + CITY_RADIUS * 0.5
+                        center.x() + CITY_RADIUS, center.y() + CITY_RADIUS * 0.5
                     ),
-                    QPointF(location.x(), location.y() - CITY_RADIUS * 1.2),
+                    QPointF(center.x(), center.y() - CITY_RADIUS * 1.2),
                 ]
             else:
                 raise ValueError("City has too many stations to draw than should be possible.")
@@ -183,4 +161,4 @@ class Renderer:
         # ? Consider doing this after rewrite to Tile.Segment
         # ! The values will overlap if there are two cities!!!
         value_location = lerp(hex.center, hex.corners[0], 0.65) - QPointF(5, 0)
-        self.painter.drawText(value_location, str(city.value))
+        self.painter.drawText(value_location, str(settlement.value))

@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 
 
 @dataclass(frozen=True)
-class RevenueCenter(ABC):
+class Settlement(ABC):
     """
     Base class for revenue centers. Locations on the map that earn revenue.
 
@@ -21,7 +21,7 @@ class RevenueCenter(ABC):
             return Town(value=dict["value"])
 
 @dataclass(frozen=True)
-class Town(RevenueCenter):
+class Town(Settlement):
     """
     A town. Revenue center which cannot hold any stations
 
@@ -31,7 +31,7 @@ class Town(RevenueCenter):
 
 
 @dataclass(frozen=True)
-class City(RevenueCenter):
+class City(Settlement):
     """
     A city. Revenue center which can hold a number of stations
 

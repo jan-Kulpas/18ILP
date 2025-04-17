@@ -1,537 +1,974 @@
 [
   {
     "id": "3",
-    "tracks": [
-      ["SW","C"],
-      ["S","C"]
-    ],
     "color": [
       "YELLOW"
     ],
-    "cities": [
-      {"value": 10}
+    "segments": [
+      {
+        "location": "C",
+        "tracks": [
+          "SW",
+          "S"
+        ],
+        "settlement": {
+          "value": 10
+        }
+      }
     ],
     "upgrades": []
   },
   {
     "id": "5",
-    "tracks": [
-      ["SW","C"],
-      ["S","C"]
-    ],
     "color": [
       "YELLOW"
     ],
-    "cities": [
-      {"value": 20, "size": 1}
+    "segments": [
+      {
+        "location": "C",
+        "tracks": [
+          "SW",
+          "S"
+        ],
+        "settlement": {
+          "value": 20,
+          "size": 1
+        }
+      }
     ],
-    "upgrades": ["12","14","15","205","206"]
+    "upgrades": [
+      "12",
+      "14",
+      "15",
+      "205",
+      "206"
+    ]
   },
   {
     "id": "6",
-    "tracks": [
-      ["NW","C"],
-      ["S","C"]
-    ],
     "color": [
       "YELLOW"
     ],
-    "cities": [
-      {"value": 20, "size": 1}
+    "segments": [
+      {
+        "location": "C",
+        "tracks": [
+          "NW",
+          "S"
+        ],
+        "settlement": {
+          "value": 20,
+          "size": 1
+        }
+      }
     ],
-    "upgrades": ["12","13","14","15","205","206"]
+    "upgrades": [
+      "12",
+      "13",
+      "14",
+      "15",
+      "205",
+      "206"
+    ]
   },
   {
     "id": "7",
-    "tracks": [
-      ["SW","S"]
-    ],
     "color": [
       "YELLOW"
     ],
-    "upgrades": ["26","27","28","29"]
+    "segments": [
+      {
+        "tracks": [
+          "S",
+          "SW"
+        ]
+      }
+    ],
+    "upgrades": [
+      "26",
+      "27",
+      "28",
+      "29"
+    ]
   },
   {
     "id": "8",
-    "tracks": [
-      ["NW","S"]
-    ],
     "color": [
       "YELLOW"
     ],
-    "upgrades": ["16","19","23","24","25","28","29"]
+    "segments": [
+      {
+        "tracks": [
+          "S",
+          "NW"
+        ]
+      }
+    ],
+    "upgrades": [
+      "16",
+      "19",
+      "23",
+      "24",
+      "25",
+      "28",
+      "29"
+    ]
   },
   {
     "id": "9",
-    "tracks": [
-      ["N","S"]
-    ],
     "color": [
       "YELLOW"
     ],
-    "upgrades": ["19","20","23","24","26","27"]
+    "segments": [
+      {
+        "tracks": [
+          "S",
+          "N"
+        ]
+      }
+    ],
+    "upgrades": [
+      "19",
+      "20",
+      "23",
+      "24",
+      "26",
+      "27"
+    ]
   },
   {
     "id": "12",
-    "tracks": [
-      ["S","C"],
-      ["SW","C"],
-      ["NW","C"]
-    ],
     "color": [
       "GREEN"
     ],
-    "cities": [
-      {"value": 30, "size": 1}
+    "segments": [
+      {
+        "location": "C",
+        "tracks": [
+          "S",
+          "SW",
+          "NW"
+        ],
+        "settlement": {
+          "value": 30,
+          "size": 1
+        }
+      }
     ],
-    "upgrades": ["448","611"]
+    "upgrades": [
+      "448",
+      "611"
+    ]
   },
   {
     "id": "13",
-    "tracks": [
-      ["NE","C"],
-      ["S","C"],
-      ["NW","C"]
-    ],
     "color": [
       "GREEN"
     ],
-    "cities": [
-      {"value": 30, "size": 1}
+    "segments": [
+      {
+        "location": "C",
+        "tracks": [
+          "NE",
+          "S",
+          "NW"
+        ],
+        "settlement": {
+          "value": 30,
+          "size": 1
+        }
+      }
     ],
-    "upgrades": ["611"]
+    "upgrades": [
+      "611"
+    ]
   },
   {
     "id": "14",
-    "tracks": [
-      ["NE","C"],
-      ["S","C"],
-      ["SW","C"],
-      ["N","C"]
-    ],
     "color": [
       "GREEN"
     ],
-    "cities": [
-      {"value": 30, "size": 2}
+    "segments": [
+      {
+        "location": "C",
+        "tracks": [
+          "NE",
+          "S",
+          "SW",
+          "N"
+        ],
+        "settlement": {
+          "value": 30,
+          "size": 2
+        }
+      }
     ],
-    "upgrades": ["611"]
+    "upgrades": [
+      "611"
+    ]
   },
   {
     "id": "15",
-    "tracks": [
-      ["S","C"],
-      ["SW","C"],
-      ["NW","C"],
-      ["N","C"]
-    ],
     "color": [
       "GREEN"
     ],
-    "cities": [
-      {"value": 30, "size": 2}
+    "segments": [
+      {
+        "location": "C",
+        "tracks": [
+          "S",
+          "SW",
+          "NW",
+          "N"
+        ],
+        "settlement": {
+          "value": 30,
+          "size": 2
+        }
+      }
     ],
-    "upgrades": ["448","611"]
+    "upgrades": [
+      "448",
+      "611"
+    ]
   },
   {
     "id": "16",
-    "tracks": [
-      ["S","NW"],
-      ["SW","N"]
-    ],
     "color": [
       "GREEN"
+    ],
+    "segments": [
+      {
+        "tracks": [
+          "S",
+          "NW"
+        ]
+      },
+      {
+        "tracks": [
+          "SW",
+          "N"
+        ]
+      }
     ],
     "upgrades": []
   },
   {
     "id": "19",
-    "tracks": [
-      ["NW","NE"],
-      ["S","N"]
-    ],
     "color": [
       "GREEN"
     ],
-    "upgrades": ["45","46"]
+    "segments": [
+      {
+        "tracks": [
+          "NW",
+          "NE"
+        ]
+      },
+      {
+        "tracks": [
+          "S",
+          "N"
+        ]
+      }
+    ],
+    "upgrades": [
+      "45",
+      "46"
+    ]
   },
   {
     "id": "20",
-    "tracks": [
-      ["SW","NE"],
-      ["S","N"]
-    ],
     "color": [
       "GREEN"
     ],
-    "upgrades": ["47"]
+    "segments": [
+      {
+        "tracks": [
+          "SW",
+          "NE"
+        ]
+      },
+      {
+        "tracks": [
+          "S",
+          "N"
+        ]
+      }
+    ],
+    "upgrades": [
+      "47"
+    ]
   },
   {
     "id": "23",
-    "tracks": [
-      ["S","NE"],
-      ["S","N"]
-    ],
     "color": [
       "GREEN"
     ],
-    "upgrades": ["41","45","47"]
+    "segments": [
+      {
+        "tracks": [
+          "S",
+          "NE"
+        ]
+      },
+      {
+        "tracks": [
+          "S",
+          "N"
+        ]
+      }
+    ],
+    "upgrades": [
+      "41",
+      "45",
+      "47"
+    ]
   },
   {
     "id": "24",
-    "tracks": [
-      ["S","NW"],
-      ["S","N"]
-    ],
     "color": [
       "GREEN"
     ],
-    "upgrades": ["42","46","47"]
+    "segments": [
+      {
+        "tracks": [
+          "S",
+          "NW"
+        ]
+      },
+      {
+        "tracks": [
+          "S",
+          "N"
+        ]
+      }
+    ],
+    "upgrades": [
+      "42",
+      "46",
+      "47"
+    ]
   },
   {
     "id": "25",
-    "tracks": [
-      ["S","NW"],
-      ["S","NE"]
-    ],
     "color": [
       "GREEN"
     ],
-    "upgrades": ["40","45","46"]
+    "segments": [
+      {
+        "tracks": [
+          "S",
+          "NW"
+        ]
+      },
+      {
+        "tracks": [
+          "S",
+          "NE"
+        ]
+      }
+    ],
+    "upgrades": [
+      "40",
+      "45",
+      "46"
+    ]
   },
   {
     "id": "26",
-    "tracks": [
-      ["S","SE"],
-      ["S","N"]
-    ],
     "color": [
       "GREEN"
     ],
-    "upgrades": ["42","45"]
+    "segments": [
+      {
+        "tracks": [
+          "S",
+          "SE"
+        ]
+      },
+      {
+        "tracks": [
+          "S",
+          "N"
+        ]
+      }
+    ],
+    "upgrades": [
+      "42",
+      "45"
+    ]
   },
   {
     "id": "27",
-    "tracks": [
-      ["S","SW"],
-      ["S","N"]
-    ],
     "color": [
       "GREEN"
     ],
-    "upgrades": ["41","46"]
+    "segments": [
+      {
+        "tracks": [
+          "S",
+          "SW"
+        ]
+      },
+      {
+        "tracks": [
+          "S",
+          "N"
+        ]
+      }
+    ],
+    "upgrades": [
+      "41",
+      "46"
+    ]
   },
   {
     "id": "28",
-    "tracks": [
-      ["S","NE"],
-      ["S","SE"]
-    ],
     "color": [
       "GREEN"
     ],
-    "upgrades": ["46"]
+    "segments": [
+      {
+        "tracks": [
+          "S",
+          "NE"
+        ]
+      },
+      {
+        "tracks": [
+          "S",
+          "SE"
+        ]
+      }
+    ],
+    "upgrades": [
+      "46"
+    ]
   },
   {
     "id": "29",
-    "tracks": [
-      ["S","NW"],
-      ["S","SW"]
-    ],
     "color": [
       "GREEN"
     ],
-    "upgrades": ["45"]
+    "segments": [
+      {
+        "tracks": [
+          "S",
+          "NW"
+        ]
+      },
+      {
+        "tracks": [
+          "S",
+          "SW"
+        ]
+      }
+    ],
+    "upgrades": [
+      "45"
+    ]
   },
   {
     "id": "39",
-    "tracks": [
-      ["S","NW"],
-      ["S","SW"],
-      ["SW","NW"]
-    ],
     "color": [
       "BROWN"
+    ],
+    "segments": [
+      {
+        "tracks": [
+          "S",
+          "NW"
+        ]
+      },
+      {
+        "tracks": [
+          "S",
+          "SW"
+        ]
+      },
+      {
+        "tracks": [
+          "SW",
+          "NW"
+        ]
+      }
     ],
     "upgrades": []
   },
   {
     "id": "40",
-    "tracks": [
-      ["S","NW"],
-      ["S","NE"],
-      ["NW","NE"]
-    ],
     "color": [
       "BROWN"
+    ],
+    "segments": [
+      {
+        "tracks": [
+          "S",
+          "NW"
+        ]
+      },
+      {
+        "tracks": [
+          "S",
+          "NE"
+        ]
+      },
+      {
+        "tracks": [
+          "NE",
+          "NW"
+        ]
+      }
     ],
     "upgrades": []
   },
   {
     "id": "41",
-    "tracks": [
-      ["S","N"],
-      ["S","SW"],
-      ["SW","N"]
-    ],
     "color": [
       "BROWN"
+    ],
+    "segments": [
+      {
+        "tracks": [
+          "S",
+          "SW"
+        ]
+      },
+      {
+        "tracks": [
+          "S",
+          "N"
+        ]
+      },
+      {
+        "tracks": [
+          "SW",
+          "N"
+        ]
+      }
     ],
     "upgrades": []
   },
   {
     "id": "42",
-    "tracks": [
-      ["S","N"],
-      ["S","SE"],
-      ["SE","N"]
-    ],
     "color": [
       "BROWN"
+    ],
+    "segments": [
+      {
+        "tracks": [
+          "S",
+          "SE"
+        ]
+      },
+      {
+        "tracks": [
+          "S",
+          "N"
+        ]
+      },
+      {
+        "tracks": [
+          "SE",
+          "N"
+        ]
+      }
     ],
     "upgrades": []
   },
   {
     "id": "45",
-    "tracks": [
-      ["S","N"],
-      ["S","NE"],
-      ["NW","N"],
-      ["NW","NE"]
-    ],
     "color": [
       "BROWN"
+    ],
+    "segments": [
+      {
+        "tracks": [
+          "S",
+          "NE"
+        ]
+      },
+      {
+        "tracks": [
+          "S",
+          "N"
+        ]
+      },
+      {
+        "tracks": [
+          "NW",
+          "NE"
+        ]
+      },
+      {
+        "tracks": [
+          "NW",
+          "N"
+        ]
+      }
     ],
     "upgrades": []
   },
   {
     "id": "46",
-    "tracks": [
-      ["S","N"],
-      ["S","NW"],
-      ["NE","N"],
-      ["NW","NE"]
-    ],
     "color": [
       "BROWN"
+    ],
+    "segments": [
+      {
+        "tracks": [
+          "S",
+          "N"
+        ]
+      },
+      {
+        "tracks": [
+          "S",
+          "NW"
+        ]
+      },
+      {
+        "tracks": [
+          "NW",
+          "NE"
+        ]
+      },
+      {
+        "tracks": [
+          "NE",
+          "N"
+        ]
+      }
     ],
     "upgrades": []
   },
   {
     "id": "47",
-    "tracks": [
-      ["S","N"],
-      ["S","NE"],
-      ["SW","NE"],
-      ["SW","N"]
-    ],
     "color": [
       "BROWN"
+    ],
+    "segments": [
+      {
+        "tracks": [
+          "S",
+          "N"
+        ]
+      },
+      {
+        "tracks": [
+          "S",
+          "NE"
+        ]
+      },
+      {
+        "tracks": [
+          "SW",
+          "NE"
+        ]
+      }
+      ,      {
+        "tracks": [
+          "SW",
+          "N"
+        ]
+      }
     ],
     "upgrades": []
   },
   {
     "id": "57",
-    "tracks": [
-      ["S","C"],
-      ["N","C"]
-    ],
     "color": [
       "YELLOW"
     ],
-    "cities": [
-      {"value": 20, "size": 1}
+    "segments": [
+      {
+        "location": "C",
+        "tracks": [
+          "S",
+          "N"
+        ],
+        "settlement": {
+          "value": 20,
+          "size": 1
+        }
+      }
     ],
-    "upgrades": ["14","15"]
+    "upgrades": [
+      "14",
+      "15"
+    ]
   },
   {
     "id": "58",
-    "tracks": [
-      ["S","C"],
-      ["NW","C"]
-    ],
     "color": [
       "YELLOW"
     ],
-    "cities": [
-      {"value": 10}
+    "segments": [
+      {
+        "location": "C",
+        "tracks": [
+          "S",
+          "NW"
+        ],
+        "settlement": {
+          "value": 10
+        }
+      }
     ],
     "upgrades": []
   },
   {
     "id": "205",
-    "tracks": [
-      ["N","C"],
-      ["S","C"],
-      ["SW","C"]
-    ],
     "color": [
       "GREEN"
     ],
-    "cities": [
-      {"value": 30, "size": 1}
+    "segments": [
+      {
+        "location": "C",
+        "tracks": [
+          "N",
+          "S",
+          "SW"
+        ],
+        "settlement": {
+          "value": 30,
+          "size": 1
+        }
+      }
     ],
-    "upgrades": ["448","611"]
+    "upgrades": [
+      "448",
+      "611"
+    ]
   },
   {
     "id": "206",
-    "tracks": [
-      ["N","C"],
-      ["S","C"],
-      ["SE","C"]
-    ],
     "color": [
       "GREEN"
     ],
-    "cities": [
-      {"value": 30, "size": 1}
+    "segments": [
+      {
+        "location": "C",
+        "tracks": [
+          "N",
+          "S",
+          "SE"
+        ],
+        "settlement": {
+          "value": 30,
+          "size": 1
+        }
+      }
     ],
-    "upgrades": ["448","611"]
+    "upgrades": [
+      "448",
+      "611"
+    ]
   },
   {
     "id": "437",
-    "tracks": [
-      ["S","C"],
-      ["NW","C"]
-    ],
     "color": [
       "YELLOW"
     ],
-    "cities": [
-      {"value": 30}
+    "segments": [
+      {
+        "location": "C",
+        "tracks": [
+          "S",
+          "NW"
+        ],
+        "settlement": {
+          "value": 30
+        }
+      }
     ],
     "label": "P",
     "upgrades": []
   },
   {
     "id": "438",
-    "tracks": [
-      ["S","C"],
-      ["NW","C"]
-    ],
     "color": [
       "YELLOW"
     ],
-    "cities": [
-      {"value": 40, "size": 1}
+    "segments": [
+      {
+        "location": "C",
+        "tracks": [
+          "S",
+          "NW"
+        ],
+        "settlement": {
+          "value": 40,
+          "size": 1
+        }
+      }
     ],
     "label": "H",
-    "upgrades": ["439"]
+    "upgrades": [
+      "439"
+    ]
   },
   {
     "id": "439",
-    "tracks": [
-      ["S","C"],
-      ["NW","C"],
-      ["NE","C"]
-    ],
     "color": [
       "GREEN"
     ],
-    "cities": [
-      {"value": 60, "size": 2}
+    "segments": [
+      {
+        "location": "C",
+        "tracks": [
+          "S",
+          "NW",
+          "NE"
+        ],
+        "settlement": {
+          "value": 60,
+          "size": 2
+        }
+      }
     ],
     "label": "H",
-    "upgrades": ["492"]
+    "upgrades": [
+      "492"
+    ]
   },
   {
     "id": "440",
-    "tracks": [
-      ["S","C"],
-      ["NW","C"],
-      ["SW","C"]
-    ],
     "color": [
       "GREEN"
     ],
-    "cities": [
-      {"value": 40, "size": 2}
+    "segments": [
+      {
+        "location": "C",
+        "tracks": [
+          "S",
+          "NW",
+          "SW"
+        ],
+        "settlement": {
+          "value": 40,
+          "size": 2
+        }
+      }
     ],
     "label": "T",
-    "upgrades": ["466"]
+    "upgrades": [
+      "466"
+    ]
   },
   {
     "id": "448",
-    "tracks": [
-      ["S","C"],
-      ["NW","C"],
-      ["SW","C"],
-      ["N","C"]
-    ],
     "color": [
       "BROWN"
     ],
-    "cities": [
-      {"value": 40, "size": 2}
+    "segments": [
+      {
+        "location": "C",
+        "tracks": [
+          "S",
+          "NW",
+          "SW",
+          "N"
+        ],
+        "settlement": {
+          "value": 40,
+          "size": 2
+        }
+      }
     ],
     "upgrades": []
   },
   {
     "id": "465",
-    "tracks": [
-      ["S","C"],
-      ["NW","C"],
-      ["SW","C"],
-      ["N","C"]
-    ],
     "color": [
       "BROWN"
     ],
-    "cities": [
-      {"value": 60, "size": 3}
+    "segments": [
+      {
+        "location": "C",
+        "tracks": [
+          "S",
+          "NW",
+          "SW",
+          "N"
+        ],
+        "settlement": {
+          "value": 60,
+          "size": 3
+        }
+      }
     ],
     "label": "K",
     "upgrades": []
   },
   {
     "id": "466",
-    "tracks": [
-      ["S","C"],
-      ["NW","C"],
-      ["SW","C"]
-    ],
     "color": [
       "BROWN"
     ],
-    "cities": [
-      {"value": 60, "size": 2}
+    "segments": [
+      {
+        "location": "C",
+        "tracks": [
+          "S",
+          "NW",
+          "SW"
+        ],
+        "settlement": {
+          "value": 60,
+          "size": 2
+        }
+      }
     ],
     "label": "T",
     "upgrades": []
   },
   {
     "id": "492",
-    "tracks": [
-      ["S","C"],
-      ["NW","C"],
-      ["SW","C"],
-      ["N","C"],
-      ["NE","C"],
-      ["SE","C"]
-    ],
     "color": [
       "BROWN"
     ],
-    "cities": [
-      {"value": 80, "size": 3}
+    "segments": [
+      {
+        "location": "C",
+        "tracks": [
+          "S",
+          "NW",
+          "SW",
+          "N",
+          "NE",
+          "SE"
+        ],
+        "settlement": {
+          "value": 80,
+          "size": 3
+        }
+      }
     ],
     "label": "H",
     "upgrades": []
   },
   {
     "id": "611",
-    "tracks": [
-      ["S","C"],
-      ["NW","C"],
-      ["SW","C"],
-      ["N","C"],
-      ["NE","C"]
-    ],
     "color": [
       "BROWN"
     ],
-    "cities": [
-      {"value": 40, "size": 2}
+    "segments": [
+      {
+        "location": "C",
+        "tracks": [
+          "S",
+          "NW",
+          "SW",
+          "N",
+          "NE"
+        ],
+        "settlement": {
+          "value": 40,
+          "size": 2
+        }
+      }
     ],
     "upgrades": []
   }
