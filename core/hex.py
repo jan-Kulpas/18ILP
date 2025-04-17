@@ -27,7 +27,7 @@ class Hex:
         """Creates a Hex from Double-Height coordinates"""
         # TODO: Move out the offset to renderer to make 0th hex match
         q = x
-        r = (y - x) // 2 + 1  #! Offset makes Doubled(0,0) mismatch with Cubic(0,0,0)!
+        r = (y - x) // 2 + 1  # ! Offset makes Doubled(0,0) mismatch with Cubic(0,0,0)!
         return cls(q, r, -q - r)
 
     @classmethod

@@ -143,7 +143,7 @@ class Renderer:
 
         return sorted_inside
 
-    def _draw_city(self, hex: Hex, city: Town | City, group: list[Track]) -> None:
+    def _draw_city(self, hex: Hex, city: RevenueCenter, group: list[Track]) -> None:
         """Draws a city or a town on the hex."""
         location = hex.track_exit(Direction.C)
 
@@ -175,7 +175,7 @@ class Renderer:
                     QPointF(location.x(), location.y() - CITY_RADIUS * 1.2),
                 ]
             else:
-                points = []
+                raise ValueError("City has too many stations to draw than should be possible.")
 
             for pt in points:
                 self.painter.drawEllipse(pt, CITY_RADIUS, CITY_RADIUS)

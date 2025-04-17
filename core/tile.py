@@ -1,9 +1,12 @@
 from __future__ import annotations
+from abc import ABC
 import json
 
 from enum import Enum, Flag
 from dataclasses import asdict, dataclass, field, is_dataclass
 from typing import Any
+
+from core.revenue_center import City, RevenueCenter, Town
 
 # TODO: Replace with Segment containing root city and branching outside edges.
 type Track = tuple[Direction, Direction]
@@ -54,39 +57,6 @@ class Color(Flag):
     RED = 16
 
 
-# TODO: Make a parent class for these three
-@dataclass(frozen=True)
-class Town:
-    """
-    A town. Revenue center which cannot hold any stations
-
-    Attributes:
-        value(int): Money earned for visiting the city.
-    """
-
-    value: int = 10
-
-
-@dataclass(frozen=True)
-class City:
-    """
-    A city. Revenue center which can hold a number of stations
-
-    Attributes:
-        value(int): Money earned for visiting the city.
-        size(int): The amount of stations that can be maximally present in the city,
-    """
-
-    value: int
-    size: int
-
-
-# Todo: Handle offboard locations
-# @dataclass(frozen=True)
-# class Offboard:
-#    idk
-
-
 @dataclass(eq=True, frozen=True)
 class Tile:
     """
@@ -98,7 +68,7 @@ class Tile:
         id (str): ID printed on the tile.
         tracks (list[tuple[Direction, Direction]]): List of track segments made of a tuple containing the 2 endpoints of a curve.
         color (Color): Color of the tile, can be multiple colors using bitwise operations
-        cities (list[City | Town]): List of revenue centers printed on the tile.
+        cities (list[RevenueCenter]): List of revenue centers printed on the tile.
         label (str): Alpha code printed on the tile.
         upgrades (list[str]): List of tile IDs that this tile could be upgraded to.
     """
@@ -106,7 +76,7 @@ class Tile:
     id: str = field()
     tracks: list[Track] = field(compare=False)
     color: Color = field()
-    cities: list[City | Town] = field(default_factory=list, compare=False)
+    cities: list[RevenueCenter] = field(default_factory=list, compare=False)
     label: str | None = field(default=None, compare=False)
     upgrades: list[str] = field(default_factory=list, compare=False)
 
@@ -122,12 +92,21 @@ class Tile:
 
     @classmethod
     def from_json(cls, string: str) -> Tile:
-        return json.loads(string, object_hook=_decode_tile)
-
+        dict = json.loads(string)
+        return Tile.from_dict(dict)
+    
     @classmethod
     def from_dict(cls, dict: dict) -> Tile:
-        return cls.from_json(json.dumps(dict))
+        if "cities" in dict:
+            dict["cities"] = [RevenueCenter.from_dict(city_dict) for city_dict in dict["cities"]]
+        return Tile(
+            id=dict["id"],
+            tracks=[(Direction[pair[0]], Direction[pair[1]]) for pair in dict["tracks"]],
+            color=Color(sum([Color[name].value for name in dict["color"]])),
+            **{k: dict[k] for k in ["cities", "label", "upgrades"] if k in dict},
+        )
 
+    
     @property
     def json(self):
         return json.dumps(self, cls=_TileEncoder)
@@ -149,18 +128,3 @@ class _TileEncoder(json.JSONEncoder):
         elif isinstance(obj, tuple):
             return list(obj)
         return super().default(obj)
-
-
-def _decode_tile(dct: dict) -> Any:
-    if "value" in dct:
-        if "size" in dct:
-            return City(value=dct["value"], size=dct["size"])
-        else:
-            return Town(value=dct["value"])
-    if "id" in dct:
-        return Tile(
-            id=dct["id"],
-            tracks=[(Direction[pair[0]], Direction[pair[1]]) for pair in dct["tracks"]],
-            color=Color(sum([Color[name].value for name in dct["color"]])),
-            **{k: dct[k] for k in ["cities", "label", "upgrades"] if k in dct},
-        )
