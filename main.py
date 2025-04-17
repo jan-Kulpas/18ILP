@@ -48,6 +48,7 @@ class Window(QWidget):
 
 if __name__ == "__main__":
     game = Game("1889")
+    game.load_save("save.json")
 
     app = QApplication(sys.argv)
     window = Window(game)

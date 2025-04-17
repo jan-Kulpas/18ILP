@@ -50,7 +50,7 @@ class Database:
             )
         }
 
-    # ? Consider doing a list for ordering
+    # TODO: Use enumerate() to add a z-value to the phase class to force ordering
     def _load_phases(self) -> dict[str, Phase]:
         return {
             train["id"]: Phase.from_dict(

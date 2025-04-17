@@ -114,9 +114,11 @@ class Tile:
     def blank(cls) -> Tile:
         return cls("0", [], Color.BLANK, upgrades=["7", "8", "9"])
 
-    # @classmethod
-    # def from_id(cls, id: str) -> Tile:
-    #     return TILES[id]
+    @classmethod
+    def from_id(cls, id: str) -> Tile:
+        from core.database import Database
+
+        return Database().tiles[id]
 
     @classmethod
     def from_json(cls, string: str) -> Tile:

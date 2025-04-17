@@ -28,8 +28,33 @@ class Phase:
     rusts: str | None = field(default=None)
 
     # ! only works cause of iffy phase ordering
+    @property
+    def next(self) -> Phase:
+        """Returns the phase that should occur after this phase."""
+        from core.database import Database
+
+        ordered_phases = sorted(Database().phases.values())
+        try:
+            return ordered_phases[ordered_phases.index(self) + 1]
+        except IndexError:
+            raise ValueError("Tried to access next phase of the final phase")
+
+    @property
+    def prev(self) -> Phase:
+        """Returns the phase that occurred before this phase."""
+        from core.database import Database
+
+        ordered_phases = sorted(Database().phases.values())
+        idx = ordered_phases.index(self)
+        if idx == 0:
+            raise ValueError("Tried to access previous phase of the first phase")
+        return ordered_phases[idx - 1]
+
+    # ! only works cause of iffy phase ordering
     @classmethod
     def first(cls) -> Phase:
+        """Returns the starting phase of the game."""
+
         from core.database import Database
 
         return min(Database().phases.values())

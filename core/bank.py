@@ -24,12 +24,12 @@ class Bank:
         self.trains: dict[str, int] = self._load_trains(data)
 
     def take_tile(self, tile: Tile) -> None:
-        if self.tiles[tile.id] == 0:
+        if self.tiles[tile.id] <= 0:
             raise RuleError("There are no more copies of this tile in the Bank.")
         self.tiles[tile.id] -= 1
 
     def take_train(self, train: Train) -> None:
-        if self.trains[train.id] == 0:
+        if self.trains[train.id] <= 0:
             raise RuleError("There are no more copies of this train in the Bank.")
         self.trains[train.id] -= 1
 
