@@ -1,7 +1,7 @@
 from __future__ import annotations
 import json
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any, ItemsView
 
 from core.hex import Hex
@@ -14,6 +14,7 @@ BOARD_PATH = "data/{}/board.json"
 @dataclass
 class Field:
     tile: Tile
+    rotation: int = field(default=0)
     # TODO: Tokens: list[Token]?
 
 

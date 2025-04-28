@@ -8,7 +8,7 @@ from core.board import Board
 from core.hex import Hex
 from core.phase import Phase
 from core.railway import Railway
-from core.tile import Tile
+from core.tile import SettlementLocation, Tile
 from core.train import Train
 from tools.exceptions import RuleError
 
@@ -48,11 +48,27 @@ class Game:
             self.place_tile(hex, tile, rotation)
 
     def place_tile(self, hex: Hex, tile: Tile, rotation: int):
-        # TODO: Handle rotation
-        # TODO: Handle phase validation
-        # TODO: Handle city/label validation
-        # TODO: Handle edge validation
-        self.board[hex].tile = tile
+        new_tile = tile.rotated(rotation)
+        board_tile = self.board[hex].tile
+
+        if (tile.color.value > self.phase.color.value):
+            raise RuleError(f"Cannot place Tile at {hex} because its color ({tile.color}) is higher the current phase ({self.phase.color})")
+        # TODO: check whether tile extends track or improves a settlement instead of merely preserving it
+        # ! Not really checking if the new title is an improvement
+        if (not new_tile.preserves_track(board_tile)):
+            raise RuleError(f"Cannot place Tile at {hex} because it ({tile.id}) does not preserve track of previous tile ({board_tile.id}).")
+        if (not new_tile.preserves_settlements(board_tile)):
+            raise RuleError(f"Cannot place Tile at {hex} because it ({tile.id}) does not upgrade any of the settlements of previous tile ({board_tile.id}).")
+        if (not new_tile.label == board_tile.label):
+            raise RuleError(f"Cannot place Tile at {hex} because its ({tile.id}) label does not match that of the previous tile ({board_tile.id}).")
+
+        # ? This may contain settlement preserving in itself?
+        # ! Can't check for direct upgrade during loading save data as we don't store the previous tile state
+        # if (not new_tile.is_upgrade(board_tile)):
+        #     raise RuleError(f"Cannot place the new tile since it is not an upgrade of the previous tile")
+
+        self.board[hex].tile = new_tile
+        self.board[hex].rotation = rotation
 
     def give_train(self, train: Train, railway: Railway):
         """
@@ -104,6 +120,5 @@ class Game:
 if __name__ == "__main__":
     game = Game("1889")
 
+    #print(Tile.from_id("23").preserves_track(Tile.from_id("8").rotated(4)))
     game.load_save("save.json")
-
-    pprint(Database().tiles)

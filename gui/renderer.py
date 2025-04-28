@@ -84,8 +84,8 @@ class Renderer:
 
     def _draw_segment(self, hex: Hex, segment: Segment) -> None:
         track_pens = [
-            QPen(QColor("#FFFFFF"), 8),
-            QPen(QColor("#000000"), 4),
+            #QPen(QColor("#FFFFFF"), 8),
+            QPen(QColor("#000000"), 6),
         ]
 
         if segment.location:
@@ -111,7 +111,6 @@ class Renderer:
             case Direction():
                 p2 = hex.midpoints[e2.value]
             case SettlementLocation():
-                print(e2.value)
                 p2 = hex.citypoints[e2.value]
         middle = lerp(p1, p2, 0.5)
 
