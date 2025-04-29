@@ -2,9 +2,6 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 import json
 
-from core.tile import Color
-
-
 # ! order=True compares the ID which just happens to work for 1889 but may not for others!
 @dataclass(frozen=True, order=True)
 class Train:

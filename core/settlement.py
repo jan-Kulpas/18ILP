@@ -1,6 +1,9 @@
 from __future__ import annotations
-from abc import ABC
+from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
+
+from core.phase import Phase
+from core.train import Train
 
 
 @dataclass(frozen=True)
@@ -11,7 +14,14 @@ class Settlement(ABC):
     Attributes:
         value(int): Money earned for visiting the revenue center.
     """
-    value: int = field(default=10)
+    @property
+    @abstractmethod
+    def value(self) -> int:
+        pass
+
+    @abstractmethod
+    def revenue(self, train: Train, phase: Phase) -> int:
+        pass
 
     @classmethod
     def from_dict(cls, dict: dict) -> City | Town:
@@ -28,7 +38,11 @@ class Town(Settlement):
     Attributes:
         None
     """
+    value: int = field(default=10)
 
+    def revenue(self, train: Train, phase: Phase) -> int:
+        return self.value
+        
 
 @dataclass(frozen=True)
 class City(Settlement):
@@ -38,10 +52,20 @@ class City(Settlement):
     Attributes:
         size(int): The amount of stations that can be maximally present in the city,
     """
+    value: int = field(default=10)
     size: int = field(default=1)
+
+    def revenue(self, train: Train, phase: Phase) -> int:
+        return self.value
 
 
 # Todo: Handle offboard locations
-# @dataclass(frozen=True)
-# class Offboard:
-#    idk
+@dataclass(frozen=True)
+class Offboard(Settlement):
+   # ? This may blow everything up when comparing values but it's unlikely to ever occur
+   @property
+   def value(self) -> int:
+       raise AttributeError("Offboard has a dynamic value and has to be accessed through revenue()")
+   
+   def revenue(self, train: Train, phase: Phase) -> int:
+       raise NotImplementedError()

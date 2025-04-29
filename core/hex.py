@@ -6,7 +6,7 @@ from dataclasses import dataclass
 
 from PyQt6.QtCore import QPoint, QPointF
 
-from core.tile import Direction
+from core.enums.direction import Direction
 from gui.helpers import lerp
 
 SIZE = 50

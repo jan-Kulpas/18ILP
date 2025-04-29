@@ -1,56 +1,15 @@
 from __future__ import annotations
-from abc import ABC
 import json
 
-from enum import Enum, Flag
+from enum import Enum
 from dataclasses import asdict, dataclass, field, is_dataclass
-from typing import Any
 
+from core.enums.color import Color
+from core.enums.direction import Direction
+from core.enums.settlement_location import SettlementLocation
 from core.settlement import City, Settlement, Town
 
-class Direction(Enum):
-    """
-    Direction in which a track may go, i.e. edges of a hex or revenue centers located on it.
-    """
-    N = 0
-    NE = 1
-    SE = 2
-    S = 3
-    SW = 4
-    NW = 5
-
-    def rotated(self, r: int) -> Direction:
-        return Direction((self.value + r) % len(Direction))
-
-class SettlementLocation(Enum):
-    C = 0 # Center for Lawsonian tiles
-    R1 = 1
-    R2 = 2
-    R3 = 3
-    R4 = 4
-    R5 = 5
-    R6 = 6
-
-    def rotated(self, r: int) -> SettlementLocation:
-        if self == SettlementLocation.C:
-            return self
-        else:
-            value = ((self.value - 1) + r) % (len(SettlementLocation) - 1) + 1
-            return SettlementLocation(value)
-
-class Color(Flag):
-    """
-    Tile color, can be combined bitwise to represent multiple colors
-    """
-
-    BLANK = 0
-    YELLOW = 1
-    GREEN = 2
-    BROWN = 4
-    GRAY = 8
-    RED = 16
-
-# TODO: Maybe handle both tracks and settlements to handle city, and cityless cases? (awful)
+# MAYBE: Maybe handle both tracks and settlements to handle city, and cityless cases? (awful)
 @dataclass(frozen=True)
 class Segment:
     tracks: list[Direction] = field(default_factory=list)

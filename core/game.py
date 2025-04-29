@@ -8,7 +8,8 @@ from core.board import Board
 from core.hex import Hex
 from core.phase import Phase
 from core.railway import Railway
-from core.tile import SettlementLocation, Tile
+from core.settlement import Town, Offboard, City
+from core.tile import Tile
 from core.train import Train
 from tools.exceptions import RuleError
 
@@ -119,4 +120,5 @@ if __name__ == "__main__":
     game = Game("1889")
 
     #print(Tile.from_id("23").preserves_track(Tile.from_id("8").rotated(4)))
+
     game.load_save("save.json")
