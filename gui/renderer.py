@@ -69,7 +69,6 @@ class Renderer:
         for segment in tile.segments:
             self._draw_segment(hex, segment)
 
-
         label_location = lerp(hex.center, hex.corners[-1], 0.65) - QPointF(5, 0)
         self.painter.drawText(label_location, tile.label)
 
@@ -82,12 +81,15 @@ class Renderer:
 
     def _draw_segment(self, hex: Hex, segment: Segment) -> None:
         track_pens = [
-            #QPen(QColor("#FFFFFF"), 8),
+            # QPen(QColor("#FFFFFF"), 8),
             QPen(QColor("#000000"), 6),
         ]
 
         if segment.location:
-            paths = [self._calculate_path(hex, track, segment.location) for track in segment.tracks]
+            paths = [
+                self._calculate_path(hex, track, segment.location)
+                for track in segment.tracks
+            ]
         elif segment.tracks:
             paths = [self._calculate_path(hex, segment.tracks[0], segment.tracks[1])]
         else:
@@ -100,9 +102,11 @@ class Renderer:
                     buffer.drawPath(path)
 
         if segment.settlement and segment.location:
-                self._draw_settlement(hex, segment.settlement, segment.location)  
+            self._draw_settlement(hex, segment.settlement, segment.location)
 
-    def _calculate_path(self, hex: Hex, e1: Direction, e2: Direction | SettlementLocation) -> QPainterPath:
+    def _calculate_path(
+        self, hex: Hex, e1: Direction, e2: Direction | SettlementLocation,
+    ) -> QPainterPath:
         """Returns a path along which a given Track should be drawn."""
         p1 = hex.midpoints[e1.value]
         match e2:
@@ -122,7 +126,9 @@ class Renderer:
 
         return path
 
-    def _draw_settlement(self, hex: Hex, settlement: Settlement, location: SettlementLocation) -> None:
+    def _draw_settlement(
+        self, hex: Hex, settlement: Settlement, location: SettlementLocation,
+    ) -> None:
         """Draws a city or a town on the hex."""
         center = hex.citypoints[location.value]
 
@@ -141,16 +147,14 @@ class Renderer:
                 ]
             elif settlement.size == 3:
                 points = [
-                    QPointF(
-                        center.x() - CITY_RADIUS, center.y() + CITY_RADIUS * 0.5
-                    ),
-                    QPointF(
-                        center.x() + CITY_RADIUS, center.y() + CITY_RADIUS * 0.5
-                    ),
+                    QPointF(center.x() - CITY_RADIUS, center.y() + CITY_RADIUS * 0.5),
+                    QPointF(center.x() + CITY_RADIUS, center.y() + CITY_RADIUS * 0.5),
                     QPointF(center.x(), center.y() - CITY_RADIUS * 1.2),
                 ]
             else:
-                raise ValueError("City has too many stations to draw than should be possible.")
+                raise ValueError(
+                    "City has too many stations to draw than should be possible."
+                )
 
             for pt in points:
                 self.painter.drawEllipse(pt, CITY_RADIUS, CITY_RADIUS)
@@ -162,8 +166,20 @@ class Renderer:
                 value_location = lerp(hex.center, hex.corners[0], 0.65) - QPointF(5, 0)
                 self.painter.drawText(value_location, str(settlement.value))
             case Offboard():
-                # TODO: Handle drawing offboards properly 
+                # TODO: Handle drawing offboards properly
                 value_location = lerp(hex.center, hex.corners[-1], 0.65) - QPointF(5, 0)
-                text = [f"{key.name[0] if key.name else "ERROR"}: {value}" for key, value in settlement.values.items()]
-                text += [f"{key[0]}: {value}" for key, value in settlement.modifiers.items()]
-                self.painter.drawText(QRectF(value_location - QPointF(5,10), value_location + QPointF(50,50)), Qt.AlignmentFlag.AlignTop, "\n".join(text))
+                text = [
+                    f"{key.name[0] if key.name else "ERROR"}: {value}"
+                    for key, value in settlement.values.items()
+                ]
+                text += [
+                    f"{key[0]}: {value}" for key, value in settlement.modifiers.items()
+                ]
+                self.painter.drawText(
+                    QRectF(
+                        value_location - QPointF(5, 10),
+                        value_location + QPointF(50, 50),
+                    ),
+                    Qt.AlignmentFlag.AlignTop,
+                    "\n".join(text),
+                )

@@ -3,7 +3,7 @@ from enum import Enum
 
 
 class SettlementLocation(Enum):
-    C = 0 # Center for Lawsonian tiles
+    C = 0  # Center for Lawsonian tiles
     R1 = 1
     R2 = 2
     R3 = 3

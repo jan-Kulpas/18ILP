@@ -9,18 +9,19 @@ from core.enums.direction import Direction
 from core.enums.settlement_location import SettlementLocation
 from core.settlement import City, Settlement, Town
 
+
 # MAYBE: Maybe handle both tracks and settlements to handle city, and cityless cases? (awful)
 @dataclass(frozen=True)
 class Segment:
     tracks: list[Direction] = field(default_factory=list)
     settlement: Settlement | None = field(default=None)
     location: SettlementLocation | None = field(default=None)
-    
+
     @classmethod
     def from_json(cls, string: str) -> Segment:
         dict = json.loads(string)
         return Segment.from_dict(dict)
-    
+
     @classmethod
     def from_dict(cls, dict: dict) -> Segment:
         if "tracks" in dict:
@@ -29,15 +30,16 @@ class Segment:
             dict["settlement"] = Settlement.from_dict(dict["settlement"])
         if "location" in dict:
             dict["location"] = SettlementLocation[dict["location"]]
-        
+
         return Segment(**dict)
-    
+
     def rotated(self, r: int) -> Segment:
         return Segment(
             [dir.rotated(r) for dir in self.tracks],
             self.settlement,
-            self.location.rotated(r) if self.location else None
+            self.location.rotated(r) if self.location else None,
         )
+
 
 @dataclass(eq=True, frozen=True)
 class Tile:
@@ -78,24 +80,28 @@ class Tile:
     def from_json(cls, string: str) -> Tile:
         dict = json.loads(string)
         return Tile.from_dict(dict)
-    
+
     @classmethod
     def from_dict(cls, dict: dict) -> Tile:
         if "cities" in dict:
-            dict["cities"] = [Settlement.from_dict(city_dict) for city_dict in dict["cities"]]
+            dict["cities"] = [
+                Settlement.from_dict(city_dict) for city_dict in dict["cities"]
+            ]
         if "segments" in dict:
-            dict["segments"] = [Segment.from_dict(segment) for segment in dict["segments"]]
-        
+            dict["segments"] = [
+                Segment.from_dict(segment) for segment in dict["segments"]
+            ]
+
         return Tile(
             id=dict["id"],
             color=Color(sum([Color[name].value for name in dict["color"]])),
             **{k: dict[k] for k in ["segments", "label", "upgrades"] if k in dict},
         )
-    
+
     # @property
     # def json(self):
     #     return json.dumps(self, cls=_TileEncoder)
-    
+
     def rotated(self, r: int) -> Tile:
         return Tile(
             self.id,
@@ -103,9 +109,9 @@ class Tile:
             [segment.rotated(r) for segment in self.segments],
             self.label,
             self.upgrades,
-            (self.rotation + r) % 6
+            (self.rotation + r) % 6,
         )
-    
+
     def is_upgrade(self, other: Tile) -> bool:
         """
         Returns True if this tile is a direct upgrade of the `other` tile.
@@ -117,10 +123,10 @@ class Tile:
         Returns True if every segment in `other` can be assigned to a distinct
         segment in self whose tracks ⊇ the other's tracks.
         """
-        
+
         # Convert segments into track sets to easily check if one contains the other
         other_sets = [set(seg.tracks) for seg in other.segments if seg.tracks]
-        self_sets  = [set(seg.tracks) for seg in self.segments  if seg.tracks]
+        self_sets = [set(seg.tracks) for seg in self.segments if seg.tracks]
 
         # Fail if the other segment list is too big to match 1:1 with self segments
         if len(other_sets) > len(self_sets):
@@ -172,7 +178,7 @@ class Tile:
 
         for loc, old_settlement in other_map.items():
             new_settlement = self_map[loc]
-            
+
             # value >= other.value
             if new_settlement.value < old_settlement.value:
                 return False

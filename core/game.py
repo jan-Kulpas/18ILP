@@ -50,15 +50,23 @@ class Game:
     def place_tile(self, hex: Hex, tile: Tile):
         board_tile = self.board[hex].tile
 
-        if (tile.color.value > self.phase.color.value):
-            raise RuleError(f"Cannot place Tile at {hex} because its color ({tile.color}) is higher the current phase ({self.phase.color})")
+        if tile.color.value > self.phase.color.value:
+            raise RuleError(
+                f"Cannot place Tile at {hex} because its color ({tile.color}) is higher the current phase ({self.phase.color})"
+            )
         # MAYBE: check whether tile extends track or improves a settlement instead of merely preserving it
-        if (not tile.preserves_track(board_tile)):
-            raise RuleError(f"Cannot place Tile at {hex} because it ({tile.id}) does not preserve track of previous tile ({board_tile.id}).")
-        if (not tile.preserves_settlements(board_tile)):
-            raise RuleError(f"Cannot place Tile at {hex} because it ({tile.id}) does not upgrade any of the settlements of previous tile ({board_tile.id}).")
-        if (not tile.label == board_tile.label):
-            raise RuleError(f"Cannot place Tile at {hex} because its ({tile.id}) label does not match that of the previous tile ({board_tile.id}).")
+        if not tile.preserves_track(board_tile):
+            raise RuleError(
+                f"Cannot place Tile at {hex} because it ({tile.id}) does not preserve track of previous tile ({board_tile.id})."
+            )
+        if not tile.preserves_settlements(board_tile):
+            raise RuleError(
+                f"Cannot place Tile at {hex} because it ({tile.id}) does not upgrade any of the settlements of previous tile ({board_tile.id})."
+            )
+        if not tile.label == board_tile.label:
+            raise RuleError(
+                f"Cannot place Tile at {hex} because its ({tile.id}) label does not match that of the previous tile ({board_tile.id})."
+            )
         # TODO: Check for going outside map with an edge
 
         # MAYBE: Change save board structure from map to list if storing previous tiles becomes important
@@ -119,6 +127,6 @@ class Game:
 if __name__ == "__main__":
     game = Game("1889")
 
-    #print(Tile.from_id("23").preserves_track(Tile.from_id("8").rotated(4)))
+    # print(Tile.from_id("23").preserves_track(Tile.from_id("8").rotated(4)))
 
     game.load_save("save.json")
