@@ -42,33 +42,31 @@ class Game:
         # Update board
         for coord, data in savedata["board"].items():
             hex = Hex.from_string(coord)
-            tile = Tile.from_id(data["tile"])
-            rotation = data["rotation"]
+            tile = Tile.from_id(data["tile"]).rotated(data["rotation"])
 
-            self.place_tile(hex, tile, rotation)
+            self.place_tile(hex, tile)
 
-    def place_tile(self, hex: Hex, tile: Tile, rotation: int):
-        new_tile = tile.rotated(rotation)
+    def place_tile(self, hex: Hex, tile: Tile):
         board_tile = self.board[hex].tile
 
         if (tile.color.value > self.phase.color.value):
             raise RuleError(f"Cannot place Tile at {hex} because its color ({tile.color}) is higher the current phase ({self.phase.color})")
-        # TODO: check whether tile extends track or improves a settlement instead of merely preserving it
-        # ! Not really checking if the new title is an improvement
-        if (not new_tile.preserves_track(board_tile)):
+        # MAYBE: check whether tile extends track or improves a settlement instead of merely preserving it
+        if (not tile.preserves_track(board_tile)):
             raise RuleError(f"Cannot place Tile at {hex} because it ({tile.id}) does not preserve track of previous tile ({board_tile.id}).")
-        if (not new_tile.preserves_settlements(board_tile)):
+        if (not tile.preserves_settlements(board_tile)):
             raise RuleError(f"Cannot place Tile at {hex} because it ({tile.id}) does not upgrade any of the settlements of previous tile ({board_tile.id}).")
-        if (not new_tile.label == board_tile.label):
+        if (not tile.label == board_tile.label):
             raise RuleError(f"Cannot place Tile at {hex} because its ({tile.id}) label does not match that of the previous tile ({board_tile.id}).")
+        # TODO: Check for going outside map with an edge
 
-        # ? This may contain settlement preserving in itself?
+        # MAYBE: Change save board structure from map to list if storing previous tiles becomes important
+        # ? This may contain settlement preserving in itself
         # ! Can't check for direct upgrade during loading save data as we don't store the previous tile state
         # if (not new_tile.is_upgrade(board_tile)):
         #     raise RuleError(f"Cannot place the new tile since it is not an upgrade of the previous tile")
 
-        self.board[hex].tile = new_tile
-        self.board[hex].rotation = rotation
+        self.board[hex].tile = tile
 
     def give_train(self, train: Train, railway: Railway):
         """

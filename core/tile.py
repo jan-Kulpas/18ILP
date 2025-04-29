@@ -87,6 +87,8 @@ class Tile:
 
     Note that this doesn't contain info on the position on board but the contents of the tile.
 
+    The tile rotation is also included as the rotated method changes every track direction in the tile so it encodes that anyway
+
     Attributes:
         id (str): ID printed on the tile.
         tracks (list[tuple[Direction, Direction]]): List of track segments made of a tuple containing the 2 endpoints of a curve.
@@ -101,6 +103,7 @@ class Tile:
     segments: list[Segment] = field(default_factory=list)
     label: str | None = field(default=None, compare=False)
     upgrades: list[str] = field(default_factory=list, compare=False)
+    rotation: int = field(default=0)
 
     @classmethod
     def blank(cls) -> Tile:
@@ -140,7 +143,8 @@ class Tile:
             self.color,
             [segment.rotated(r) for segment in self.segments],
             self.label,
-            self.upgrades
+            self.upgrades,
+            (self.rotation + r) % 6
         )
     
     def is_upgrade(self, other: Tile) -> bool:

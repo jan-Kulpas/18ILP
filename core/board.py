@@ -14,7 +14,7 @@ BOARD_PATH = "data/{}/board.json"
 @dataclass
 class Field:
     tile: Tile
-    rotation: int = field(default=0)
+    # rotation: int = field(default=0)
     # TODO: Tokens: list[Token]?
 
 
