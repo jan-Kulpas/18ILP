@@ -216,13 +216,31 @@
             "location": "R4",
             "tracks": [
               "S"
-            ]
+            ],
+            "settlement": {
+              "values": {
+                "YELLOW": 30,
+                "BROWN": 60 
+              },
+              "modifiers": {
+                "D": 100
+              }
+            }
           },
           {
             "location": "R5",
             "tracks": [
               "SW"
-            ]
+            ],
+            "settlement": {
+              "values": {
+                "YELLOW": 30,
+                "BROWN": 60 
+              },
+              "modifiers": {
+                "D": 100
+              }
+            }
           }
         ],
         "upgrades": []
@@ -256,13 +274,31 @@
             "location": "R4",
             "tracks": [
               "S"
-            ]
+            ],
+            "settlement": {
+              "values": {
+                "YELLOW": 20,
+                "BROWN": 40 
+              },
+              "modifiers": {
+                "D": 80
+              }
+            }
           },
           {
             "location": "R5",
             "tracks": [
               "SW"
-            ]
+            ],
+            "settlement": {
+              "values": {
+                "YELLOW": 20,
+                "BROWN": 40 
+              },
+              "modifiers": {
+                "D": 80
+              }
+            }
           }
         ],
         "upgrades": []
@@ -292,13 +328,31 @@
             "location": "R6",
             "tracks": [
               "NW"
-            ]
+            ],
+            "settlement": {
+              "values": {
+                "YELLOW": 20,
+                "BROWN": 40 
+              },
+              "modifiers": {
+                "D": 80
+              }
+            }
           },
           {
             "location": "R5",
             "tracks": [
               "SW"
-            ]
+            ],
+            "settlement": {
+              "values": {
+                "YELLOW": 20,
+                "BROWN": 40 
+              },
+              "modifiers": {
+                "D": 80
+              }
+            }
           }
         ],
         "upgrades": []

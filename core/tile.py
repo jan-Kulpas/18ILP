@@ -92,9 +92,9 @@ class Tile:
             **{k: dict[k] for k in ["segments", "label", "upgrades"] if k in dict},
         )
     
-    @property
-    def json(self):
-        return json.dumps(self, cls=_TileEncoder)
+    # @property
+    # def json(self):
+    #     return json.dumps(self, cls=_TileEncoder)
     
     def rotated(self, r: int) -> Tile:
         return Tile(
@@ -187,19 +187,19 @@ class Tile:
         return True
 
 
-class _TileEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, Color):
-            flags = []
-            for flag in obj:
-                flags.append(flag.name)
-            if not flags:
-                return [Color.BLANK.name]
-            return flags
-        elif isinstance(obj, Enum):
-            return obj.name
-        elif is_dataclass(obj) and not isinstance(obj, type):
-            return asdict(obj)
-        elif isinstance(obj, tuple):
-            return list(obj)
-        return super().default(obj)
+# class _TileEncoder(json.JSONEncoder):
+#     def default(self, obj):
+#         if isinstance(obj, Color):
+#             flags = []
+#             for flag in obj:
+#                 flags.append(flag.name)
+#             if not flags:
+#                 return [Color.BLANK.name]
+#             return flags
+#         elif isinstance(obj, Enum):
+#             return obj.name
+#         elif is_dataclass(obj) and not isinstance(obj, type):
+#             return asdict(obj)
+#         elif isinstance(obj, tuple):
+#             return list(obj)
+#         return super().default(obj)

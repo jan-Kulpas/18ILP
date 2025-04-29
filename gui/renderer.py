@@ -1,7 +1,5 @@
-from collections import defaultdict
-from itertools import zip_longest
 from PyQt6.QtGui import QPainter, QPen, QColor, QBrush, QPainterPath, QImage
-from PyQt6.QtCore import Qt, QPoint, QPointF, QSize
+from PyQt6.QtCore import Qt, QPoint, QPointF, QSize, QRectF
 
 from core.tile import *
 from core.game import *
@@ -159,5 +157,13 @@ class Renderer:
 
         # ? Consider doing this after rewrite to Tile.Segment
         # ! The values will overlap if there are two cities!!!
-        value_location = lerp(hex.center, hex.corners[0], 0.65) - QPointF(5, 0)
-        self.painter.drawText(value_location, str(settlement.value))
+        match settlement:
+            case Town() | City():
+                value_location = lerp(hex.center, hex.corners[0], 0.65) - QPointF(5, 0)
+                self.painter.drawText(value_location, str(settlement.value))
+            case Offboard():
+                # TODO: Handle drawing offboards properly 
+                value_location = lerp(hex.center, hex.corners[-1], 0.65) - QPointF(5, 0)
+                text = [f"{key.name[0] if key.name else "ERROR"}: {value}" for key, value in settlement.values.items()]
+                text += [f"{key[0]}: {value}" for key, value in settlement.modifiers.items()]
+                self.painter.drawText(QRectF(value_location - QPointF(5,10), value_location + QPointF(50,50)), Qt.AlignmentFlag.AlignTop, "\n".join(text))
