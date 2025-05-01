@@ -15,14 +15,15 @@ class Railway:
     it belongs to as that influences which stations are passable.
 
     Attributes:
-        name(str): ID of the Railway.
+        id(str): ID of the Railway.
         home(Hex): Coordinates of the city/town that will contain the first station when it gets floated.
         trains(list[Train]): List of Trains belonging to this Railway.
         floated(bool): Whether the railway is active or not.
     """
 
-    name: str = field()
+    id: str = field()
     home: Hex = field()
+    stations: int = field()
     trains: list[Train] = field(default_factory=list, compare=False)
     floated: bool = field(default=False)
 
@@ -34,4 +35,4 @@ class Railway:
     @classmethod
     def from_dict(cls, dict: dict) -> Railway:
         dict["home"] = Hex.from_string(dict["home"])
-        return cls(**dict)
+        return cls(**{k: dict[k] for k in dict if k != "color"})

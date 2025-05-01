@@ -1,3 +1,4 @@
+from typing import Any
 from PyQt6.QtGui import QPainter, QPen, QColor, QBrush, QPainterPath, QImage
 from PyQt6.QtCore import Qt, QPoint, QPointF, QSize, QRectF
 
@@ -5,6 +6,8 @@ from core.tile import *
 from core.game import *
 from core.hex import Hex
 from gui.helpers import lerp
+
+BOARD_PATH = "data/{}/board.json"
 
 TILE_COLORS = {
     Color.BLANK: QColor("#E6E6E6"),
@@ -55,12 +58,24 @@ class BufferedPainter:
 
 
 class Renderer:
+    year: str
+
     painter: QPainter
     size: QSize
 
-    def __init__(self, painter: QPainter, size: QSize) -> None:
+    def __init__(self, year: str, painter: QPainter, size: QSize) -> None:
+        self.year = year
+
         self.painter = painter
         self.size = size
+
+        self._station_colors = self._load_station_colors()
+
+    def _load_station_colors(self) -> dict[str, QColor]:
+        with open(BOARD_PATH.format(self.year)) as file:
+            data: dict[str, Any] = json.load(file)
+
+        return {dct["id"]: QColor(dct["color"]) for dct in data["railways"]}
 
     def draw_tile(self, hex: Hex, tile: Tile) -> None:
         """Draws a given Tile on the given Hex along with all its features."""
@@ -105,7 +120,10 @@ class Renderer:
             self._draw_settlement(hex, segment.settlement, segment.location)
 
     def _calculate_path(
-        self, hex: Hex, e1: Direction, e2: Direction | SettlementLocation,
+        self,
+        hex: Hex,
+        e1: Direction,
+        e2: Direction | SettlementLocation,
     ) -> QPainterPath:
         """Returns a path along which a given Track should be drawn."""
         p1 = hex.midpoints[e1.value]
@@ -127,37 +145,19 @@ class Renderer:
         return path
 
     def _draw_settlement(
-        self, hex: Hex, settlement: Settlement, location: SettlementLocation,
+        self,
+        hex: Hex,
+        settlement: Settlement,
+        location: SettlementLocation,
     ) -> None:
         """Draws a city or a town on the hex."""
         center = hex.citypoints[location.value]
 
-        if isinstance(settlement, Town):
-            self.painter.setBrush(QBrush(Qt.GlobalColor.black))
-            self.painter.drawEllipse(center, TOWN_RADIUS, TOWN_RADIUS)
-        elif isinstance(settlement, City):
-            self.painter.setBrush(QBrush(Qt.GlobalColor.white))
-            points = []
-            if settlement.size == 1:
-                points = [center]
-            elif settlement.size == 2:
-                points = [
-                    QPointF(center.x() - CITY_RADIUS, center.y()),
-                    QPointF(center.x() + CITY_RADIUS, center.y()),
-                ]
-            elif settlement.size == 3:
-                points = [
-                    QPointF(center.x() - CITY_RADIUS, center.y() + CITY_RADIUS * 0.5),
-                    QPointF(center.x() + CITY_RADIUS, center.y() + CITY_RADIUS * 0.5),
-                    QPointF(center.x(), center.y() - CITY_RADIUS * 1.2),
-                ]
-            else:
-                raise ValueError(
-                    "City has too many stations to draw than should be possible."
-                )
-
-            for pt in points:
-                self.painter.drawEllipse(pt, CITY_RADIUS, CITY_RADIUS)
+        match settlement:
+            case Town():
+                self._draw_town_shape(center)
+            case City():
+                self._draw_city_shape(center, settlement)
 
         # ? Consider doing this after rewrite to Tile.Segment
         # ! The values will overlap if there are two cities!!!
@@ -183,3 +183,44 @@ class Renderer:
                     Qt.AlignmentFlag.AlignTop,
                     "\n".join(text),
                 )
+
+    def _draw_town_shape(self, center: QPointF) -> None:
+        self.painter.setBrush(QBrush(Qt.GlobalColor.black))
+        self.painter.drawEllipse(center, TOWN_RADIUS, TOWN_RADIUS)
+
+    def _draw_city_shape(self, center: QPointF, city: City) -> None:
+        points = []
+        colors = []
+
+        match city.size:
+            case 1:
+                points = [center]
+            case 2:
+                points = [
+                    QPointF(center.x() - CITY_RADIUS, center.y()),
+                    QPointF(center.x() + CITY_RADIUS, center.y()),
+                ]
+            case 3:
+                points = [
+                    QPointF(center.x() - CITY_RADIUS, center.y() + CITY_RADIUS * 0.5),
+                    QPointF(center.x() + CITY_RADIUS, center.y() + CITY_RADIUS * 0.5),
+                    QPointF(center.x(), center.y() - CITY_RADIUS * 1.2),
+                ]
+            case _:
+                raise ValueError(
+                    "City has too many stations to draw than should be possible."
+                )
+
+        for station in city.stations:
+            colors.append(self._station_colors[station])
+
+        # Add default color for empty stations
+        while len(colors) < len(points):
+            colors.append(Qt.GlobalColor.white)
+
+        for pt, color in zip(points, colors):
+            self.painter.setBrush(QBrush(color))
+            self.painter.drawEllipse(pt, CITY_RADIUS, CITY_RADIUS)
+
+        for idx, station in enumerate(city.stations):
+            self.painter.drawText(points[idx] + QPointF(-8, 5), station)

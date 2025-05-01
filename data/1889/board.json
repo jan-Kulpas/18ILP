@@ -388,32 +388,46 @@
     },
     "railways": [
       {
-        "name": "TR",
-        "home": "F9"
+        "id": "TR",
+        "home": "F9",
+        "stations": 3,
+        "color": "#217168"
       },
       {
-        "name": "KO",
-        "home": "K4"
+        "id": "KO",
+        "home": "K4",
+        "stations": 2,
+        "color": "#D01735"
       },
       {
-        "name": "UR",
-        "home": "B7"
+        "id": "UR",
+        "home": "B7",
+        "stations": 3,
+        "color": "#7A3B2E"
       },
       {
-        "name": "KU",
-        "home": "C10"
+        "id": "KU",
+        "home": "C10",
+        "stations": 1,
+        "color": "#2967AC"
       },
       {
-        "name": "AR",
-        "home": "K8"
+        "id": "AR",
+        "home": "K8",
+        "stations": 2,
+        "color": "#535050"
       },
       {
-        "name": "IR",
-        "home": "E2"
+        "id": "IR",
+        "home": "E2",
+        "stations": 2,
+        "color": "#E34C27"
       },
       {
-        "name": "SR",
-        "home": "I2"
+        "id": "SR",
+        "home": "I2",
+        "stations": 2,
+        "color": "#50AB3B"
       }
     ]
 }

@@ -5,6 +5,7 @@ from pprint import pprint
 from core.database import Database
 from core.bank import Bank
 from core.board import Board
+from core.enums.settlement_location import SettlementLocation
 from core.hex import Hex
 from core.phase import Phase
 from core.railway import Railway
@@ -46,6 +47,13 @@ class Game:
             tile = Tile.from_id(data["tile"]).rotated(data["rotation"])
 
             self.place_tile(hex, tile)
+
+        # TODO: Add ability to read which city is the station on if multiple.
+        # Place stations
+        for coord, railways in savedata["stations"].items():
+            hex = Hex.from_string(coord)
+            for id in railways:
+                self.place_station(hex, self.railways[id])
 
     def place_tile(self, hex: Hex, tile: Tile):
         board_tile = self.board[hex].tile
@@ -96,6 +104,36 @@ class Game:
         phase = Phase.from_id(train.id)
         if phase > self.phase:
             self.change_phase(phase)
+
+    def place_station(
+        self,
+        hex: Hex,
+        railway: Railway,
+        location: SettlementLocation = SettlementLocation.C,
+    ) -> None:
+        """
+        Places a station token of a given railway on the given tile.
+
+        There's an optional location argument that has to be specified if the tile has multiple cities
+        """
+        # TODO: Check for station with a spot reserved for unfloated railways
+        tile = self.board[hex].tile
+
+        # Get the correct city from the tile
+        city = next(
+            (seg.settlement for seg in tile.segments if seg.location == location), None
+        )
+
+        if not city:
+            raise ValueError("Tried to place a station in a non existent city.")
+        if not railway.stations > 0:
+            raise RuleError("Railway doesn't have any stations left.")
+
+        # Update railway and start it if it's not floated yet
+        railway.stations -= 1
+        railway.floated = True
+
+        city.build_station(railway.id)
 
     def change_phase(self, new_phase: Phase):
         """Sets current phase to given phase and enforces train rusting and train limits."""

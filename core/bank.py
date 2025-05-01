@@ -3,7 +3,7 @@ from collections import namedtuple
 from pprint import pprint
 from typing import Any
 
-from core.railway import Train
+from core.train import Train
 from core.tile import *
 from tools.exceptions import RuleError
 

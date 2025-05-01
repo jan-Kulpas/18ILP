@@ -35,7 +35,7 @@ class Window(QWidget):
         # Background
         painter.fillRect(self.rect(), QColor("#f8f9fa"))
 
-        renderer = Renderer(painter, self.size())
+        renderer = Renderer(game.year, painter, self.size())
 
         # Draw the entire board
         for hex, field in self.game.board.items():

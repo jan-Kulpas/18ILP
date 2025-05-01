@@ -1,4 +1,5 @@
 from __future__ import annotations
+import copy
 from dataclasses import dataclass, field
 import json
 
@@ -26,7 +27,7 @@ class Train:
     def from_id(cls, id: str) -> Train:
         from core.database import Database
 
-        return Database().trains[id]
+        return copy.deepcopy(Database().trains[id])
 
     @classmethod
     def from_json(cls, string: str) -> Train:

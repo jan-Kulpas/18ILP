@@ -1,4 +1,5 @@
 from __future__ import annotations
+import copy
 import json
 
 from enum import Enum
@@ -74,7 +75,7 @@ class Tile:
     def from_id(cls, id: str) -> Tile:
         from core.database import Database
 
-        return Database().tiles[id]
+        return copy.deepcopy(Database().tiles[id])
 
     @classmethod
     def from_json(cls, string: str) -> Tile:

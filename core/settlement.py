@@ -6,6 +6,7 @@ from dataclasses import dataclass, field
 from core.enums.color import Color
 from core.phase import Phase
 from core.train import Train
+from tools.exceptions import RuleError
 
 
 @dataclass(frozen=True)
@@ -29,6 +30,9 @@ class Settlement(ABC):
     @abstractmethod
     def revenue(self, train: Train, phase: Phase) -> int:
         pass
+
+    def build_station(self, company: str) -> None:
+        raise NotImplementedError(f"{self.__class__.__name__} cannot build stations")
 
     @classmethod
     def from_dict(cls, dict: dict) -> Settlement:
@@ -73,11 +77,17 @@ class City(Settlement):
     value: int = field(default=10)
     size: int = field(default=1)
 
+    stations: list[str] = field(init=False, default_factory=list)
+
     def revenue(self, train: Train, phase: Phase) -> int:
         return self.value
 
+    def build_station(self, company: str) -> None:
+        if len(self.stations) >= self.size:
+            raise RuleError("Cannot build another station because the City is full")
+        self.stations.append(company)
 
-# Todo: Handle offboard locations
+
 @dataclass(frozen=True)
 class Offboard(Settlement):
     values: dict[Color, int] = field()
