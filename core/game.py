@@ -56,7 +56,7 @@ class Game:
                 self.place_station(hex, self.railways[id])
 
     def place_tile(self, hex: Hex, tile: Tile):
-        board_tile = self.board[hex].tile
+        board_tile = self.board[hex]
 
         if tile.color.value > self.phase.color.value:
             raise RuleError(
@@ -83,7 +83,7 @@ class Game:
         # if (not new_tile.is_upgrade(board_tile)):
         #     raise RuleError(f"Cannot place the new tile since it is not an upgrade of the previous tile")
 
-        self.board[hex].tile = tile
+        self.board[hex] = tile
 
     def give_train(self, train: Train, railway: Railway):
         """
@@ -117,7 +117,7 @@ class Game:
         There's an optional location argument that has to be specified if the tile has multiple cities
         """
         # TODO: Check for station with a spot reserved for unfloated railways
-        tile = self.board[hex].tile
+        tile = self.board[hex]
 
         # Get the correct city from the tile
         city = next(
