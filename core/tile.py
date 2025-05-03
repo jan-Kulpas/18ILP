@@ -8,6 +8,7 @@ from dataclasses import asdict, dataclass, field, is_dataclass
 from core.enums.color import Color
 from core.enums.direction import Direction
 from core.enums.settlement_location import SettlementLocation
+from core.railway import Railway
 from core.settlement import City, Settlement, Town
 
 
@@ -16,6 +17,7 @@ from core.settlement import City, Settlement, Town
 class Segment:
     tracks: list[Direction] = field(default_factory=list)
     settlement: Settlement | None = field(default=None)
+    # TODO: move to settlement
     location: SettlementLocation | None = field(default=None)
 
     @classmethod
@@ -112,6 +114,47 @@ class Tile:
             self.upgrades,
             (self.rotation + r) % 6,
         )
+
+    def segments_with_exit(self, direction: Direction) -> list[Segment]:
+        return [segment for segment in self.segments if direction in segment.tracks]
+
+    def segment_at(self, location: SettlementLocation) -> Segment:
+        """
+        Returns segment with a settlement in given location.
+        Throws an error if such doesn't exist.
+        """
+
+        for segment in self.segments:
+            if segment.location == location:
+                return segment
+
+        raise IndexError(f"Couldn't find segment at {location}.")
+
+    def get_station_location(self, railway: Railway) -> SettlementLocation | None:
+        """
+        Returns the location of settlement that contains the station of given railway, or None.
+        """
+
+        for segment in self.segments:
+            match segment.settlement:
+                case City():
+                    if railway.id in segment.settlement.stations:
+                        return segment.location
+
+        return None
+
+    def has_station(self, railway: Railway) -> bool:
+        """
+        Returns true if the tile has a station of the given railway.
+        """
+
+        for segment in self.segments:
+            match segment.settlement:
+                case City():
+                    if railway.id in segment.settlement.stations:
+                        return True
+
+        return False
 
     def is_upgrade(self, other: Tile) -> bool:
         """

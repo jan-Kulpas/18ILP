@@ -9,6 +9,7 @@ from core.tile import *
 from core.game import *
 
 from gui.renderer import Renderer
+from solver.pathfinder import Pathfinder
 
 WIDTH = 1200
 HEIGHT = 800
@@ -38,8 +39,8 @@ class Window(QWidget):
         renderer = Renderer(game.year, painter, self.size())
 
         # Draw the entire board
-        for hex, field in self.game.board.items():
-            renderer.draw_tile(hex, field.tile)
+        for hex, tile in self.game.board.items():
+            renderer.draw_tile(hex, tile)
 
     def mousePressEvent(self, event):
         pos = event.pos()
@@ -49,6 +50,9 @@ class Window(QWidget):
 if __name__ == "__main__":
     game = Game("1889")
     game.load_save("save.json")
+
+    pathfinder = Pathfinder(game)
+    pathfinder.solve_for("UR")
 
     app = QApplication(sys.argv)
     window = Window(game)

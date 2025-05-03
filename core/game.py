@@ -117,6 +117,7 @@ class Game:
         There's an optional location argument that has to be specified if the tile has multiple cities
         """
         # TODO: Check for station with a spot reserved for unfloated railways
+        # TODO: Check to prevent multiple stations of same railway.
         tile = self.board[hex]
 
         # Get the correct city from the tile

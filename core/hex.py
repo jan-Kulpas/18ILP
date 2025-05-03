@@ -139,10 +139,13 @@ class Hex:
     def __add__(self, other: Hex) -> Hex:
         return Hex(self.q + other.q, self.r + other.r, self.s + other.s)
 
+    def __sub__(self, other: Hex) -> Hex:
+        return Hex(self.q - other.q, self.r - other.r, self.s - other.s)
+
     def __str__(self) -> str:
         col = self.q
         row = 2 * self.r + self.q
-        return f"Hex({chr(ord('A')+col-1)}{row-1})"
+        return f"{chr(ord('A')+col-1)}{row-1}"
 
 
 UNITS = [

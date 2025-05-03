@@ -4,11 +4,13 @@ import json
 from dataclasses import dataclass, field
 from typing import Any, ItemsView
 
+from core.enums.settlement_location import SettlementLocation
 from core.hex import Hex
 from core.railway import Railway
-from core.tile import Tile
+from core.tile import Segment, Tile
 
 BOARD_PATH = "data/{}/board.json"
+
 
 class Board:
     def __init__(self, year: str) -> None:
@@ -25,6 +27,11 @@ class Board:
     def items(self) -> ItemsView[Hex, Tile]:
         return self._board.items()
 
+    def segment_at(self, coord) -> Segment:
+        hex, location = coord.split(".")
+        return self[Hex.from_string(hex)].segment_at(SettlementLocation[location])
+
+    # TODO: Take railways to separate file and move this up to Game class.
     def load_railways(self) -> dict[str, Railway]:
         with open(BOARD_PATH.format(self.year)) as file:
             data: dict[str, Any] = json.load(file)
@@ -59,7 +66,7 @@ class Board:
 
     def __getitem__(self, key: Hex) -> Tile:
         return self._board[key]
-    
+
     def __setitem__(self, key: Hex, value: Tile):
         self._board[key] = value
 
