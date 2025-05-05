@@ -7,6 +7,7 @@ from typing import Any, ItemsView
 from core.enums.settlement_location import SettlementLocation
 from core.hex import Hex
 from core.railway import Railway
+from core.settlement import Settlement
 from core.tile import Segment, Tile
 
 BOARD_PATH = "data/{}/board.json"
@@ -27,9 +28,15 @@ class Board:
     def items(self) -> ItemsView[Hex, Tile]:
         return self._board.items()
 
-    def segment_at(self, coord) -> Segment:
+    def segment_at(self, coord: str) -> Segment:
         hex, location = coord.split(".")
         return self[Hex.from_string(hex)].segment_at(SettlementLocation[location])
+
+    def settlement_at(self, coord: str) -> Settlement:
+        settlement = self.segment_at(coord).settlement
+        if not settlement:
+            raise IndexError(f"No settlement at specified coordinate: {coord}")
+        return settlement
 
     # TODO: Take railways to separate file and move this up to Game class.
     def load_railways(self) -> dict[str, Railway]:

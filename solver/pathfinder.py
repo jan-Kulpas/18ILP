@@ -1,5 +1,5 @@
 from pprint import pprint
-from pulp import LpProblem
+from pulp import LpProblem, LpVariable, lpSum
 from pulp import const
 
 from core.enums.direction import Direction
@@ -24,6 +24,7 @@ class Pathfinder:
 
         self.nodes: set[str] = set()
         self.edges: set[tuple[str, str]] = set()
+        self.cities: set[str] = set()
 
     # TODO: figure out return type.
     def solve_for(self, railway_id: str):
@@ -39,11 +40,51 @@ class Pathfinder:
         print(f"Finding best route for {railway_id} - Trains: {railway.trains}")
 
         self._build_graph(railway)
-        
+
         print(len(self.nodes))
         print(len(self.edges))
+        print(len(self.cities))
 
         problem = LpProblem("MaximalRouteFinding", const.LpMaximize)
+
+        v = LpVariable.dicts("v", self.nodes, cat=const.LpBinary)  # vertex visited
+        e = LpVariable.dicts("e", self.edges, cat=const.LpBinary)  # edge visited
+        c = LpVariable.dicts("c", self.cities, cat=const.LpBinary)  # city counted
+
+        # Objective: Maximize visited city value
+        problem += lpSum(
+            self.game.board.settlement_at(i).revenue(railway.trains[0], self.game.phase)
+            * c[i]
+            for i in self.cities
+        )
+
+        # TODO: if check for diesels to disable
+        # Constraint: cannot visit more cites than the trains range
+        problem += (
+            lpSum(c[n] for n in self.cities) <= railway.trains[0].range,
+            "MaxCitiesVisited",
+        )
+
+        problem.solve()
+
+        print("Visited Nodes:", [node for node in self.nodes if v[node].varValue == 1])
+        print("Used Edges:", [edge for edge in self.edges if e[edge].varValue == 1])
+        print(
+            "Visited Cities:", [city for city in self.cities if c[city].varValue == 1]
+        )
+        print(
+            "Total Value:",
+            sum(
+                self.game.board.settlement_at(city).revenue(
+                    railway.trains[0], self.game.phase
+                )
+                for city in self.cities
+                if c[city].varValue == 1
+            ),
+        )
+
+        # print(v)
+        # print(e)
 
     def _build_graph(self, railway: Railway) -> None:
         # Reset graph
@@ -61,7 +102,7 @@ class Pathfinder:
                 continue  # Skip already visited
 
             self.nodes.add(node)
-            
+
             match kind:
                 case "city":
                     self._process_city(node, queue)
@@ -78,6 +119,7 @@ class Pathfinder:
 
     def _process_city(self, node: str, queue: deque[tuple[str, str]]) -> None:
         print(f"Visiting city: {node}")
+        self.cities.add(node)
 
         hex = Hex.from_string(node.split(".")[0])
 
@@ -91,12 +133,17 @@ class Pathfinder:
             self.edges.add((node, junction))
             queue.append((junction, "junction"))
 
-    def _process_junction(self, node: str, queue: deque[tuple[str,str]]) -> None:
+    def _process_junction(self, node: str, queue: deque[tuple[str, str]]) -> None:
         print(f"Visiting junction: {node}")
 
-        def get_connected_segments(base_hex: Hex, other_hex: Hex) -> list[tuple[Hex, Segment]]:
+        def get_connected_segments(
+            base_hex: Hex, other_hex: Hex
+        ) -> list[tuple[Hex, Segment]]:
             direction = Direction.from_unit_hex(other_hex - base_hex)
-            return [(base_hex, seg) for seg in self.game.board[base_hex].segments_with_exit(direction)]
+            return [
+                (base_hex, seg)
+                for seg in self.game.board[base_hex].segments_with_exit(direction)
+            ]
 
         # Get the Hexes neighbouring with the junction
         hexes = [Hex.from_string(coord) for coord in node.split("-")]
@@ -104,7 +151,9 @@ class Pathfinder:
 
         # Get the actual segments that are connected to the junction
         # Pair segment and hex for city id (not converting we need to handle None case)
-        cities: list[tuple[Hex, Segment]] = get_connected_segments(from_hex, to_hex) + get_connected_segments(to_hex, from_hex)
+        cities: list[tuple[Hex, Segment]] = get_connected_segments(
+            from_hex, to_hex
+        ) + get_connected_segments(to_hex, from_hex)
 
         # Go through every neighbouring thing and add edge to list and thing to queue
         for hex, seg in cities:
@@ -116,7 +165,8 @@ class Pathfinder:
                 # Oops! There's no city actually so we need to make an edge to the next junction.
                 # I am not sure if there can be multiple directions but just in case.
                 directions = [
-                    dir for dir in seg.tracks
+                    dir
+                    for dir in seg.tracks
                     if hex.neighbour(dir) not in [from_hex, to_hex]
                 ]
                 for dir in directions:
@@ -130,6 +180,7 @@ class Pathfinder:
 
     def junction_name(self, h1: Hex, h2: Hex) -> str:
         return f"{h1}-{h2}" if str(h1) < str(h2) else f"{h2}-{h1}"
+
 
 if __name__ == "__main__":
     game = Game("1889")
