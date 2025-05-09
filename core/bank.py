@@ -1,10 +1,11 @@
 from __future__ import annotations
 from collections import namedtuple
+import json
 from pprint import pprint
 from typing import Any
 
 from core.train import Train
-from core.tile import *
+from core.tile import Tile
 from tools.exceptions import RuleError
 
 MANIFEST_PATH = "data/{}/manifest.json"

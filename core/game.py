@@ -9,7 +9,6 @@ from core.enums.settlement_location import SettlementLocation
 from core.hex import Hex
 from core.phase import Phase
 from core.railway import Railway
-from core.settlement import Town, Offboard, City
 from core.tile import Tile
 from core.train import Train
 from tools.exceptions import RuleError

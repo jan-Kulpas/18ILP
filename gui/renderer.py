@@ -2,6 +2,7 @@ from typing import Any
 from PyQt6.QtGui import QPainter, QPen, QColor, QBrush, QPainterPath, QImage
 from PyQt6.QtCore import Qt, QPoint, QPointF, QSize, QRectF
 
+from core.settlement import *
 from core.tile import *
 from core.game import *
 from core.hex import Hex

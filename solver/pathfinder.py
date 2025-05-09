@@ -11,6 +11,7 @@ from core.railway import Railway
 from collections import deque
 
 from core.tile import Segment
+from core.train import Train
 
 
 class Pathfinder:
@@ -18,13 +19,19 @@ class Pathfinder:
 
     nodes: set[str] = set()
     edges: set[tuple[str, str]] = set()
+    cities: set[str] = set()
 
     def __init__(self, game: Game) -> None:
         self.game = game
 
+        self._reset_graph()
+
+    def _reset_graph(self) -> None:
+        # Reset graph
         self.nodes: set[str] = set()
         self.edges: set[tuple[str, str]] = set()
         self.cities: set[str] = set()
+        self.trains: dict[int, Train] = {}
 
     # TODO: figure out return type.
     def solve_for(self, railway_id: str):
@@ -41,55 +48,96 @@ class Pathfinder:
 
         self._build_graph(railway)
 
-        print(len(self.nodes))
-        print(len(self.edges))
-        print(len(self.cities))
-
         problem = LpProblem("MaximalRouteFinding", const.LpMaximize)
 
-        v = LpVariable.dicts("v", self.nodes, cat=const.LpBinary)  # vertex visited
-        e = LpVariable.dicts("e", self.edges, cat=const.LpBinary)  # edge visited
-        c = LpVariable.dicts("c", self.cities, cat=const.LpBinary)  # city counted
+        v = [
+            LpVariable.dicts(f"v_{train}", self.nodes, cat=const.LpBinary)
+            for train in self.trains
+        ]  # vertex visited
+        e = [
+            LpVariable.dicts(f"e_{train}", self.edges, cat=const.LpBinary)
+            for train in self.trains
+        ]  # edge visited
+        c = [
+            LpVariable.dicts(f"c_{train}", self.cities, cat=const.LpBinary)
+            for train in self.trains
+        ]  # city counted
 
         # Objective: Maximize visited city value
         problem += lpSum(
-            self.game.board.settlement_at(i).revenue(railway.trains[0], self.game.phase)
-            * c[i]
-            for i in self.cities
+            self.game.board.settlement_at(city).revenue(
+                self.trains[train], self.game.phase
+            )
+            * c[train][city]
+            for train in self.trains
+            for city in self.cities
         )
 
         # TODO: if check for diesels to disable
         # Constraint: cannot visit more cites than the trains range
-        problem += (
-            lpSum(c[n] for n in self.cities) <= railway.trains[0].range,
-            "MaxCitiesVisited",
-        )
+        for train in self.trains:
+            problem += (
+                lpSum(c[train][city] for city in self.cities)
+                <= self.trains[train].range,
+                f"Train{train}MaxCitiesVisited",
+            )
+
+        # Constraint: Trains can only score cities they pass through
+        for train in self.trains:
+            for city in self.cities:
+                problem += (
+                    c[train][city] == v[train][city],
+                    f"City{city}CountedIfVisitedByTrain{train}",
+                )
+
+        # Constraint: Trains cannot pass through edge another train has already used
+        for edge in self.edges:
+            problem += (
+                lpSum(e[train][edge] for train in self.trains) <= 1,
+                f"Edge{edge}UsedOnce",
+            )
+
+        # Constraint: Visited nodes need at least one incident edge
+        for train in self.trains:
+            for node in self.nodes:
+                incident_edges = [edge for edge in self.edges if node in edge]
+                problem += (
+                    lpSum(e[train][edge] for edge in incident_edges) >= v[train][node],
+                    f"Node{node}HasUsedEdgeByTrain{train}",
+                )
 
         problem.solve()
 
-        print("Visited Nodes:", [node for node in self.nodes if v[node].varValue == 1])
-        print("Used Edges:", [edge for edge in self.edges if e[edge].varValue == 1])
-        print(
-            "Visited Cities:", [city for city in self.cities if c[city].varValue == 1]
-        )
+        for train in self.trains:
+            print(
+                "Visited Nodes:",
+                [node for node in self.nodes if v[train][node].varValue == 1],
+            )
+            print(
+                "Used Edges:",
+                [edge for edge in self.edges if e[train][edge].varValue == 1],
+            )
+            print(
+                "Visited Cities:",
+                [city for city in self.cities if c[train][city].varValue == 1],
+            )
+
         print(
             "Total Value:",
             sum(
                 self.game.board.settlement_at(city).revenue(
-                    railway.trains[0], self.game.phase
+                    self.trains[train], self.game.phase
                 )
                 for city in self.cities
-                if c[city].varValue == 1
+                for train in self.trains
+                if c[train][city].varValue == 1
             ),
         )
 
-        # print(v)
-        # print(e)
-
     def _build_graph(self, railway: Railway) -> None:
-        # Reset graph
-        self.nodes: set[str] = set()
-        self.edges: set[tuple[str, str]] = set()
+        self._reset_graph()
+
+        self.trains = {idx: train for idx, train in enumerate(railway.trains)}
 
         queue: deque[tuple[str, str]] = deque(
             [(id, "city") for id in self._get_station_segment_ids(railway)]

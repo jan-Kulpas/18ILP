@@ -1,9 +1,10 @@
 from __future__ import annotations
 from collections import namedtuple
+import json
 from pprint import pprint
 
 from core.railway import Train
-from core.tile import *
+from core.tile import Tile
 from core.phase import Phase
 
 TILE_DB_PATH = "data/tiles.json"
