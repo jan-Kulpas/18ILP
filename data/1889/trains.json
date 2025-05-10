@@ -45,7 +45,7 @@
         "id": "D",
         "diesel": true,
         "phase": {
-            "color": "GRAY",
+            "color": "BROWN",
             "limit": 2,
             "rusts": "4"
         }

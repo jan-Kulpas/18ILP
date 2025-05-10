@@ -1,14 +1,14 @@
 from __future__ import annotations
 import json
+from typing import TYPE_CHECKING, Any, ItemsView
 
-from dataclasses import dataclass, field
-from typing import Any, ItemsView
-
-from core.enums.settlement_location import SettlementLocation
 from core.hex import Hex
 from core.railway import Railway
 from core.settlement import Settlement
 from core.tile import Segment, Tile
+
+if TYPE_CHECKING:
+    from solver.graph import CityNode
 
 BOARD_PATH = "data/{}/board.json"
 
@@ -28,14 +28,14 @@ class Board:
     def items(self) -> ItemsView[Hex, Tile]:
         return self._board.items()
 
-    def segment_at(self, coord: str) -> Segment:
-        hex, location = coord.split(".")
-        return self[Hex.from_string(hex)].segment_at(SettlementLocation[location])
+    def segment_at(self, node: CityNode) -> Segment:
 
-    def settlement_at(self, coord: str) -> Settlement:
-        settlement = self.segment_at(coord).settlement
+        return self[node.hex].segment_at(node.loc)
+
+    def settlement_at(self, node: CityNode) -> Settlement:
+        settlement = self.segment_at(node).settlement
         if not settlement:
-            raise IndexError(f"No settlement at specified coordinate: {coord}")
+            raise IndexError(f"No settlement at specified coordinate: {node}")
         return settlement
 
     # TODO: Take railways to separate file and move this up to Game class.

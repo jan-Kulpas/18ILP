@@ -61,7 +61,7 @@ if __name__ == "__main__":
     game.load_save("save.json")
 
     pathfinder = Pathfinder(game)
-    results = pathfinder.solve_for("UR")
+    results = pathfinder.solve_for("AR")
 
     app = QApplication(sys.argv)
     window = Window(game, results)

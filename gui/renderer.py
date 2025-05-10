@@ -7,6 +7,7 @@ from core.tile import *
 from core.game import *
 from core.hex import Hex
 from gui.helpers import lerp, node2point, random_color
+from solver.graph import Edge, Node
 
 BOARD_PATH = "data/{}/board.json"
 
@@ -88,7 +89,7 @@ class Renderer:
         label_location = lerp(hex.center, hex.corners[-1], 0.65) - QPointF(5, 0)
         self.painter.drawText(label_location, tile.label)
 
-    def draw_route(self, nodes: set[str], edges: set[tuple[str, str]]):
+    def draw_route(self, nodes: set[Node], edges: set[Edge]):
         color = random_color()
 
         self.painter.setBrush(QBrush(color))
