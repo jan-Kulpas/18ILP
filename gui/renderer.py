@@ -6,7 +6,7 @@ from core.settlement import *
 from core.tile import *
 from core.game import *
 from core.hex import Hex
-from gui.helpers import lerp
+from gui.helpers import lerp, node2point, random_color
 
 BOARD_PATH = "data/{}/board.json"
 
@@ -87,6 +87,26 @@ class Renderer:
 
         label_location = lerp(hex.center, hex.corners[-1], 0.65) - QPointF(5, 0)
         self.painter.drawText(label_location, tile.label)
+
+    def draw_route(self, nodes: set[str], edges: set[tuple[str, str]]):
+        color = random_color()
+
+        self.painter.setBrush(QBrush(color))
+
+        # for node in nodes:
+        #     center = node2point(node)
+        #     self.painter.drawEllipse(center, CITY_RADIUS, CITY_RADIUS)
+
+        for edge in edges:
+            p1, p2 = (node2point(node) for node in edge)
+
+            path = QPainterPath()
+            path.moveTo(p1)
+            path.lineTo(p2)
+
+            with BufferedPainter(self.painter, self.size) as buffer:
+                buffer.setPen(QPen(color, 4))
+                buffer.drawPath(path)
 
     def _draw_hex(self, hex: Hex, color: QColor) -> None:
         """Draws a Tile background in the given color"""

@@ -16,7 +16,7 @@ HEIGHT = 800
 
 
 class Window(QWidget):
-    def __init__(self, game: Game):
+    def __init__(self, game: Game, results: tuple):
         super().__init__()
 
         # Window settings
@@ -28,6 +28,7 @@ class Window(QWidget):
         self.shortcut.activated.connect(QApplication.quit)
 
         self.game = game
+        self.results = results
 
     def paintEvent(self, event):
         painter = QPainter(self)
@@ -42,6 +43,14 @@ class Window(QWidget):
         for hex, tile in self.game.board.items():
             renderer.draw_tile(hex, tile)
 
+        # Draw results
+        # TODO: Pass train info to maybe do a legend on the side so we know which train is which.
+        total, nodes, edges, cities = self.results
+
+        for train in range(len(nodes)):
+            nodes[train].add("E2-F1")
+            renderer.draw_route(nodes[train], edges[train])
+
     def mousePressEvent(self, event):
         pos = event.pos()
         print(pos)
@@ -52,10 +61,10 @@ if __name__ == "__main__":
     game.load_save("save.json")
 
     pathfinder = Pathfinder(game)
-    pathfinder.solve_for("UR")
+    results = pathfinder.solve_for("UR")
 
     app = QApplication(sys.argv)
-    window = Window(game)
+    window = Window(game, results)
     window.show()
 
     # hack borrowing allow_interrupt from matplotlib to unlock Ctrl+C from terminal

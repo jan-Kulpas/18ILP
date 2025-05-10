@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from pprint import pprint
 from pulp import LpProblem, LpVariable, lpSum
 from pulp import const
@@ -12,7 +13,6 @@ from collections import deque
 
 from core.tile import Segment
 from core.train import Train
-
 
 class Pathfinder:
     game: Game
@@ -91,6 +91,7 @@ class Pathfinder:
                 )
 
         # Constraint: Trains cannot pass through edge another train has already used
+        # ! BOTH WAYS
         for edge in self.edges:
             problem += (
                 lpSum(e[train][edge] for train in self.trains) <= 1,
@@ -108,31 +109,35 @@ class Pathfinder:
 
         problem.solve()
 
+        used_nodes: dict[int, set[str]] = {
+            train: set(node for node in self.nodes if v[train][node].varValue == 1)
+            for train in self.trains
+        }
+        used_edges: dict[int, set[tuple[str, str]]] = {
+            train: set(edge for edge in self.edges if e[train][edge].varValue == 1)
+            for train in self.trains
+        }
+        used_cities: dict[int, set[str]] = {
+            train: set(city for city in self.cities if c[train][city].varValue == 1)
+            for train in self.trains
+        }
+        total_value: int = sum(
+            self.game.board.settlement_at(city).revenue(
+                self.trains[train], self.game.phase
+            )
+            for city in self.cities
+            for train in self.trains
+            if c[train][city].varValue == 1
+        )
+
         for train in self.trains:
             print(
-                "Visited Nodes:",
-                [node for node in self.nodes if v[train][node].varValue == 1],
-            )
-            print(
-                "Used Edges:",
-                [edge for edge in self.edges if e[train][edge].varValue == 1],
-            )
-            print(
-                "Visited Cities:",
-                [city for city in self.cities if c[train][city].varValue == 1],
+                f"Train: {self.trains[train]}\nVisited Nodes: {used_nodes[train]}\nUsed Edges: {used_edges[train]}\nVisited Cities: {used_cities[train]}\n"
             )
 
-        print(
-            "Total Value:",
-            sum(
-                self.game.board.settlement_at(city).revenue(
-                    self.trains[train], self.game.phase
-                )
-                for city in self.cities
-                for train in self.trains
-                if c[train][city].varValue == 1
-            ),
-        )
+        print(f"Total Value: {total_value}")
+
+        return total_value, used_nodes, used_edges, used_cities
 
     def _build_graph(self, railway: Railway) -> None:
         self._reset_graph()
