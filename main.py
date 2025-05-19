@@ -48,7 +48,6 @@ class Window(QWidget):
         total, nodes, edges, cities = self.results
 
         for train in range(len(nodes)):
-            nodes[train].add("E2-F1")
             renderer.draw_route(nodes[train], edges[train])
 
     def mousePressEvent(self, event):
@@ -61,7 +60,7 @@ if __name__ == "__main__":
     game.load_save("save.json")
 
     pathfinder = Pathfinder(game)
-    results = pathfinder.solve_for("AR")
+    results = pathfinder.solve_for("TR")
 
     app = QApplication(sys.argv)
     window = Window(game, results)

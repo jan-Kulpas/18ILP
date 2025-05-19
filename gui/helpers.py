@@ -16,7 +16,7 @@ def lerp(a: QPointF, b: QPointF, t: float) -> QPointF:
 
 def random_color() -> QColor:
     return QColor.fromHsl(
-        random.randrange(0, 360), random.randrange(107, 250), random.randrange(102, 230)
+        random.randrange(0, 360), random.randrange(150, 250), random.randrange(102, 180)
     )
 
 

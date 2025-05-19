@@ -1,5 +1,26 @@
 [
   {
+    "id": "DBG",
+    "color": ["YELLOW"],
+    "segments": [
+      {
+        "location": "C",
+        "tracks": [
+          "N",
+          "NE",
+          "SE",
+          "S",
+          "SW",
+          "NW"
+        ],
+        "settlement": {
+          "value": 1000
+        }
+      }
+    ],
+    "upgrades": []
+  },
+  {
     "id": "3",
     "color": [
       "YELLOW"

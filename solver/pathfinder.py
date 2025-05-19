@@ -1,4 +1,5 @@
 from collections import deque
+from pprint import pprint
 
 from pulp import const
 from pulp import LpProblem, LpVariable, lpSum, PULP_CBC_CMD
@@ -35,8 +36,12 @@ class Pathfinder:
         self.home_nodes: set[CityNode] = set()
         self.trains: dict[int, Train] = {}
 
-    # TODO: figure out return type.
-    def solve_for(self, railway_id: str):
+    def solve_for(self, railway_id: str) -> tuple[
+        int,
+        dict[int, set[Node]],
+        dict[int, set[Edge]],
+        dict[int, set[CityNode]],
+    ]:
         railway = self.game.railways[railway_id]
 
         if not railway.floated:
@@ -50,10 +55,9 @@ class Pathfinder:
 
         self._build_graph(railway)
 
-        print(len(self.edges))
-
         problem = LpProblem("MaximalRouteFinding", const.LpMaximize)
 
+        a = LpVariable.dicts(f"a", self.trains, cat=const.LpBinary)  # train used
         v = [
             LpVariable.dicts(f"v_{train}", self.nodes, cat=const.LpBinary)
             for train in self.trains
@@ -81,14 +85,21 @@ class Pathfinder:
             for city in self.cities
         )
 
-        # Constraint: cannot visit more cites than the trains range
+        # Constraint: cannot visit more cites than the trains range (if used)
         for train in self.trains:
             if not self.trains[train].diesel:
                 problem += (
                     lpSum(c[train][city] for city in self.cities)
-                    <= self.trains[train].range,
+                    <= self.trains[train].range * a[train],
                     f"Train{train}MaxCitiesVisited",
                 )
+
+        # Constraint: train must visit at least two cities (if used)
+        for train in self.trains:
+            problem += (
+                lpSum(c[train][city] for city in self.cities) >= 2 * a[train],
+                f"Train{train}MinCitiesVisited",
+            )
 
         # Constraint: Trains can only score cities they pass through
         for train in self.trains:
@@ -122,10 +133,10 @@ class Pathfinder:
                     f"Node{node}HasTwoOrOneEdgeUsedByTrain{train}",
                 )
 
-        # Constraint: Only 2 termini nodes
+        # Constraint: Only 2 termini nodes (if train used)
         for train in self.trains:
             problem += (
-                lpSum(z[train][node] for node in self.nodes) == 2,
+                lpSum(z[train][node] for node in self.nodes) == 2 * a[train],
                 f"Train{train}HasOnlyTwoEnds",
             )
 
@@ -138,11 +149,25 @@ class Pathfinder:
                         f"Node{node}TerminalIfCityCountedByTrain{train}",
                     )
                 else:
-                    problem += z[train][node] == 0
+                    problem += (
+                        z[train][node] == 0,
+                        f"Justion{node}CantBeTerminalOfTrain{train}",
+                    )
 
-        # Constraint: Each route has to visit at least one home node
+        # Constraint: Each route has to visit at least one home node (if train used)
         for train in self.trains:
-            problem += lpSum(c[train][home] for home in self.home_nodes) >= 1
+            problem += (
+                lpSum(c[train][home] for home in self.home_nodes) >= a[train],
+                f"Train{train}UsesHomeStation",
+            )
+
+        # Constaint: Can't visit nodes if train not active
+        for train in self.trains:
+            for node in self.nodes:
+                problem += (
+                    v[train][node] <= a[train],
+                    f"Node{node}CanOnlyBeVisitedIfTrain{train}Active",
+                )
 
         solver = PULP_CBC_CMD(
             msg=True,
@@ -180,6 +205,18 @@ class Pathfinder:
             if c[train][city].varValue == 1
         )
 
+        self.print_results(total_value, used_nodes, used_edges, used_cities, used_terminals)
+
+        return total_value, used_nodes, used_edges, used_cities
+
+    def print_results(
+        self,
+        total_value: int,
+        used_nodes: dict[int, set[Node]],
+        used_edges: dict[int, set[Edge]],
+        used_cities: dict[int, set[CityNode]],
+        used_terminals: dict[int, set[Node]],
+    ):
         for train in self.trains:
             print(f"Train: {self.trains[train]}")
             print(f"Visited Nodes: {[str(n) for n in used_nodes[train]]}")
@@ -188,15 +225,6 @@ class Pathfinder:
             print(f"Terminal Nodes: {[str(c) for c in used_terminals[train]]}")
 
         print(f"Total Value: {total_value}")
-
-        print(
-            {
-                train: [z[train][city].varValue for city in self.nodes]
-                for train in self.trains
-            }
-        )
-
-        return total_value, used_nodes, used_edges, used_cities
 
     def _build_graph(self, railway: Railway) -> None:
         self._reset_graph()
@@ -241,7 +269,7 @@ class Pathfinder:
             neighbour = hex.neighbour(direction)
             junction = JunctionNode((hex, neighbour))
             queue.append(junction)
-            self.edges.add(Edge((node, junction)))
+            self.edges.add(Edge((node, junction), hex))
 
     def _process_junction(self, node: JunctionNode, queue: deque[Node]) -> None:
         print(f"Visiting junction: {node}")
@@ -269,7 +297,7 @@ class Pathfinder:
             if seg.location:
                 city = CityNode(hex, seg.location)
                 queue.append(city)
-                self.edges.add(Edge((node, city)))
+                self.edges.add(Edge((node, city), hex))
             else:
                 # Oops! There's no city actually so we need to make an edge to the next junction.
                 # I am not sure if there can be multiple directions but just in case.
@@ -282,7 +310,7 @@ class Pathfinder:
                     neighbour = hex.neighbour(dir)
                     junction = JunctionNode((hex, neighbour))
                     queue.append(junction)
-                    self.edges.add(Edge((node, junction)))
+                    self.edges.add(Edge((node, junction), hex))
 
 
 if __name__ == "__main__":

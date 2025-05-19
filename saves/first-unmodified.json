@@ -93,8 +93,8 @@
             "rotation": 1
         },
         "I8": {
-            "tile": "23",
-            "rotation": 4
+            "tile": "8",
+            "rotation": 2
         },
         "J5": {
             "tile": "58",
@@ -107,10 +107,6 @@
         "K8": {
             "tile": "15",
             "rotation": 1
-        },
-        "H9": {
-            "tile": "DBG",
-            "rotation": 0
         }
     },
     "stations": {

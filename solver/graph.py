@@ -38,6 +38,7 @@ class JunctionNode(Node):
 @dataclass(frozen=True, eq=True)
 class Edge:
     nodes: tuple[Node, Node] = field()
+    hex: Hex = field()
 
     def __post_init__(self):
         if str(self.nodes[0]) > str(self.nodes[1]):
