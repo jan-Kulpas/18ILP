@@ -8,6 +8,7 @@ from core.enums.direction import Direction
 from core.game import Game
 from core.hex import Hex
 from core.railway import Railway
+from core.settlement import City
 from core.tile import Segment
 from core.train import Train
 from solver.graph import CityNode, Edge, JunctionNode, Node
@@ -76,6 +77,7 @@ class Pathfinder:
         ]  # node is terminus
 
         # Objective: Maximize visited city value
+        # ∑f(i,t,p) * c[t][i]; ∀t∈T ∀i∈C
         problem += lpSum(
             self.game.board.settlement_at(city).revenue(
                 self.trains[train], self.game.phase
@@ -86,6 +88,7 @@ class Pathfinder:
         )
 
         # Constraint: cannot visit more cites than the trains range (if used)
+        # ∑_{i ∈ C} c[t][i] <= r_t * a[t]; ∀t∈T where t is non-diesel
         for train in self.trains:
             if not self.trains[train].diesel:
                 problem += (
@@ -95,6 +98,7 @@ class Pathfinder:
                 )
 
         # Constraint: train must visit at least two cities (if used)
+        # ∑_{i ∈ C} c[t][i] >= 2 * a[t]; ∀t∈T
         for train in self.trains:
             problem += (
                 lpSum(c[train][city] for city in self.cities) >= 2 * a[train],
@@ -102,6 +106,7 @@ class Pathfinder:
             )
 
         # Constraint: Trains can only score cities they pass through
+        # c[t][i] == v[t][i]; ∀t∈T ∀i∈C
         for train in self.trains:
             for city in self.cities:
                 problem += (
@@ -110,6 +115,7 @@ class Pathfinder:
                 )
 
         # Constraint: Trains cannot pass through edge another train has already used
+        # ∑_{t ∈ T) [t][(i,j)] <= 1; ∀(i,j)∈E
         for edge in self.edges:
             problem += (
                 lpSum(e[train][edge] for train in self.trains) <= 1,
@@ -117,6 +123,7 @@ class Pathfinder:
             )
 
         # Constraint: Edge can only be visited if both nodes are visited.
+        # e[t][(i,j)] <= v[t][i], e[t][(i,j)] <= v[t][j]; ∀t∈T
         for train in self.trains:
             for edge in self.edges:
                 node1, node2 = edge
@@ -169,16 +176,51 @@ class Pathfinder:
                     f"Node{node}CanOnlyBeVisitedIfTrain{train}Active",
                 )
 
-        solver = PULP_CBC_CMD(
-            msg=True,
-            options=[
-                "primalTolerance=1e-11",
-                "integerTolerance=1e-11",
-                "ratioGap=0.0",  # optional: ensure optimality
-            ],
-        )
+        # Constraint: Each junction needs to have equal about of used edges from both hexes for each route
+        for train in self.trains:
+            for node in self.nodes:
+                if isinstance(node, JunctionNode):
+                    incident_edges = [edge for edge in self.edges if node in edge]
+                    incident_from_sideA = [
+                        edge for edge in incident_edges if edge.hex == node.hexes[0]
+                    ]
+                    incident_from_sideB = [
+                        edge for edge in incident_edges if edge.hex == node.hexes[1]
+                    ]
+                    problem += (
+                        lpSum(e[train][edge] for edge in incident_from_sideA)
+                        == lpSum(e[train][edge] for edge in incident_from_sideB),
+                        f"Juction{node}MustHaveEqualEdgesFromBothHexSidesForTrain{train}",
+                    )
 
-        problem.solve(solver)
+        print(self.cities)
+
+        for train in self.trains:
+            print(train)
+            for node in self.cities:
+                settlement = self.game.board.settlement_at(node)
+                if isinstance(settlement, City):
+                    print(settlement)
+                    print(settlement.full)
+                    print(settlement.is_blocking_for(railway))
+                if isinstance(settlement, City) and settlement.is_blocking_for(railway):
+                    incident_edges = [edge for edge in self.edges if node in edge]
+                    problem += (
+                        lpSum(e[train][edge] for edge in incident_edges)
+                        == v[train][node],
+                        f"City{node}MustBeTerminalForTrain{train}IfBlocking",
+                    )
+
+        # solver = PULP_CBC_CMD(
+        #     msg=True,
+        #     options=[
+        #         "primalTolerance=1e-11",
+        #         "integerTolerance=1e-11",
+        #         "ratioGap=0.0",  # optional: ensure optimality
+        #     ],
+        # )
+
+        problem.solve()
 
         used_nodes: dict[int, set[Node]] = {
             train: set(node for node in self.nodes if v[train][node].varValue == 1)
@@ -205,7 +247,9 @@ class Pathfinder:
             if c[train][city].varValue == 1
         )
 
-        self.print_results(total_value, used_nodes, used_edges, used_cities, used_terminals)
+        self.print_results(
+            total_value, used_nodes, used_edges, used_cities, used_terminals
+        )
 
         return total_value, used_nodes, used_edges, used_cities
 

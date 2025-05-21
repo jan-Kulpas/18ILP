@@ -5,6 +5,7 @@ from dataclasses import dataclass, field
 
 from core.enums.color import Color
 from core.phase import Phase
+from core.railway import Railway
 from core.train import Train
 from tools.exceptions import RuleError
 
@@ -79,6 +80,10 @@ class City(Settlement):
 
     stations: list[str] = field(init=False, default_factory=list)
 
+    @property
+    def full(self) -> bool:
+        return len(self.stations) == self.size
+
     def revenue(self, train: Train, phase: Phase) -> int:
         return self.value
 
@@ -86,6 +91,9 @@ class City(Settlement):
         if len(self.stations) >= self.size:
             raise RuleError("Cannot build another station because the City is full")
         self.stations.append(company)
+
+    def is_blocking_for(self, company: Railway) -> bool:
+        return self.full and company.id not in self.stations
 
 
 @dataclass(frozen=True)

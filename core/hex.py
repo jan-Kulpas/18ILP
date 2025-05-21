@@ -122,20 +122,6 @@ class Hex:
             lerp(self.midpoints[i], self.center, 0.5) for i in range(6)
         ]
 
-    # def track_exit(self, dir: Direction):
-    #     """
-    #     Returns either a midpoint, a citypoint or the hex center based on Direction.
-
-    #     The ending pixel of a track path.
-    #     """
-    #     # ! This ties the city position to the json data which should be avoided.
-    #     if dir.outside:
-    #         return self.midpoints[dir.value]
-    #     elif dir == Direction.C:
-    #         return self.center
-    #     else:
-    #         return self.citypoints[dir.value - 6]
-
     def __add__(self, other: Hex) -> Hex:
         return Hex(self.q + other.q, self.r + other.r, self.s + other.s)
 
