@@ -9,7 +9,7 @@ from PyQt6.QtCore import QPoint, QPointF
 from core.enums.direction import Direction
 from gui.helpers import lerp
 
-SIZE = 50
+SIZE = 45
 
 
 @dataclass(eq=True, frozen=True)
@@ -18,9 +18,9 @@ class Hex:
     Represents a point in a hexagonal grid. Uses cubic coordinates.
     """
 
-    q: int
-    r: int
-    s: int
+    q: float
+    r: float
+    s: float
 
     @classmethod
     def from_doubled(cls, x: int, y: int) -> Hex:
@@ -129,8 +129,8 @@ class Hex:
         return Hex(self.q - other.q, self.r - other.r, self.s - other.s)
 
     def __str__(self) -> str:
-        col = self.q
-        row = 2 * self.r + self.q
+        col = int(self.q)
+        row = int(2 * self.r + self.q)
         return f"{chr(ord('A')+col-1)}{row-1}"
 
 

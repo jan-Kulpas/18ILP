@@ -22,6 +22,7 @@ class Railway:
     """
 
     id: str = field()
+    name: str = field()
     home: Hex = field()
     stations: int = field()
     trains: list[Train] = field(default_factory=list, compare=False)

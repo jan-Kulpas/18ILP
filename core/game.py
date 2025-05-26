@@ -71,10 +71,11 @@ class Game:
                 raise RuleError(
                     f"Cannot place Tile at {hex} because it ({tile.id}) does not upgrade any of the settlements of previous tile ({board_tile.id})."
                 )
-            if not tile.label == board_tile.label:
-                raise RuleError(
-                    f"Cannot place Tile at {hex} because its ({tile.id}) label does not match that of the previous tile ({board_tile.id})."
-                )
+            # ! Already check with tile.upgrades, also this breaks placing normal towns in ports
+            # if not tile.label == board_tile.label:
+            #     raise RuleError(
+            #         f"Cannot place Tile at {hex} because its ({tile.id}) label does not match that of the previous tile ({board_tile.id})."
+            #     )
         # TODO: Check for going outside map with an edge
 
         # MAYBE: Change save board structure from map to list if storing previous tiles becomes important

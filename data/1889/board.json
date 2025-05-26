@@ -389,42 +389,49 @@
     "railways": [
       {
         "id": "TR",
+        "name": "Tosa Electric Railway",
         "home": "F9",
         "stations": 3,
         "color": "#217168"
       },
       {
         "id": "KO",
+        "name": "Takamatsu & Kotohira Electric Railway",
         "home": "K4",
         "stations": 2,
         "color": "#D01735"
       },
       {
         "id": "UR",
+        "name": "Uwajima Railway",
         "home": "B7",
         "stations": 3,
         "color": "#7A3B2E"
       },
       {
         "id": "KU",
+        "name": "Tosa Kuroshio Railway",
         "home": "C10",
         "stations": 1,
         "color": "#2967AC"
       },
       {
         "id": "AR",
+        "name": "Awa Railroad",
         "home": "K8",
         "stations": 2,
         "color": "#535050"
       },
       {
         "id": "IR",
+        "name": "Iyo Railway",
         "home": "E2",
         "stations": 2,
         "color": "#E34C27"
       },
       {
         "id": "SR",
+        "name": "Sanuki Railway",
         "home": "I2",
         "stations": 2,
         "color": "#50AB3B"

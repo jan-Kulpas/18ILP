@@ -1,5 +1,13 @@
 from typing import Any
-from PyQt6.QtGui import QPainter, QPen, QColor, QBrush, QPainterPath, QImage
+from PyQt6.QtGui import (
+    QPainter,
+    QPen,
+    QColor,
+    QBrush,
+    QPainterPath,
+    QImage,
+    QPaintDevice,
+)
 from PyQt6.QtCore import Qt, QPoint, QPointF, QSize, QRectF
 
 from core.settlement import *
@@ -62,16 +70,19 @@ class BufferedPainter:
 class Renderer:
     year: str
 
-    painter: QPainter
-    size: QSize
+    device: QPaintDevice
 
-    def __init__(self, year: str, painter: QPainter, size: QSize) -> None:
+    def __init__(self, year: str, device: QPaintDevice) -> None:
         self.year = year
 
-        self.painter = painter
-        self.size = size
+        self.painter = QPainter(device)
+        self.device = device
+        self.size = QSize(self.device.width(), self.device.height())
 
         self._station_colors = self._load_station_colors()
+
+        self.painter.setRenderHint(QPainter.RenderHint.Antialiasing, True)
+        self.painter.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform, True)
 
     def _load_station_colors(self) -> dict[str, QColor]:
         with open(BOARD_PATH.format(self.year)) as file:
@@ -108,6 +119,12 @@ class Renderer:
             with BufferedPainter(self.painter, self.size) as buffer:
                 buffer.setPen(QPen(color, 4))
                 buffer.drawPath(path)
+
+    def draw_outline(self, hex: Hex) -> None:
+        """Draw a selection outline of a given Hex"""
+        self.painter.setBrush(QBrush(Qt.GlobalColor.transparent))
+        self.painter.setPen(QPen(Qt.GlobalColor.red, 4))
+        self.painter.drawPolygon(*hex.corners)
 
     def _draw_hex(self, hex: Hex, color: QColor) -> None:
         """Draws a Tile background in the given color"""

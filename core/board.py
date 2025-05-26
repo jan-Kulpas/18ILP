@@ -1,4 +1,5 @@
 from __future__ import annotations
+from collections.abc import Iterator
 import json
 from typing import TYPE_CHECKING, Any, ItemsView
 
@@ -76,6 +77,9 @@ class Board:
 
     def __setitem__(self, key: Hex, value: Tile):
         self._board[key] = value
+
+    def __iter__(self) -> Iterator[Hex]:
+        return iter(self._board)
 
     def __repr__(self) -> str:
         return repr(self._board)
