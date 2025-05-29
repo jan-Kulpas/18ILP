@@ -84,6 +84,7 @@ class Game:
         # if (not new_tile.is_upgrade(board_tile)):
         #     raise RuleError(f"Cannot place the new tile since it is not an upgrade of the previous tile")
 
+        self.bank.take_tile(tile)
         self.board[hex] = tile
 
     def give_train(self, train: Train, railway: Railway):

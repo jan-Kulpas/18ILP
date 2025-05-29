@@ -17,7 +17,11 @@ from core.tile import *
 from core.game import *
 
 from gui.canvas import Canvas
+from gui.logbox import Logbox
+from gui.railway_selector import RailwaySelector
 from gui.sidebar import SIDEBAR_WIDTH, Sidebar
+from gui.tile_selector import TileSelector
+from gui.train_selector import TrainSelector
 from solver.pathfinder import Pathfinder
 
 WIDTH = 1200
@@ -29,18 +33,59 @@ class Window(QWidget):
     pathfinder: Pathfinder
 
     ### STATE
-    selected_hex: Hex | None
-    selected_tile: Tile | None
-    selected_railway: Railway | None
+    _selected_hex: Hex | None = None
+    _selected_tile: Tile | None = None
+    _selected_railway: Railway | None = None
+
+    ### Widgets
+    canvas: Canvas
+    tile_selector: TileSelector
+    train_selector: TrainSelector
+    railway_selector: RailwaySelector
+    logbox: Logbox
+
+    @property
+    def selected_railway(self) -> Railway | None:
+        return self._selected_railway
+
+    @selected_railway.setter
+    def selected_railway(self, railway: Railway | None):
+        self._selected_railway = railway
+        self.update_routes()
+        for row in self.train_selector.rows:
+            row.button.setEnabled(bool(railway))
+
+    @property
+    def selected_hex(self) -> Hex | None:
+        return self._selected_hex
+    
+    @selected_hex.setter
+    def selected_hex(self, hex: Hex | None):
+        self._selected_hex = hex
+        self.canvas.update()
+        if hex:
+            tile = self.game.board[hex]
+            self.tile_selector.populate_tile_list(tile)
+
+    @property
+    def selected_tile(self) -> Tile | None:
+        return self._selected_tile
+    
+    @selected_tile.setter
+    def selected_tile(self, tile: Tile | None):
+        self._selected_tile = tile
+        self.tile_selector.enable_tile_buttons(bool(tile))
+        self.tile_selector.update()
 
     def __init__(self, game: Game):
         super().__init__()
         self.game = game
         self.pathfinder = Pathfinder(game)
 
-        self.selected_hex = None
-        self.selected_tile = None
-        self.selected_railway = None
+        self.tile_selector = TileSelector(self, game)
+        self.train_selector = TrainSelector(self, game)
+        self.railway_selector = RailwaySelector(self, game)
+        self.logbox = Logbox()
 
         # Window settings
         self.setWindowTitle("18xx-router")
@@ -50,7 +95,7 @@ class Window(QWidget):
         self.canvas = Canvas(self, game)  # Widget for custom painting
         self.canvas.setMinimumWidth(WIDTH - SIDEBAR_WIDTH)
 
-        self.sidebar = Sidebar(self, game)
+        self.sidebar = Sidebar(self.tile_selector, self.train_selector, self.railway_selector, self.logbox)
 
         layout = QHBoxLayout(self)
         layout.addWidget(self.canvas)
@@ -63,7 +108,11 @@ class Window(QWidget):
 
     def update_routes(self) -> None:
         if self.selected_railway:
-            self.canvas.routes = self.pathfinder.solve_for(self.selected_railway.id)
+            try:
+                self.canvas.routes = self.pathfinder.solve_for(self.selected_railway.id)
+            except RuleError as e:
+                self.logbox.logger.append(str(e))
+                self.canvas.routes = None
 
 
 

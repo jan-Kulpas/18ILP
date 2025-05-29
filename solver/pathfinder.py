@@ -12,6 +12,7 @@ from core.settlement import City
 from core.tile import Segment
 from core.train import Train
 from solver.graph import CityNode, Edge, JunctionNode, Node
+from tools.exceptions import RuleError
 
 
 class Pathfinder:
@@ -46,11 +47,11 @@ class Pathfinder:
         railway = self.game.railways[railway_id]
 
         if not railway.floated:
-            raise ValueError(
+            raise RuleError(
                 f"Railway {railway_id} has not floated yet. (Railway is not active)"
             )
         if len(railway.trains) == 0:
-            raise ValueError(f"Railway {railway_id} has no trains to find route for.")
+            raise RuleError(f"Railway {railway_id} has no trains to find route for.")
 
         print(f"Finding best route for {railway_id} - Trains: {railway.trains}")
 
@@ -193,16 +194,9 @@ class Pathfinder:
                         f"Juction{node}MustHaveEqualEdgesFromBothHexSidesForTrain{train}",
                     )
 
-        print(self.cities)
-
         for train in self.trains:
-            print(train)
             for node in self.cities:
                 settlement = self.game.board.settlement_at(node)
-                if isinstance(settlement, City):
-                    print(settlement)
-                    print(settlement.full)
-                    print(settlement.is_blocking_for(railway))
                 if isinstance(settlement, City) and settlement.is_blocking_for(railway):
                     incident_edges = [edge for edge in self.edges if node in edge]
                     problem += (

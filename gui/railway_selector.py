@@ -33,7 +33,7 @@ class RailwaySelector(QWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(layout)
 
-        self.label = QLabel("Select a Railway")
+        self.label = QLabel("Select a Railway:")
 
         self.railway_list = QListWidget()
         self.railway_list.setDragEnabled(False)
@@ -48,7 +48,7 @@ class RailwaySelector(QWidget):
     def _on_railway_selected(self, item: QListWidgetItem) -> None:
         railway: Railway = item.data(Qt.ItemDataRole.UserRole)
         self.app.selected_railway = railway
-        self.app.update_routes()
+        
 
     def _populate_railway_list(self):
         for railway in self.game.railways.values():

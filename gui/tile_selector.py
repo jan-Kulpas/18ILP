@@ -16,6 +16,7 @@ from PyQt6.QtCore import Qt, QSize
 from core.game import Game
 from core.tile import Tile
 from gui.tile_preview import TilePreview
+from tools.exceptions import RuleError
 
 if TYPE_CHECKING:
     from main import Window
@@ -33,10 +34,10 @@ class TileSelector(QWidget):
         self.game = game
 
         layout = QVBoxLayout()
-        layout.setContentsMargins(0, 0, 0, 0)
+        # layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(layout)
 
-        self.label = QLabel("Select a Tile")
+        self.label = QLabel("Select a Tile:")
 
         self.tile_list = QListWidget()
         self.tile_list.setDragEnabled(False)
@@ -51,12 +52,15 @@ class TileSelector(QWidget):
         self.rotate_left_button = QPushButton("⟲ Rotate Left")
         self.rotate_right_button = QPushButton("⟳ Rotate Right")
         self.submit_button = QPushButton("Place Tile")
-
-        self._set_buttons(False)
+        self.enable_tile_buttons(False)
 
         self.rotate_left_button.clicked.connect(self._on_rotate_left)
         self.rotate_right_button.clicked.connect(self._on_rotate_right)
         self.submit_button.clicked.connect(self._on_submit_tile)
+
+        self.station_button = QPushButton("Place Station")
+        self.station_button.setEnabled(False)
+        self.station_button.clicked.connect(self._on_place_station)
 
         layout.addWidget(self.label)
         layout.addWidget(self.tile_list)
@@ -64,39 +68,42 @@ class TileSelector(QWidget):
         rotate_layout.addWidget(self.rotate_left_button)
         rotate_layout.addWidget(self.rotate_right_button)
         layout.addWidget(self.submit_button)
+        layout.addWidget(self.station_button)
 
-    def populate_tile_list(self, tile: Tile) -> None:
+    def populate_tile_list(self, tile: Tile | None) -> None:
         self.reset_tile_list()
-        for upgrade in tile.upgrades:
-            item = TilePreview(self.game, Tile.from_id(upgrade))
-            item.setData(Qt.ItemDataRole.UserRole, upgrade)
-            self.tile_list.addItem(item)
+        if tile:
+            for upgrade in tile.upgrades:
+                item = TilePreview(self.game, Tile.from_id(upgrade))
+                item.setData(Qt.ItemDataRole.UserRole, upgrade)
+                self.tile_list.addItem(item)
 
     def reset_tile_list(self):
         self.tile_list.clear()
-        self._set_buttons(False)
+        self.enable_tile_buttons(False)
 
     def _on_tile_selected(self, item: QListWidgetItem) -> None:
         self.app.selected_tile = self.tile_list.selectedItems()[0].tile  # type: ignore
-        self._set_buttons(True)
-
+        
     def _on_submit_tile(self) -> None:
         if self.app.selected_hex and self.app.selected_tile:
-            self.game.place_tile(self.app.selected_hex, self.app.selected_tile)
-
-            self.tile_list.clear()
-            self._set_buttons(False)
-
-            self.app.selected_hex = None
-            self.app.selected_tile = None
-
-            self.app.update()  # triggers paintEvent to redraw
+            try:
+                self.game.place_tile(self.app.selected_hex, self.app.selected_tile)
+            except RuleError as e:
+                self.app.logbox.logger.append(str(e))
+            else:
+                self.app.selected_hex = None
+                self.app.selected_tile = None
+                self.app.update_routes()
 
     def _on_rotate_left(self) -> None:
         self._update_tile_rotation(-1)
 
     def _on_rotate_right(self) -> None:
         self._update_tile_rotation(1)
+
+    def _on_place_station(self) -> None:
+        pass
 
     def _update_tile_rotation(self, r: int) -> None:
         for i in range(self.tile_list.count()):
@@ -106,7 +113,7 @@ class TileSelector(QWidget):
 
         self.app.selected_tile = self.tile_list.selectedItems()[0].tile  # type: ignore
 
-    def _set_buttons(self, enabled: bool) -> None:
+    def enable_tile_buttons(self, enabled: bool) -> None:
         self.submit_button.setEnabled(enabled)
         self.rotate_left_button.setEnabled(enabled)
         self.rotate_right_button.setEnabled(enabled)

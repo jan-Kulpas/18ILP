@@ -69,10 +69,6 @@ class Canvas(QWidget):
         pos: QPoint = event.pos()
         hex = Hex.from_pixel(pos)
         if hex in self.game.board:
-            tile = self.game.board[hex]
             self.app.selected_hex = hex
-            self.app.sidebar.tile_selector.populate_tile_list(tile)
-            self.update()
         else:
-            self.app.sidebar.tile_selector.reset_tile_list()
             self.app.selected_hex = None
