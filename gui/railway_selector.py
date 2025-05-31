@@ -21,13 +21,11 @@ if TYPE_CHECKING:
 
 
 class RailwaySelector(QWidget):
-    game: Game
     app: Window
 
-    def __init__(self, app: Window, game: Game) -> None:
+    def __init__(self, app: Window) -> None:
         super().__init__()
         self.app = app
-        self.game = game
 
         layout = QVBoxLayout()
         layout.setContentsMargins(0, 0, 0, 0)
@@ -48,10 +46,9 @@ class RailwaySelector(QWidget):
     def _on_railway_selected(self, item: QListWidgetItem) -> None:
         railway: Railway = item.data(Qt.ItemDataRole.UserRole)
         self.app.selected_railway = railway
-        
 
     def _populate_railway_list(self):
-        for railway in self.game.railways.values():
+        for railway in self.app.game.railways.values():
             item = QListWidgetItem()
             item.setData(Qt.ItemDataRole.UserRole, railway)
             item.setText(f"{railway.name} ({railway.id})")

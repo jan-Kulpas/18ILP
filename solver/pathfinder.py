@@ -353,7 +353,7 @@ class Pathfinder:
 
 if __name__ == "__main__":
     game = Game("1889")
-    game.load_save("save.json")
+    game.load("save.json")
 
     pathfinder = Pathfinder(game)
     pathfinder.solve_for("UR")

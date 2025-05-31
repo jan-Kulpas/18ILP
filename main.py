@@ -18,6 +18,7 @@ from core.game import *
 
 from gui.canvas import Canvas
 from gui.logbox import Logbox
+from gui.menu_bar import MenuBar
 from gui.railway_selector import RailwaySelector
 from gui.sidebar import SIDEBAR_WIDTH, Sidebar
 from gui.tile_selector import TileSelector
@@ -54,23 +55,32 @@ class Window(QWidget):
         self.update_routes()
         for row in self.train_selector.rows:
             row.button.setEnabled(bool(railway))
+        self.tile_selector.station_button.setEnabled(
+            bool(self.selected_hex and self.selected_railway)
+        )
+        if not self.selected_railway:
+            self.railway_selector.railway_list.clearSelection()
+            self.railway_selector.railway_list.clearFocus()
 
     @property
     def selected_hex(self) -> Hex | None:
         return self._selected_hex
-    
+
     @selected_hex.setter
     def selected_hex(self, hex: Hex | None):
         self._selected_hex = hex
         self.canvas.update()
-        if hex:
-            tile = self.game.board[hex]
-            self.tile_selector.populate_tile_list(tile)
+        tile = self.game.board[hex] if hex else None
+        self.tile_selector.populate_tile_list(tile)
+        # TODO: maybe check for if hex can have stations? try catch for now
+        self.tile_selector.station_button.setEnabled(
+            bool(self.selected_hex and self.selected_railway)
+        )
 
     @property
     def selected_tile(self) -> Tile | None:
         return self._selected_tile
-    
+
     @selected_tile.setter
     def selected_tile(self, tile: Tile | None):
         self._selected_tile = tile
@@ -82,9 +92,10 @@ class Window(QWidget):
         self.game = game
         self.pathfinder = Pathfinder(game)
 
-        self.tile_selector = TileSelector(self, game)
-        self.train_selector = TrainSelector(self, game)
-        self.railway_selector = RailwaySelector(self, game)
+        self.menu = MenuBar(self)
+        self.tile_selector = TileSelector(self)
+        self.train_selector = TrainSelector(self)
+        self.railway_selector = RailwaySelector(self)
         self.logbox = Logbox()
 
         # Window settings
@@ -92,12 +103,15 @@ class Window(QWidget):
         self.setGeometry(20, 40, WIDTH, HEIGHT)  # On-screen margin and size
 
         # Layouts
-        self.canvas = Canvas(self, game)  # Widget for custom painting
+        self.canvas = Canvas(self)  # Widget for custom painting
         self.canvas.setMinimumWidth(WIDTH - SIDEBAR_WIDTH)
 
-        self.sidebar = Sidebar(self.tile_selector, self.train_selector, self.railway_selector, self.logbox)
+        self.sidebar = Sidebar(
+            self.tile_selector, self.train_selector, self.railway_selector, self.logbox
+        )
 
         layout = QHBoxLayout(self)
+        layout.setMenuBar(self.menu)
         layout.addWidget(self.canvas)
         layout.addWidget(self.sidebar)
         self.setLayout(layout)
@@ -114,11 +128,19 @@ class Window(QWidget):
                 self.logbox.logger.append(str(e))
                 self.canvas.routes = None
 
+    def reset_state(self) -> None:
+        self.selected_hex = None
+        self.selected_tile = None
+        self.selected_railway = None
+        self.canvas.routes = None
+        self.train_selector.update_train_count()
+        self.logbox.logger.clear()
+        self.update()
 
 
 if __name__ == "__main__":
     game = Game("1889")
-    game.load_save("save.json")
+    game.load("save.json")
 
     app = QApplication(sys.argv)
     window = Window(game)

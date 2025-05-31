@@ -13,6 +13,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt, QSize
 
+from core.enums.settlement_location import SettlementLocation
 from core.game import Game
 from core.tile import Tile
 from gui.tile_preview import TilePreview
@@ -23,15 +24,13 @@ if TYPE_CHECKING:
 
 
 class TileSelector(QWidget):
-    game: Game
     app: Window
 
     tile_rotation: int = 0
 
-    def __init__(self, app: Window, game: Game) -> None:
+    def __init__(self, app: Window) -> None:
         super().__init__()
         self.app = app
-        self.game = game
 
         layout = QVBoxLayout()
         # layout.setContentsMargins(0, 0, 0, 0)
@@ -74,7 +73,7 @@ class TileSelector(QWidget):
         self.reset_tile_list()
         if tile:
             for upgrade in tile.upgrades:
-                item = TilePreview(self.game, Tile.from_id(upgrade))
+                item = TilePreview(self.app.game, Tile.from_id(upgrade))
                 item.setData(Qt.ItemDataRole.UserRole, upgrade)
                 self.tile_list.addItem(item)
 
@@ -84,11 +83,11 @@ class TileSelector(QWidget):
 
     def _on_tile_selected(self, item: QListWidgetItem) -> None:
         self.app.selected_tile = self.tile_list.selectedItems()[0].tile  # type: ignore
-        
+
     def _on_submit_tile(self) -> None:
         if self.app.selected_hex and self.app.selected_tile:
             try:
-                self.game.place_tile(self.app.selected_hex, self.app.selected_tile)
+                self.app.game.place_tile(self.app.selected_hex, self.app.selected_tile)
             except RuleError as e:
                 self.app.logbox.logger.append(str(e))
             else:
@@ -103,7 +102,19 @@ class TileSelector(QWidget):
         self._update_tile_rotation(1)
 
     def _on_place_station(self) -> None:
-        pass
+        if self.app.selected_hex and self.app.selected_railway:
+            try:
+                # TODO: Figure it out at some point :(
+                #! Oh god what if there's two stations
+                self.app.game.place_station(
+                    self.app.selected_hex,
+                    self.app.selected_railway,
+                    SettlementLocation.C,
+                )
+            except RuleError as e:
+                self.app.logbox.logger.append(str(e))
+            else:
+                self.app.update_routes()
 
     def _update_tile_rotation(self, r: int) -> None:
         for i in range(self.tile_list.count()):

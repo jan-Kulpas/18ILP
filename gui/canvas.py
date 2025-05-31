@@ -20,15 +20,13 @@ if TYPE_CHECKING:
 
 class Canvas(QWidget):
     app: Window
-    game: Game
     _routes: Any
 
-    def __init__(self, app: Window, game: Game):
+    def __init__(self, app: Window):
         super().__init__()
 
         self.app = app
 
-        self.game = game
         self._routes = None
 
     @property
@@ -48,10 +46,10 @@ class Canvas(QWidget):
         painter.fillRect(self.rect(), QColor("#f8f9fa"))
         painter.end()
 
-        renderer = Renderer(self.game.year, self)
+        renderer = Renderer(self.app.game.year, self)
 
         # Draw the entire board
-        for hex, tile in self.game.board.items():
+        for hex, tile in self.app.game.board.items():
             renderer.draw_tile(hex, tile)
 
         # Draw results
@@ -68,7 +66,7 @@ class Canvas(QWidget):
     def mousePressEvent(self, event):
         pos: QPoint = event.pos()
         hex = Hex.from_pixel(pos)
-        if hex in self.game.board:
+        if hex in self.app.game.board:
             self.app.selected_hex = hex
         else:
             self.app.selected_hex = None

@@ -29,14 +29,25 @@ class Bank:
         # Ignore debug tiles
         if tile.id.startswith("DBG"):
             return
-        
+
         if self.tiles[tile.id] <= 0:
-            raise RuleError(f"There are no more copies of this tile in the Bank: {tile.id}")
+            raise RuleError(
+                f"There are no more copies of this tile in the Bank: {tile.id}"
+            )
         self.tiles[tile.id] -= 1
+
+    def return_tile(self, tile: Tile) -> None:
+        # Ignore debug and pre-printed tiles
+        if tile.id.startswith("DBG") or tile.id.startswith("0"):
+            return
+
+        self.tiles[tile.id] += 1
 
     def take_train(self, train: Train) -> None:
         if self.trains[train.id] <= 0:
-            raise RuleError(f"There are no more copies of this train in the Bank: {train.id}")
+            raise RuleError(
+                f"There are no more copies of this train in the Bank: {train.id}"
+            )
         self.trains[train.id] -= 1
 
     def _load_tiles(self, data: dict[str, Any]) -> dict[str, int]:

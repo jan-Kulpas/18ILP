@@ -78,7 +78,7 @@ class City(Settlement):
     value: int = field(default=10)
     size: int = field(default=1)
 
-    stations: list[str] = field(init=False, default_factory=list)
+    stations: list[str] = field(init=False, default_factory=list, hash=False)
 
     @property
     def full(self) -> bool:

@@ -27,7 +27,9 @@ class Sidebar(QWidget):
     # railway_selector: RailwaySelector
     # logbox: Logbox
 
-    def __init__(self, ts: TileSelector, ts2: TrainSelector, rs: RailwaySelector, lb: Logbox) -> None:
+    def __init__(
+        self, ts: TileSelector, ts2: TrainSelector, rs: RailwaySelector, lb: Logbox
+    ) -> None:
         super().__init__()
 
         self.setFixedWidth(SIDEBAR_WIDTH)

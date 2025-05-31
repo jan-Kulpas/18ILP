@@ -1,5 +1,6 @@
 from __future__ import annotations
 from collections.abc import Iterator
+import copy
 import json
 from typing import TYPE_CHECKING, Any, ItemsView
 
@@ -64,7 +65,7 @@ class Board:
         # Add preprinted tiles at specified locations
         for coord, tile_id in preprinted_locations.items():
             hex = Hex.from_string(coord)
-            tile = self.preprinted_tiles[tile_id]
+            tile = copy.deepcopy(self.preprinted_tiles[tile_id])
             map[hex] = tile
 
         return map

@@ -9,6 +9,7 @@ from core.enums.settlement_location import SettlementLocation
 from core.hex import Hex
 from core.phase import Phase
 from core.railway import Railway
+from core.settlement import City
 from core.tile import Tile
 from core.train import Train
 from tools.exceptions import RuleError
@@ -26,7 +27,13 @@ class Game:
         self.railways: dict[str, Railway] = self.board.load_railways()
         self.phase: Phase = Phase.first()
 
-    def load_save(self, path: str) -> None:
+    @classmethod
+    def load_year(cls, path: str) -> str:
+        with open(path) as savefile:
+            savedata = json.load(savefile)
+            return savedata["year"]
+
+    def load(self, path: str) -> None:
         with open(path) as savefile:
             savedata = json.load(savefile)
 
@@ -54,6 +61,31 @@ class Game:
             for id in railways:
                 self.place_station(hex, self.railways[id])
 
+    def save(self, path: str) -> None:
+        save = dict()
+        save["year"] = self.year
+        save["trains"] = {
+            railway.id: [train.id for train in railway.trains]
+            for railway in self.railways.values()
+        }
+        save["board"] = {
+            str(hex): {"tile": tile.id, "rotation": tile.rotation}
+            for hex, tile in self.board.items()
+            if not tile.id.startswith("0")
+        }
+        save["stations"] = {
+            str(hex): ids
+            for hex, tile in self.board.items()
+            if (ids := [
+                railway.id
+                for railway in self.railways.values()
+                if tile.has_station(railway)
+            ])
+        }
+
+        with open(path, "w+") as savefile:
+            json.dump(save, savefile)
+
     def place_tile(self, hex: Hex, tile: Tile):
         board_tile = self.board[hex]
 
@@ -71,12 +103,15 @@ class Game:
                 raise RuleError(
                     f"Cannot place Tile at {hex} because it ({tile.id}) does not upgrade any of the settlements of previous tile ({board_tile.id})."
                 )
+            if tile.goes_outside_map(self.board, hex):
+                raise RuleError(
+                    f"Cannot place Tile at {hex} because it ({tile.id}) has a track that goes outside the map."
+                )
             # ! Already check with tile.upgrades, also this breaks placing normal towns in ports
             # if not tile.label == board_tile.label:
             #     raise RuleError(
             #         f"Cannot place Tile at {hex} because its ({tile.id}) label does not match that of the previous tile ({board_tile.id})."
             #     )
-        # TODO: Check for going outside map with an edge
 
         # MAYBE: Change save board structure from map to list if storing previous tiles becomes important
         # ? This may contain settlement preserving in itself
@@ -84,6 +119,22 @@ class Game:
         # if (not new_tile.is_upgrade(board_tile)):
         #     raise RuleError(f"Cannot place the new tile since it is not an upgrade of the previous tile")
 
+        # Carry over the stations in each city
+        old_cities = [
+            seg.settlement
+            for seg in self.board[hex].segments
+            if seg.settlement and isinstance(seg.settlement, City)
+        ]
+        new_cities = [
+            seg.settlement
+            for seg in tile.segments
+            if seg.settlement and isinstance(seg.settlement, City)
+        ]
+        for old, new in zip(old_cities, new_cities):
+            new.stations.clear()
+            new.stations.extend(old.stations)
+
+        self.bank.return_tile(self.board[hex])
         self.bank.take_tile(tile)
         self.board[hex] = tile
 
@@ -128,7 +179,7 @@ class Game:
         )
 
         if not city:
-            raise ValueError("Tried to place a station in a non existent city.")
+            raise RuleError("Tried to place a station in a non existent city.")
         if not railway.stations > 0:
             raise RuleError("Railway doesn't have any stations left.")
 
@@ -170,4 +221,4 @@ if __name__ == "__main__":
 
     # print(Tile.from_id("23").preserves_track(Tile.from_id("8").rotated(4)))
 
-    game.load_save("save.json")
+    game.load("save.json")

@@ -4,12 +4,17 @@ import json
 
 from enum import Enum
 from dataclasses import asdict, dataclass, field, is_dataclass
+from typing import TYPE_CHECKING
 
 from core.enums.color import Color
 from core.enums.direction import Direction
 from core.enums.settlement_location import SettlementLocation
+from core.hex import Hex
 from core.railway import Railway
 from core.settlement import City, Settlement, Town
+
+if TYPE_CHECKING:
+    from core.board import Board
 
 
 # MAYBE: Maybe handle both tracks and settlements to handle city, and cityless cases? (awful)
@@ -235,6 +240,18 @@ class Tile:
                     return False
 
         return True
+
+    # MAYBE: Extract self.reachable_neighbours from this
+    def goes_outside_map(self, board: Board, hex: Hex) -> bool:
+        directions: set[Direction] = set()
+        for seg in self.segments:
+            directions.update(seg.tracks)
+
+        for dir in directions:
+            if hex.neighbour(dir) not in board:
+                return True
+
+        return False
 
 
 # class _TileEncoder(json.JSONEncoder):

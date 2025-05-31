@@ -1,9 +1,5 @@
-from PyQt6.QtWidgets import (
-    QTextEdit,
-    QWidget,
-    QVBoxLayout,
-    QLabel
-)
+from PyQt6.QtWidgets import QTextEdit, QWidget, QVBoxLayout, QLabel
+
 
 class Logbox(QWidget):
     logger: QTextEdit
@@ -17,7 +13,7 @@ class Logbox(QWidget):
         self.logger.setReadOnly(True)
 
         layout = QVBoxLayout()
-        layout.setContentsMargins(0,0,0,0)
+        layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self.label)
         layout.addWidget(self.logger)
 
