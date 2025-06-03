@@ -6,12 +6,8 @@ from pulp import LpProblem, LpVariable, lpSum, PULP_CBC_CMD
 
 from core.enums.direction import Direction
 from core.game import Game
-from core.hex import Hex
-from core.railway import Railway
 from core.settlement import City
-from core.tile import Segment
-from core.train import Train
-from solver.graph import CityNode, Edge, Graph, JunctionNode, Node, Solution
+from solver.graph import Graph, JunctionNode, Solution
 from tools.exceptions import RuleError
 
 
@@ -173,8 +169,17 @@ class Pathfinder:
         # )
 
         problem.solve()
-
         solution = Solution(graph, a, v, e, c)
+
+        while solution.trains_with_subtour:
+            print("DETECTED SUBTOURS - RERUNNING")
+
+            for train in solution.trains_with_subtour:
+                problem += lpSum(e[train][edge] for edge in solution.edges[train]) <= len(solution.edges[train]) - 1
+
+            problem.solve()
+            solution = Solution(graph, a, v, e, c)
+
         print(solution)
 
         return solution

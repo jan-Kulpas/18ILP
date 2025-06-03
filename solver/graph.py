@@ -100,7 +100,7 @@ class Graph:
         ]
 
     def _process_city(self, node: CityNode, queue: deque[Node]) -> None:
-        print(f"Visiting city: {node}")
+        # print(f"Visiting city: {node}")
         self.cities.add(node)
 
         hex = node.hex
@@ -115,8 +115,7 @@ class Graph:
             self.edges.add(Edge((node, junction), hex))
 
     def _process_junction(self, node: JunctionNode, queue: deque[Node]) -> None:
-        print(f"Visiting junction: {node}")
-
+        # print(f"Visiting junction: {node}")
         def get_connected_segments(
             base_hex: Hex, other_hex: Hex
         ) -> list[tuple[Hex, Segment]]:
@@ -188,6 +187,35 @@ class Solution:
             for train in graph.trains
             if c[train][city].varValue == 1
         )
+
+    @property
+    def trains_with_subtour(self) -> dict[int, Train]:
+        return {idx: train for idx, train in self.trains.items() if self.has_subtour_at(idx)}
+    
+    def has_subtour_at(self, idx: int) -> bool:
+        nodes = self.nodes[idx]
+        edges = self.edges[idx]
+
+        visited: set[Node] = set()
+        adjacency = {}
+        for edge in edges:
+            u, v = edge.nodes
+            adjacency.setdefault(u, []).append(v)
+            adjacency.setdefault(v, []).append(u)
+
+        stack: list[Node] = [next(iter(nodes))]
+
+        while stack:
+            node = stack.pop()
+            if node in visited:
+                continue
+            visited.add(node)
+            for neighbor in adjacency[node]:
+                if neighbor not in visited:
+                    stack.append(neighbor)
+
+        return len(nodes) != len(visited)
+
 
     def __str__(self) -> str:
         s = ""
