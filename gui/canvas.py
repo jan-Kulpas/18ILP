@@ -13,6 +13,7 @@ from PyQt6.QtCore import QPoint
 from core.game import Game
 from core.hex import Hex
 from gui.renderer import Renderer
+from solver.graph import Solution
 
 if TYPE_CHECKING:
     from main import Window
@@ -20,22 +21,22 @@ if TYPE_CHECKING:
 
 class Canvas(QWidget):
     app: Window
-    _routes: Any
+    _solution: Solution | None
 
     def __init__(self, app: Window):
         super().__init__()
 
         self.app = app
 
-        self._routes = None
+        self._solution = None
 
     @property
-    def routes(self) -> Any:
-        return self._routes
+    def solution(self) -> Solution | None:
+        return self._solution
 
-    @routes.setter
-    def routes(self, new) -> None:
-        self._routes = new
+    @solution.setter
+    def solution(self, new) -> None:
+        self._solution = new
         self.update()
 
     def paintEvent(self, event):
@@ -54,10 +55,9 @@ class Canvas(QWidget):
 
         # Draw results
         # TODO: Pass train info to maybe do a legend on the side so we know which train is which.
-        if self.routes:
-            total, nodes, edges, cities = self.routes
-            for train in range(len(nodes)):
-                renderer.draw_route(nodes[train], edges[train])
+        if self.solution:
+            for train in range(len(self.solution.nodes)):
+                renderer.draw_route(self.solution.nodes[train], self.solution.edges[train])
 
         # Draw selected hex
         if self.app.selected_hex:

@@ -123,16 +123,16 @@ class Window(QWidget):
     def update_routes(self) -> None:
         if self.selected_railway:
             try:
-                self.canvas.routes = self.pathfinder.solve_for(self.selected_railway.id)
+                self.canvas.solution = self.pathfinder.solve_for(self.selected_railway.id)
             except RuleError as e:
                 self.logbox.logger.append(str(e))
-                self.canvas.routes = None
+                self.canvas.solution = None
 
     def reset_state(self) -> None:
         self.selected_hex = None
         self.selected_tile = None
         self.selected_railway = None
-        self.canvas.routes = None
+        self.canvas.solution = None
         self.train_selector.update_train_count()
         self.logbox.logger.clear()
         self.update()
