@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from abc import ABC, abstractmethod
 from collections import deque
 from dataclasses import dataclass, field
@@ -16,6 +18,10 @@ class Node(ABC):
     def __str__(self) -> str:
         pass
 
+    @abstractmethod
+    def is_on_hex(self, hex: Hex) -> bool:
+        pass
+
 
 @dataclass(frozen=True, eq=True)
 class CityNode(Node):
@@ -24,6 +30,9 @@ class CityNode(Node):
 
     def __str__(self) -> str:
         return f"{self.hex}.{self.loc.name}"
+
+    def is_on_hex(self, hex: Hex) -> bool:
+        return hex == self.hex
 
 
 @dataclass(frozen=True, eq=True)
@@ -40,6 +49,9 @@ class JunctionNode(Node):
     def __str__(self) -> str:
         return f"{self.hexes[0]}-{self.hexes[1]}"
 
+    def is_on_hex(self, hex: Hex) -> bool:
+        return hex in self.hexes
+
 
 @dataclass(frozen=True, eq=True)
 class Edge:
@@ -50,12 +62,20 @@ class Edge:
         if str(self.nodes[0]) > str(self.nodes[1]):
             object.__setattr__(self, "nodes", (self.nodes[1], self.nodes[0]))
 
+    def other(self, node: Node) -> Node:
+        if node == self.nodes[0]:
+            return self.nodes[1]
+        if node == self.nodes[1]:
+            return self.nodes[0]
+        raise ValueError(f"Node {node} is not part of Edge {self}")
+
     def __iter__(self):
         return iter(self.nodes)
 
     def __str__(self) -> str:
         return f"({self.nodes[0]}, {self.nodes[1]})"
-    
+
+
 class Graph:
     game: Game
 
@@ -90,6 +110,9 @@ class Graph:
                     self._process_city(node, queue)
                 case JunctionNode():
                     self._process_junction(node, queue)
+
+    def incident_to(self, node: Node) -> set[Edge]:
+        return set([edge for edge in self.edges if node in edge])
 
     def _get_station_segment_nodes(self, railway: Railway) -> list[CityNode]:
         # The nullcheck takes care of None type
@@ -154,44 +177,56 @@ class Graph:
                     queue.append(junction)
                     self.edges.add(Edge((node, junction), hex))
 
+
 class Solution:
     nodes: dict[int, set[Node]]
     edges: dict[int, set[Edge]]
     cities: dict[int, set[CityNode]]
 
-    trains: dict[int, Train]
-
     value: int
+    graph: Graph
 
-    def __init__(self, graph: Graph, a, v, e, c) -> None:
-        self.trains = graph.trains
+    def __init__(self, value: int, graph: Graph, nodes, edges, cities) -> None:
+        self.value = value
+        self.graph = graph
+        self.nodes = nodes
+        self.edges = edges
+        self.cities = cities
 
-        self.nodes = {
+    @classmethod
+    def from_ilp(cls, graph: Graph, a, v, e, c) -> Solution:
+        nodes = {
             train: set(node for node in graph.nodes if v[train][node].varValue == 1)
-            for train in self.trains
+            for train in graph.trains
         }
-        self.edges = {
+        edges = {
             train: set(edge for edge in graph.edges if e[train][edge].varValue == 1)
-            for train in self.trains
+            for train in graph.trains
         }
-        self.cities = {
+        cities = {
             train: set(city for city in graph.cities if c[train][city].varValue == 1)
-            for train in self.trains
+            for train in graph.trains
         }
 
-        self.value = sum(
+        value = sum(
             graph.game.board.settlement_at(city).revenue(
-                self.trains[train], graph.game.phase
+                graph.trains[train], graph.game.phase
             )
             for city in graph.cities
             for train in graph.trains
             if c[train][city].varValue == 1
         )
 
+        return Solution(value, graph, nodes, edges, cities)
+
     @property
     def trains_with_subtour(self) -> dict[int, Train]:
-        return {idx: train for idx, train in self.trains.items() if self.has_subtour_at(idx)}
-    
+        return {
+            idx: train
+            for idx, train in self.graph.trains.items()
+            if self.has_subtour_at(idx)
+        }
+
     def has_subtour_at(self, idx: int) -> bool:
         nodes = self.nodes[idx]
         edges = self.edges[idx]
@@ -216,11 +251,10 @@ class Solution:
 
         return len(nodes) != len(visited)
 
-
     def __str__(self) -> str:
         s = ""
-        for train in self.trains:
-            s += f"Train: {self.trains[train]}\n"
+        for train in self.graph.trains:
+            s += f"Train: {self.graph.trains[train]}\n"
             s += f"Visited Nodes: {[str(n) for n in self.nodes[train]]}\n"
             s += f"Used Edges: {[str(e) for e in self.edges[train]]}\n"
             s += f"Visited Cities: {[str(c) for c in self.cities[train]]}\n"

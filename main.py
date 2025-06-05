@@ -23,6 +23,7 @@ from gui.railway_selector import RailwaySelector
 from gui.sidebar import SIDEBAR_WIDTH, Sidebar
 from gui.tile_selector import TileSelector
 from gui.train_selector import TrainSelector
+from solver.bruteforcer import Bruteforcer
 from solver.pathfinder import Pathfinder
 
 WIDTH = 1200
@@ -31,7 +32,7 @@ HEIGHT = 800
 
 class Window(QWidget):
     game: Game
-    pathfinder: Pathfinder
+    pathfinder: Pathfinder | Bruteforcer
 
     ### STATE
     _selected_hex: Hex | None = None
@@ -90,7 +91,8 @@ class Window(QWidget):
     def __init__(self, game: Game):
         super().__init__()
         self.game = game
-        self.pathfinder = Pathfinder(game)
+        # self.pathfinder = Pathfinder(game)
+        self.pathfinder = Bruteforcer(game)
 
         self.menu = MenuBar(self)
         self.tile_selector = TileSelector(self)
@@ -123,7 +125,9 @@ class Window(QWidget):
     def update_routes(self) -> None:
         if self.selected_railway:
             try:
-                self.canvas.solution = self.pathfinder.solve_for(self.selected_railway.id)
+                self.canvas.solution = self.pathfinder.solve_for(
+                    self.selected_railway.id
+                )
             except RuleError as e:
                 self.logbox.logger.append(str(e))
                 self.canvas.solution = None

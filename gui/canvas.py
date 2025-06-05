@@ -57,7 +57,9 @@ class Canvas(QWidget):
         # TODO: Pass train info to maybe do a legend on the side so we know which train is which.
         if self.solution:
             for train in range(len(self.solution.nodes)):
-                renderer.draw_route(self.solution.nodes[train], self.solution.edges[train])
+                renderer.draw_route(
+                    self.solution.nodes[train], self.solution.edges[train]
+                )
 
         # Draw selected hex
         if self.app.selected_hex:

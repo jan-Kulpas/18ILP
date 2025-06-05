@@ -9,6 +9,7 @@ from core.game import Game
 from core.settlement import City
 from solver.graph import Graph, JunctionNode, Solution
 from tools.exceptions import RuleError
+from tools.timed import timed
 
 
 class Pathfinder:
@@ -17,6 +18,7 @@ class Pathfinder:
     def __init__(self, game: Game) -> None:
         self.game = game
 
+    @timed
     def solve_for(self, railway_id: str) -> Solution:
         railway = self.game.railways[railway_id]
 
@@ -157,7 +159,10 @@ class Pathfinder:
 
         # Constraint: Fence-post relationship between nodes and edges, enforcing a path (if active)
         for train in graph.trains:
-            problem += lpSum(e[train][edge] for edge in graph.edges) == lpSum(v[train][node] for node in graph.nodes) - 1 * a[train]
+            problem += (
+                lpSum(e[train][edge] for edge in graph.edges)
+                == lpSum(v[train][node] for node in graph.nodes) - 1 * a[train]
+            )
 
         # solver = PULP_CBC_CMD(
         #     msg=True,
@@ -169,20 +174,26 @@ class Pathfinder:
         # )
 
         problem.solve()
-        solution = Solution(graph, a, v, e, c)
+        solution = Solution.from_ilp(graph, a, v, e, c)
+        subtour_counter = 0
 
         while solution.trains_with_subtour:
             print("DETECTED SUBTOURS - RERUNNING")
+            subtour_counter += 1
 
             for train in solution.trains_with_subtour:
-                problem += lpSum(e[train][edge] for edge in solution.edges[train]) <= len(solution.edges[train]) - 1
+                problem += (
+                    lpSum(e[train][edge] for edge in solution.edges[train])
+                    <= len(solution.edges[train]) - 1
+                )
 
             problem.solve()
-            solution = Solution(graph, a, v, e, c)
+            solution = Solution.from_ilp(graph, a, v, e, c)
 
         print(solution)
 
         return solution
+
 
 if __name__ == "__main__":
     game = Game("1889")

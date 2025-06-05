@@ -76,11 +76,13 @@ class Game:
         save["stations"] = {
             str(hex): ids
             for hex, tile in self.board.items()
-            if (ids := [
-                railway.id
-                for railway in self.railways.values()
-                if tile.has_station(railway)
-            ])
+            if (
+                ids := [
+                    railway.id
+                    for railway in self.railways.values()
+                    if tile.has_station(railway)
+                ]
+            )
         }
 
         with open(path, "w+") as savefile:
