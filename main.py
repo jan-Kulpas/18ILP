@@ -91,8 +91,8 @@ class Window(QWidget):
     def __init__(self, game: Game):
         super().__init__()
         self.game = game
-        # self.pathfinder = Pathfinder(game)
-        self.pathfinder = Bruteforcer(game)
+        self.pathfinder = Pathfinder(game)
+        # self.pathfinder = Bruteforcer(game)
 
         self.menu = MenuBar(self)
         self.tile_selector = TileSelector(self)
@@ -133,10 +133,12 @@ class Window(QWidget):
                 self.canvas.solution = None
 
     def reset_state(self) -> None:
+        self.pathfinder.game = self.game
         self.selected_hex = None
         self.selected_tile = None
         self.selected_railway = None
         self.canvas.solution = None
+        self.railway_selector._populate_railway_list()
         self.train_selector.update_train_count()
         self.logbox.logger.clear()
         self.update()

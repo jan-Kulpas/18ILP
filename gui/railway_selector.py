@@ -48,6 +48,7 @@ class RailwaySelector(QWidget):
         self.app.selected_railway = railway
 
     def _populate_railway_list(self):
+        self.railway_list.clear()
         for railway in self.app.game.railways.values():
             item = QListWidgetItem()
             item.setData(Qt.ItemDataRole.UserRole, railway)

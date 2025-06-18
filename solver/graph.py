@@ -231,6 +231,9 @@ class Solution:
         nodes = self.nodes[idx]
         edges = self.edges[idx]
 
+        if len(nodes) == 0 or len(edges) == 0:
+            return False
+
         visited: set[Node] = set()
         adjacency = {}
         for edge in edges:
