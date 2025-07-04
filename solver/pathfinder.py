@@ -1,4 +1,4 @@
-from collections import deque
+from collections import defaultdict, deque
 from pprint import pprint
 
 from pulp import const
@@ -163,6 +163,18 @@ class Pathfinder:
                 lpSum(e[train][edge] for edge in graph.edges)
                 == lpSum(v[train][node] for node in graph.nodes) - 1 * a[train]
             )
+
+        # Constraint: Train cannot score two cities on the same hex 
+        cities_by_hex_id = defaultdict(list)
+        for city in graph.cities:
+            hex_id = str(city).split(".")[0]
+            cities_by_hex_id[hex_id].append(city)
+
+        for train in graph.trains:
+            for cities_on_hex in cities_by_hex_id.values():
+                problem += lpSum(c[train][city] for city in cities_on_hex) <= 1
+
+        # TODO: Block scoring offboards spanning multiple hexes
 
         # solver = PULP_CBC_CMD(
         #     msg=True,

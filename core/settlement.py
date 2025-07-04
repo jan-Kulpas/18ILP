@@ -113,5 +113,8 @@ class Offboard(Settlement):
     def revenue(self, train: Train, phase: Phase) -> int:
         if train.id in self.modifiers:
             return self.modifiers[train.id]
-        else:
+
+        if phase.color in self.values:
             return self.values[phase.color]
+        return self.revenue(train, phase.prev)
+

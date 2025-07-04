@@ -15,7 +15,7 @@ from core.tile import *
 from core.game import *
 from core.hex import Hex
 from gui.helpers import lerp, node2point, random_color
-from solver.graph import Edge, Node
+from solver.graph import Edge, JunctionNode, Node
 
 BOARD_PATH = "data/{}/board.json"
 
@@ -113,8 +113,14 @@ class Renderer:
             p1, p2 = (node2point(node) for node in edge)
 
             path = QPainterPath()
-            path.moveTo(p1)
-            path.lineTo(p2)
+            if (all([isinstance(node, JunctionNode) for node in edge])):
+                middle = lerp(p1, p2, 0.5)
+                ctrl = lerp(middle, edge.hex.center, 0.75)
+                path.moveTo(p1)
+                path.quadTo(ctrl, p2)
+            else:
+                path.moveTo(p1)
+                path.lineTo(p2)
 
             with BufferedPainter(self.painter, self.size) as buffer:
                 buffer.setPen(QPen(color, 4))
