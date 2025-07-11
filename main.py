@@ -128,6 +128,7 @@ class Window(QWidget):
                 self.canvas.solution = self.pathfinder.solve_for(
                     self.selected_railway.id
                 )
+                self.logbox.logger.append(f"Found a route for {self.selected_railway.id} valued at {self.canvas.solution.value}")
             except RuleError as e:
                 self.logbox.logger.append(str(e))
                 self.canvas.solution = None
