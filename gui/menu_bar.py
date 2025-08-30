@@ -19,7 +19,7 @@ class MenuBar(QMenuBar):
         super().__init__()
         self.app = app
 
-        self.quicksave_count: int = 1
+        self.quicksave_count: int = 23
 
         file_menu = self.addMenu("File")
 
