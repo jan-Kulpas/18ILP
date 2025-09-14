@@ -91,8 +91,8 @@ class Window(QWidget):
     def __init__(self, game: Game):
         super().__init__()
         self.game = game
-        self.pathfinder = Pathfinder(game)
-        # self.pathfinder = Bruteforcer(game)
+        # self.pathfinder = Pathfinder(game)
+        self.pathfinder = Bruteforcer(game)
 
         self.menu = MenuBar(self)
         self.tile_selector = TileSelector(self)

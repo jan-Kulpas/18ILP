@@ -30,7 +30,9 @@ class Bruteforcer:
         if len(railway.trains) == 0:
             raise RuleError(f"Railway {railway_id} has no trains to find route for.")
 
+        #railway.trains[0] = Train.from_id("D") #override for debugging
         print(f"Finding best route for {railway_id} - Trains: {railway.trains}")
+
 
         graph = Graph(self.game, railway)
         max_range: int = self._calc_max_range(railway)
@@ -48,11 +50,10 @@ class Bruteforcer:
 
         merged_routes: set[Route] = self._merge_routes(routes, max_range)
 
-        print(len(routes))
-        print(len(merged_routes))
-        print(len(list(combinations(routes, 2))))
+        print(f"Routes starting at home stations: {len(routes)}")
+        print(f"After adding routes going through the home station: {len(merged_routes)}")
 
-        print(len(list(permutations(merged_routes, 2))))
+        print(f"Train-Route pairings for {len(railway.trains)}: {sum(1 for _ in self._train_route_pairings(railway.trains, merged_routes))}")
 
         best_value = 0
         best_pairing = None
@@ -87,6 +88,10 @@ class Bruteforcer:
         return solution
 
     def _merge_routes(self, routes: set[Route], max_range: int) -> set[Route]:
+        """
+        Expands the set of routes starting in company station by joining routes at the station point,
+        creating routes that go through the company station but not start there
+        """
         merged = set()
         for r1, r2 in combinations(routes, 2):
             if r1.path[0] == r2.path[0]:
