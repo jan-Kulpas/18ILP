@@ -101,7 +101,7 @@ class Window(QWidget):
         self.logbox = Logbox()
 
         # Window settings
-        self.setWindowTitle("18xx-router")
+        self.setWindowTitle("18XX Improved Logistics Pathfinder")
         self.setGeometry(20, 40, WIDTH, HEIGHT)  # On-screen margin and size
 
         # Layouts
