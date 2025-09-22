@@ -1,1 +1,17 @@
-{"year": "1889", "trains": {"TR": [], "KO": [], "UR": [], "KU": [], "AR": [], "IR": ["4"], "SR": []}, "board": {"E2": {"tile": "5", "rotation": 4}, "F3": {"tile": "5", "rotation": 2}}, "stations": {"E2": ["IR"]}}
+{
+  "year": "1889",
+  "trains": {
+    "TR": [],
+    "KO": [],
+    "UR": [],
+    "KU": [],
+    "AR": [],
+    "IR": ["4"],
+    "SR": []
+  },
+  "board": {
+    "E2": { "tile": "5", "rotation": 4 },
+    "F3": { "tile": "5", "rotation": 2 }
+  },
+  "stations": { "E2": ["IR"] }
+}

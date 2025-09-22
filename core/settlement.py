@@ -90,6 +90,7 @@ class City(Settlement):
     def build_station(self, company: str) -> None:
         if len(self.stations) >= self.size:
             raise RuleError("Cannot build another station because the City is full")
+        # TODO: block bulding multiple stations by same company
         self.stations.append(company)
 
     def is_blocking_for(self, company: Railway) -> bool:

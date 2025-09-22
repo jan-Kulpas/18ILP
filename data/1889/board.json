@@ -1,439 +1,351 @@
 {
-    "shape": {
-        "A":[[8,2]],
-        "B":[[3,5]],
-        "C":[[4,4]],
-        "D":[[3,4]],
-        "E":[[2,4]],
-        "F":[[1,5]],
-        "G":[[4,6]],
-        "H":[[3,6]],
-        "I":[[2,6]],
-        "J":[[1,6]],
-        "K":[[4,3]],
-        "L":[[7,1]]
+  "shape": {
+    "A": [[8, 2]],
+    "B": [[3, 5]],
+    "C": [[4, 4]],
+    "D": [[3, 4]],
+    "E": [[2, 4]],
+    "F": [[1, 5]],
+    "G": [[4, 6]],
+    "H": [[3, 6]],
+    "I": [[2, 6]],
+    "J": [[1, 6]],
+    "K": [[4, 3]],
+    "L": [[7, 1]]
+  },
+  "tiles": [
+    {
+      "id": "0M1",
+      "color": ["BLANK"],
+      "segments": [
+        {
+          "location": "C",
+          "settlement": {
+            "value": 0,
+            "size": 1
+          }
+        }
+      ],
+      "upgrades": ["5", "6", "57"]
     },
-    "tiles": [
-      {
-        "id": "0M1",
-        "color": [
-          "BLANK"
-        ],
-        "segments": [
-          {
-            "location": "C",
-            "settlement": {
-              "value": 0,
-              "size": 1
-            }
+    {
+      "id": "0M2",
+      "color": ["BLANK"],
+      "segments": [
+        {
+          "location": "C",
+          "settlement": {
+            "value": 0
           }
-        ],
-        "upgrades": [
-          "5",
-          "6",
-          "57"
-        ]
-      },
-      {
-        "id": "0M2",
-        "color": [
-          "BLANK"
-        ],
-        "segments": [
-          {
-            "location": "C",
-            "settlement": {
-              "value": 0
-            }
-          }
-        ],
-        "upgrades": [
-          "3",
-          "58"
-        ]
-      },
-      {
-        "id": "0M3",
-        "color": [
-          "BLANK"
-        ],
-        "segments": [
-          {
-            "location": "C",
-            "settlement": {
-              "value": 0
-            }
-          }
-        ],
-        "upgrades": [
-          "3",
-          "58",
-          "437"
-        ]
-      },
-      {
-        "id": "0M4",
-        "color": [
-          "BLANK"
-        ],
-        "segments": [
-          {
-            "location": "C",
-            "settlement": {
-              "value": 0,
-              "size": 1
-            }
-          }
-        ],
-        "label": "H",
-        "upgrades": [
-          "438"
-        ]
-      },
-      {
-        "id": "0M5",
-        "color": [
-          "YELLOW"
-        ],
-        "segments": [
-          {
-            "location": "C",
-            "tracks": [
-              "NW",
-              "SW",
-              "S"
-            ],
-            "settlement": {
-              "value": 30,
-              "size": 1
-            }
-          }
-        ],
-        "label": "T",
-        "upgrades": [
-          "440"
-        ]
-      },
-      {
-        "id": "0M6",
-        "color": [
-          "GREEN"
-        ],
-        "segments": [
-          {
-            "location": "C",
-            "tracks": [
-              "NW",
-              "N",
-              "NE",
-              "SE"
-            ],
-            "settlement": {
-              "value": 30,
-              "size": 2
-            }
-          }
-        ],
-        "label": "K",
-        "upgrades": [
-          "465"
-        ]
-      },
-      {
-        "id": "0P1",
-        "color": [
-          "GRAY"
-        ],
-        "segments": [
-          {
-            "location": "C",
-            "tracks": [
-              "SE",
-              "S"
-            ],
-            "settlement": {
-              "value": 20
-            }
-          }
-        ],
-        "upgrades": []
-      },
-      {
-        "id": "0P2",
-        "color": [
-          "GRAY"
-        ],
-        "segments": [
-          {
-            "location": "C",
-            "tracks": [
-              "N",
-              "SE",
-              "SW"
-            ],
-            "settlement": {
-              "value": 40,
-              "size": 2
-            }
-          }
-        ],
-        "upgrades": []
-      },
-      {
-        "id": "0P3",
-        "color": [
-          "YELLOW"
-        ],
-        "segments": [
-          {
-            "location": "C",
-            "tracks": [
-              "NW"
-            ],
-            "settlement": {
-              "value": 20,
-              "size": 1
-            }
-          }
-        ],
-        "upgrades": [
-          "12",
-          "13",
-          "14",
-          "15",
-          "205",
-          "206"
-        ]
-      },
-      {
-        "id": "0P4",
-        "color": [
-          "RED"
-        ],
-        "segments": [
-          {
-            "location": "R4",
-            "tracks": [
-              "S"
-            ],
-            "settlement": {
-              "values": {
-                "YELLOW": 30,
-                "BROWN": 60 
-              },
-              "modifiers": {
-                "D": 100
-              }
-            }
-          },
-          {
-            "location": "R5",
-            "tracks": [
-              "SW"
-            ],
-            "settlement": {
-              "values": {
-                "YELLOW": 30,
-                "BROWN": 60 
-              },
-              "modifiers": {
-                "D": 100
-              }
-            }
-          }
-        ],
-        "upgrades": []
-      },
-      {
-        "id": "0P5",
-        "color": [
-          "GRAY"
-        ],
-        "segments": [
-          {
-            "location": "C",
-            "tracks": [
-              "N",
-              "NE"
-            ],
-            "settlement": {
-              "value": 20
-            }
-          }
-        ],
-        "upgrades": []
-      },
-      {
-        "id": "0P6",
-        "color": [
-          "RED"
-        ],
-        "segments": [
-          {
-            "location": "R4",
-            "tracks": [
-              "S"
-            ],
-            "settlement": {
-              "values": {
-                "YELLOW": 20,
-                "BROWN": 40 
-              },
-              "modifiers": {
-                "D": 80
-              }
-            }
-          },
-          {
-            "location": "R5",
-            "tracks": [
-              "SW"
-            ],
-            "settlement": {
-              "values": {
-                "YELLOW": 20,
-                "BROWN": 40 
-              },
-              "modifiers": {
-                "D": 80
-              }
-            }
-          }
-        ],
-        "upgrades": []
-      },
-      {
-        "id": "0P7",
-        "color": [
-          "GRAY"
-        ],
-        "segments": [
-          {
-            "tracks": [
-              "SW",
-              "SE"
-            ]
-          }
-        ],
-        "upgrades": []
-      },
-      {
-        "id": "0P8",
-        "color": [
-          "RED"
-        ],
-        "segments": [
-          {
-            "location": "R6",
-            "tracks": [
-              "NW"
-            ],
-            "settlement": {
-              "values": {
-                "YELLOW": 20,
-                "BROWN": 40 
-              },
-              "modifiers": {
-                "D": 80
-              }
-            }
-          },
-          {
-            "location": "R5",
-            "tracks": [
-              "SW"
-            ],
-            "settlement": {
-              "values": {
-                "YELLOW": 20,
-                "BROWN": 40 
-              },
-              "modifiers": {
-                "D": 80
-              }
-            }
-          }
-        ],
-        "upgrades": []
-      }
-    ],
-    "preprinted": {
-        "A10": "0M1",
-        "B3": "0P1",
-        "B7": "0P2",
-        "B11": "0M3",
-        "C4": "0P3",
-        "C10": "0M1",
-        "E2": "0M1",
-        "F1": "0P4",
-        "F3": "0M1",
-        "F9": "0M6",
-        "G4": "0M1",
-        "G10": "0M3",
-        "G12": "0M1",
-        "G14": "0P5",
-        "H7": "0M1",
-        "I2": "0M1",
-        "I4": "0M4",
-        "I12": "0M3",
-        "J1": "0P6",
-        "J5": "0M2",
-        "J7": "0P7",
-        "J9": "0M3",
-        "J11": "0M1",
-        "K4": "0M5",
-        "K8": "0M1",
-        "L7": "0P8"
+        }
+      ],
+      "upgrades": ["3", "58"]
     },
-    "railways": [
-      {
-        "id": "TR",
-        "name": "Tosa Electric Railway",
-        "home": "F9",
-        "stations": 3,
-        "color": "#217168"
-      },
-      {
-        "id": "KO",
-        "name": "Takamatsu & Kotohira Electric Railway",
-        "home": "K4",
-        "stations": 2,
-        "color": "#D01735"
-      },
-      {
-        "id": "UR",
-        "name": "Uwajima Railway",
-        "home": "B7",
-        "stations": 3,
-        "color": "#7A3B2E"
-      },
-      {
-        "id": "KU",
-        "name": "Tosa Kuroshio Railway",
-        "home": "C10",
-        "stations": 1,
-        "color": "#2967AC"
-      },
-      {
-        "id": "AR",
-        "name": "Awa Railroad",
-        "home": "K8",
-        "stations": 2,
-        "color": "#535050"
-      },
-      {
-        "id": "IR",
-        "name": "Iyo Railway",
-        "home": "E2",
-        "stations": 2,
-        "color": "#E34C27"
-      },
-      {
-        "id": "SR",
-        "name": "Sanuki Railway",
-        "home": "I2",
-        "stations": 2,
-        "color": "#50AB3B"
-      }
-    ]
+    {
+      "id": "0M3",
+      "color": ["BLANK"],
+      "segments": [
+        {
+          "location": "C",
+          "settlement": {
+            "value": 0
+          }
+        }
+      ],
+      "upgrades": ["3", "58", "437"]
+    },
+    {
+      "id": "0M4",
+      "color": ["BLANK"],
+      "segments": [
+        {
+          "location": "C",
+          "settlement": {
+            "value": 0,
+            "size": 1
+          }
+        }
+      ],
+      "label": "H",
+      "upgrades": ["438"]
+    },
+    {
+      "id": "0M5",
+      "color": ["YELLOW"],
+      "segments": [
+        {
+          "location": "C",
+          "tracks": ["NW", "SW", "S"],
+          "settlement": {
+            "value": 30,
+            "size": 1
+          }
+        }
+      ],
+      "label": "T",
+      "upgrades": ["440"]
+    },
+    {
+      "id": "0M6",
+      "color": ["GREEN"],
+      "segments": [
+        {
+          "location": "C",
+          "tracks": ["NW", "N", "NE", "SE"],
+          "settlement": {
+            "value": 30,
+            "size": 2
+          }
+        }
+      ],
+      "label": "K",
+      "upgrades": ["465"]
+    },
+    {
+      "id": "0P1",
+      "color": ["GRAY"],
+      "segments": [
+        {
+          "location": "C",
+          "tracks": ["SE", "S"],
+          "settlement": {
+            "value": 20
+          }
+        }
+      ],
+      "upgrades": []
+    },
+    {
+      "id": "0P2",
+      "color": ["GRAY"],
+      "segments": [
+        {
+          "location": "C",
+          "tracks": ["N", "SE", "SW"],
+          "settlement": {
+            "value": 40,
+            "size": 2
+          }
+        }
+      ],
+      "upgrades": []
+    },
+    {
+      "id": "0P3",
+      "color": ["YELLOW"],
+      "segments": [
+        {
+          "location": "C",
+          "tracks": ["NW"],
+          "settlement": {
+            "value": 20,
+            "size": 1
+          }
+        }
+      ],
+      "upgrades": ["12", "13", "14", "15", "205", "206"]
+    },
+    {
+      "id": "0P4",
+      "color": ["RED"],
+      "segments": [
+        {
+          "location": "R4",
+          "tracks": ["S"],
+          "settlement": {
+            "values": {
+              "YELLOW": 30,
+              "BROWN": 60
+            },
+            "modifiers": {
+              "D": 100
+            }
+          }
+        },
+        {
+          "location": "R5",
+          "tracks": ["SW"],
+          "settlement": {
+            "values": {
+              "YELLOW": 30,
+              "BROWN": 60
+            },
+            "modifiers": {
+              "D": 100
+            }
+          }
+        }
+      ],
+      "upgrades": []
+    },
+    {
+      "id": "0P5",
+      "color": ["GRAY"],
+      "segments": [
+        {
+          "location": "C",
+          "tracks": ["N", "NE"],
+          "settlement": {
+            "value": 20
+          }
+        }
+      ],
+      "upgrades": []
+    },
+    {
+      "id": "0P6",
+      "color": ["RED"],
+      "segments": [
+        {
+          "location": "R4",
+          "tracks": ["S"],
+          "settlement": {
+            "values": {
+              "YELLOW": 20,
+              "BROWN": 40
+            },
+            "modifiers": {
+              "D": 80
+            }
+          }
+        },
+        {
+          "location": "R5",
+          "tracks": ["SW"],
+          "settlement": {
+            "values": {
+              "YELLOW": 20,
+              "BROWN": 40
+            },
+            "modifiers": {
+              "D": 80
+            }
+          }
+        }
+      ],
+      "upgrades": []
+    },
+    {
+      "id": "0P7",
+      "color": ["GRAY"],
+      "segments": [
+        {
+          "tracks": ["SW", "SE"]
+        }
+      ],
+      "upgrades": []
+    },
+    {
+      "id": "0P8",
+      "color": ["RED"],
+      "segments": [
+        {
+          "location": "R6",
+          "tracks": ["NW"],
+          "settlement": {
+            "values": {
+              "YELLOW": 20,
+              "BROWN": 40
+            },
+            "modifiers": {
+              "D": 80
+            }
+          }
+        },
+        {
+          "location": "R5",
+          "tracks": ["SW"],
+          "settlement": {
+            "values": {
+              "YELLOW": 20,
+              "BROWN": 40
+            },
+            "modifiers": {
+              "D": 80
+            }
+          }
+        }
+      ],
+      "upgrades": []
+    }
+  ],
+  "preprinted": {
+    "A10": "0M1",
+    "B3": "0P1",
+    "B7": "0P2",
+    "B11": "0M3",
+    "C4": "0P3",
+    "C10": "0M1",
+    "E2": "0M1",
+    "F1": "0P4",
+    "F3": "0M1",
+    "F9": "0M6",
+    "G4": "0M1",
+    "G10": "0M3",
+    "G12": "0M1",
+    "G14": "0P5",
+    "H7": "0M1",
+    "I2": "0M1",
+    "I4": "0M4",
+    "I12": "0M3",
+    "J1": "0P6",
+    "J5": "0M2",
+    "J7": "0P7",
+    "J9": "0M3",
+    "J11": "0M1",
+    "K4": "0M5",
+    "K8": "0M1",
+    "L7": "0P8"
+  },
+  "railways": [
+    {
+      "id": "TR",
+      "name": "Tosa Electric Railway",
+      "home": "F9",
+      "stations": 3,
+      "color": "#217168"
+    },
+    {
+      "id": "KO",
+      "name": "Takamatsu & Kotohira Electric Railway",
+      "home": "K4",
+      "stations": 2,
+      "color": "#D01735"
+    },
+    {
+      "id": "UR",
+      "name": "Uwajima Railway",
+      "home": "B7",
+      "stations": 3,
+      "color": "#7A3B2E"
+    },
+    {
+      "id": "KU",
+      "name": "Tosa Kuroshio Railway",
+      "home": "C10",
+      "stations": 1,
+      "color": "#2967AC"
+    },
+    {
+      "id": "AR",
+      "name": "Awa Railroad",
+      "home": "K8",
+      "stations": 2,
+      "color": "#535050"
+    },
+    {
+      "id": "IR",
+      "name": "Iyo Railway",
+      "home": "E2",
+      "stations": 2,
+      "color": "#E34C27"
+    },
+    {
+      "id": "SR",
+      "name": "Sanuki Railway",
+      "home": "I2",
+      "stations": 2,
+      "color": "#50AB3B"
+    }
+  ]
 }

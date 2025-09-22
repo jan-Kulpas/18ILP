@@ -5,14 +5,7 @@
     "segments": [
       {
         "location": "C",
-        "tracks": [
-          "N",
-          "NE",
-          "SE",
-          "S",
-          "SW",
-          "NW"
-        ],
+        "tracks": ["N", "NE", "SE", "S", "SW", "NW"],
         "settlement": {
           "value": 1000
         }
@@ -21,17 +14,38 @@
     "upgrades": []
   },
   {
-    "id": "3",
-    "color": [
-      "YELLOW"
+    "id": "DBG2",
+    "color": ["BROWN"],
+    "segments": [
+      {
+        "tracks": ["N", "NE"]
+      },
+      {
+        "tracks": ["S", "NE"]
+      },
+      {
+        "tracks": ["N", "S"]
+      },
+      {
+        "tracks": ["NW", "S"]
+      },
+      {
+        "tracks": ["NW", "N"]
+      },
+      {
+        "tracks": ["NW", "NE"]
+      }
     ],
+    "upgrades": []
+  },
+
+  {
+    "id": "3",
+    "color": ["YELLOW"],
     "segments": [
       {
         "location": "C",
-        "tracks": [
-          "SW",
-          "S"
-        ],
+        "tracks": ["SW", "S"],
         "settlement": {
           "value": 10
         }
@@ -41,699 +55,397 @@
   },
   {
     "id": "5",
-    "color": [
-      "YELLOW"
-    ],
+    "color": ["YELLOW"],
     "segments": [
       {
         "location": "C",
-        "tracks": [
-          "SW",
-          "S"
-        ],
+        "tracks": ["SW", "S"],
         "settlement": {
           "value": 20,
           "size": 1
         }
       }
     ],
-    "upgrades": [
-      "12",
-      "14",
-      "15",
-      "205",
-      "206"
-    ]
+    "upgrades": ["12", "14", "15", "205", "206"]
   },
   {
     "id": "6",
-    "color": [
-      "YELLOW"
-    ],
+    "color": ["YELLOW"],
     "segments": [
       {
         "location": "C",
-        "tracks": [
-          "NW",
-          "S"
-        ],
+        "tracks": ["NW", "S"],
         "settlement": {
           "value": 20,
           "size": 1
         }
       }
     ],
-    "upgrades": [
-      "12",
-      "13",
-      "14",
-      "15",
-      "205",
-      "206"
-    ]
+    "upgrades": ["12", "13", "14", "15", "205", "206"]
   },
   {
     "id": "7",
-    "color": [
-      "YELLOW"
-    ],
+    "color": ["YELLOW"],
     "segments": [
       {
-        "tracks": [
-          "S",
-          "SW"
-        ]
+        "tracks": ["S", "SW"]
       }
     ],
-    "upgrades": [
-      "26",
-      "27",
-      "28",
-      "29"
-    ]
+    "upgrades": ["26", "27", "28", "29"]
   },
   {
     "id": "8",
-    "color": [
-      "YELLOW"
-    ],
+    "color": ["YELLOW"],
     "segments": [
       {
-        "tracks": [
-          "S",
-          "NW"
-        ]
+        "tracks": ["S", "NW"]
       }
     ],
-    "upgrades": [
-      "16",
-      "19",
-      "23",
-      "24",
-      "25",
-      "28",
-      "29"
-    ]
+    "upgrades": ["16", "19", "23", "24", "25", "28", "29"]
   },
   {
     "id": "9",
-    "color": [
-      "YELLOW"
-    ],
+    "color": ["YELLOW"],
     "segments": [
       {
-        "tracks": [
-          "S",
-          "N"
-        ]
+        "tracks": ["S", "N"]
       }
     ],
-    "upgrades": [
-      "19",
-      "20",
-      "23",
-      "24",
-      "26",
-      "27"
-    ]
+    "upgrades": ["19", "20", "23", "24", "26", "27"]
   },
   {
     "id": "12",
-    "color": [
-      "GREEN"
-    ],
+    "color": ["GREEN"],
     "segments": [
       {
         "location": "C",
-        "tracks": [
-          "S",
-          "SW",
-          "NW"
-        ],
+        "tracks": ["S", "SW", "NW"],
         "settlement": {
           "value": 30,
           "size": 1
         }
       }
     ],
-    "upgrades": [
-      "448",
-      "611"
-    ]
+    "upgrades": ["448", "611"]
   },
   {
     "id": "13",
-    "color": [
-      "GREEN"
-    ],
+    "color": ["GREEN"],
     "segments": [
       {
         "location": "C",
-        "tracks": [
-          "NE",
-          "S",
-          "NW"
-        ],
+        "tracks": ["NE", "S", "NW"],
         "settlement": {
           "value": 30,
           "size": 1
         }
       }
     ],
-    "upgrades": [
-      "611"
-    ]
+    "upgrades": ["611"]
   },
   {
     "id": "14",
-    "color": [
-      "GREEN"
-    ],
+    "color": ["GREEN"],
     "segments": [
       {
         "location": "C",
-        "tracks": [
-          "NE",
-          "S",
-          "SW",
-          "N"
-        ],
+        "tracks": ["NE", "S", "SW", "N"],
         "settlement": {
           "value": 30,
           "size": 2
         }
       }
     ],
-    "upgrades": [
-      "611"
-    ]
+    "upgrades": ["611"]
   },
   {
     "id": "15",
-    "color": [
-      "GREEN"
-    ],
+    "color": ["GREEN"],
     "segments": [
       {
         "location": "C",
-        "tracks": [
-          "S",
-          "SW",
-          "NW",
-          "N"
-        ],
+        "tracks": ["S", "SW", "NW", "N"],
         "settlement": {
           "value": 30,
           "size": 2
         }
       }
     ],
-    "upgrades": [
-      "448",
-      "611"
-    ]
+    "upgrades": ["448", "611"]
   },
   {
     "id": "16",
-    "color": [
-      "GREEN"
-    ],
+    "color": ["GREEN"],
     "segments": [
       {
-        "tracks": [
-          "S",
-          "NW"
-        ]
+        "tracks": ["S", "NW"]
       },
       {
-        "tracks": [
-          "SW",
-          "N"
-        ]
+        "tracks": ["SW", "N"]
       }
     ],
     "upgrades": []
   },
   {
     "id": "19",
-    "color": [
-      "GREEN"
-    ],
+    "color": ["GREEN"],
     "segments": [
       {
-        "tracks": [
-          "NW",
-          "NE"
-        ]
+        "tracks": ["NW", "NE"]
       },
       {
-        "tracks": [
-          "S",
-          "N"
-        ]
+        "tracks": ["S", "N"]
       }
     ],
-    "upgrades": [
-      "45",
-      "46"
-    ]
+    "upgrades": ["45", "46"]
   },
   {
     "id": "20",
-    "color": [
-      "GREEN"
-    ],
+    "color": ["GREEN"],
     "segments": [
       {
-        "tracks": [
-          "SW",
-          "NE"
-        ]
+        "tracks": ["SW", "NE"]
       },
       {
-        "tracks": [
-          "S",
-          "N"
-        ]
+        "tracks": ["S", "N"]
       }
     ],
-    "upgrades": [
-      "47"
-    ]
+    "upgrades": ["47"]
   },
   {
     "id": "23",
-    "color": [
-      "GREEN"
-    ],
+    "color": ["GREEN"],
     "segments": [
       {
-        "tracks": [
-          "S",
-          "NE"
-        ]
+        "tracks": ["S", "NE"]
       },
       {
-        "tracks": [
-          "S",
-          "N"
-        ]
+        "tracks": ["S", "N"]
       }
     ],
-    "upgrades": [
-      "41",
-      "45",
-      "47"
-    ]
+    "upgrades": ["41", "45", "47"]
   },
   {
     "id": "24",
-    "color": [
-      "GREEN"
-    ],
+    "color": ["GREEN"],
     "segments": [
       {
-        "tracks": [
-          "S",
-          "NW"
-        ]
+        "tracks": ["S", "NW"]
       },
       {
-        "tracks": [
-          "S",
-          "N"
-        ]
+        "tracks": ["S", "N"]
       }
     ],
-    "upgrades": [
-      "42",
-      "46",
-      "47"
-    ]
+    "upgrades": ["42", "46", "47"]
   },
   {
     "id": "25",
-    "color": [
-      "GREEN"
-    ],
+    "color": ["GREEN"],
     "segments": [
       {
-        "tracks": [
-          "S",
-          "NW"
-        ]
+        "tracks": ["S", "NW"]
       },
       {
-        "tracks": [
-          "S",
-          "NE"
-        ]
+        "tracks": ["S", "NE"]
       }
     ],
-    "upgrades": [
-      "40",
-      "45",
-      "46"
-    ]
+    "upgrades": ["40", "45", "46"]
   },
   {
     "id": "26",
-    "color": [
-      "GREEN"
-    ],
+    "color": ["GREEN"],
     "segments": [
       {
-        "tracks": [
-          "S",
-          "SE"
-        ]
+        "tracks": ["S", "SE"]
       },
       {
-        "tracks": [
-          "S",
-          "N"
-        ]
+        "tracks": ["S", "N"]
       }
     ],
-    "upgrades": [
-      "42",
-      "45"
-    ]
+    "upgrades": ["42", "45"]
   },
   {
     "id": "27",
-    "color": [
-      "GREEN"
-    ],
+    "color": ["GREEN"],
     "segments": [
       {
-        "tracks": [
-          "S",
-          "SW"
-        ]
+        "tracks": ["S", "SW"]
       },
       {
-        "tracks": [
-          "S",
-          "N"
-        ]
+        "tracks": ["S", "N"]
       }
     ],
-    "upgrades": [
-      "41",
-      "46"
-    ]
+    "upgrades": ["41", "46"]
   },
   {
     "id": "28",
-    "color": [
-      "GREEN"
-    ],
+    "color": ["GREEN"],
     "segments": [
       {
-        "tracks": [
-          "S",
-          "NE"
-        ]
+        "tracks": ["S", "NE"]
       },
       {
-        "tracks": [
-          "S",
-          "SE"
-        ]
+        "tracks": ["S", "SE"]
       }
     ],
-    "upgrades": [
-      "46"
-    ]
+    "upgrades": ["46"]
   },
   {
     "id": "29",
-    "color": [
-      "GREEN"
-    ],
+    "color": ["GREEN"],
     "segments": [
       {
-        "tracks": [
-          "S",
-          "NW"
-        ]
+        "tracks": ["S", "NW"]
       },
       {
-        "tracks": [
-          "S",
-          "SW"
-        ]
+        "tracks": ["S", "SW"]
       }
     ],
-    "upgrades": [
-      "45"
-    ]
+    "upgrades": ["45"]
   },
   {
     "id": "39",
-    "color": [
-      "BROWN"
-    ],
+    "color": ["BROWN"],
     "segments": [
       {
-        "tracks": [
-          "S",
-          "NW"
-        ]
+        "tracks": ["S", "NW"]
       },
       {
-        "tracks": [
-          "S",
-          "SW"
-        ]
+        "tracks": ["S", "SW"]
       },
       {
-        "tracks": [
-          "SW",
-          "NW"
-        ]
+        "tracks": ["SW", "NW"]
       }
     ],
     "upgrades": []
   },
   {
     "id": "40",
-    "color": [
-      "BROWN"
-    ],
+    "color": ["BROWN"],
     "segments": [
       {
-        "tracks": [
-          "S",
-          "NW"
-        ]
+        "tracks": ["S", "NW"]
       },
       {
-        "tracks": [
-          "S",
-          "NE"
-        ]
+        "tracks": ["S", "NE"]
       },
       {
-        "tracks": [
-          "NE",
-          "NW"
-        ]
+        "tracks": ["NE", "NW"]
       }
     ],
     "upgrades": []
   },
   {
     "id": "41",
-    "color": [
-      "BROWN"
-    ],
+    "color": ["BROWN"],
     "segments": [
       {
-        "tracks": [
-          "S",
-          "SW"
-        ]
+        "tracks": ["S", "SW"]
       },
       {
-        "tracks": [
-          "S",
-          "N"
-        ]
+        "tracks": ["S", "N"]
       },
       {
-        "tracks": [
-          "SW",
-          "N"
-        ]
+        "tracks": ["SW", "N"]
       }
     ],
     "upgrades": []
   },
   {
     "id": "42",
-    "color": [
-      "BROWN"
-    ],
+    "color": ["BROWN"],
     "segments": [
       {
-        "tracks": [
-          "S",
-          "SE"
-        ]
+        "tracks": ["S", "SE"]
       },
       {
-        "tracks": [
-          "S",
-          "N"
-        ]
+        "tracks": ["S", "N"]
       },
       {
-        "tracks": [
-          "SE",
-          "N"
-        ]
+        "tracks": ["SE", "N"]
       }
     ],
     "upgrades": []
   },
   {
     "id": "45",
-    "color": [
-      "BROWN"
-    ],
+    "color": ["BROWN"],
     "segments": [
       {
-        "tracks": [
-          "S",
-          "NE"
-        ]
+        "tracks": ["S", "NE"]
       },
       {
-        "tracks": [
-          "S",
-          "N"
-        ]
+        "tracks": ["S", "N"]
       },
       {
-        "tracks": [
-          "NW",
-          "NE"
-        ]
+        "tracks": ["NW", "NE"]
       },
       {
-        "tracks": [
-          "NW",
-          "N"
-        ]
+        "tracks": ["NW", "N"]
       }
     ],
     "upgrades": []
   },
   {
     "id": "46",
-    "color": [
-      "BROWN"
-    ],
+    "color": ["BROWN"],
     "segments": [
       {
-        "tracks": [
-          "S",
-          "N"
-        ]
+        "tracks": ["S", "N"]
       },
       {
-        "tracks": [
-          "S",
-          "NW"
-        ]
+        "tracks": ["S", "NW"]
       },
       {
-        "tracks": [
-          "NW",
-          "NE"
-        ]
+        "tracks": ["NW", "NE"]
       },
       {
-        "tracks": [
-          "NE",
-          "N"
-        ]
+        "tracks": ["NE", "N"]
       }
     ],
     "upgrades": []
   },
   {
     "id": "47",
-    "color": [
-      "BROWN"
-    ],
+    "color": ["BROWN"],
     "segments": [
       {
-        "tracks": [
-          "S",
-          "N"
-        ]
+        "tracks": ["S", "N"]
       },
       {
-        "tracks": [
-          "S",
-          "NE"
-        ]
+        "tracks": ["S", "NE"]
       },
       {
-        "tracks": [
-          "SW",
-          "NE"
-        ]
-      }
-      ,      {
-        "tracks": [
-          "SW",
-          "N"
-        ]
+        "tracks": ["SW", "NE"]
+      },
+      {
+        "tracks": ["SW", "N"]
       }
     ],
     "upgrades": []
   },
   {
     "id": "57",
-    "color": [
-      "YELLOW"
-    ],
+    "color": ["YELLOW"],
     "segments": [
       {
         "location": "C",
-        "tracks": [
-          "S",
-          "N"
-        ],
+        "tracks": ["S", "N"],
         "settlement": {
           "value": 20,
           "size": 1
         }
       }
     ],
-    "upgrades": [
-      "14",
-      "15",
-      "205",
-      "206"
-    ]
+    "upgrades": ["14", "15", "205", "206"]
   },
   {
     "id": "58",
-    "color": [
-      "YELLOW"
-    ],
+    "color": ["YELLOW"],
     "segments": [
       {
         "location": "C",
-        "tracks": [
-          "S",
-          "NW"
-        ],
+        "tracks": ["S", "NW"],
         "settlement": {
           "value": 10
         }
@@ -743,64 +455,41 @@
   },
   {
     "id": "205",
-    "color": [
-      "GREEN"
-    ],
+    "color": ["GREEN"],
     "segments": [
       {
         "location": "C",
-        "tracks": [
-          "N",
-          "S",
-          "SW"
-        ],
+        "tracks": ["N", "S", "SW"],
         "settlement": {
           "value": 30,
           "size": 1
         }
       }
     ],
-    "upgrades": [
-      "448",
-      "611"
-    ]
+    "upgrades": ["448", "611"]
   },
   {
     "id": "206",
-    "color": [
-      "GREEN"
-    ],
+    "color": ["GREEN"],
     "segments": [
       {
         "location": "C",
-        "tracks": [
-          "N",
-          "S",
-          "SE"
-        ],
+        "tracks": ["N", "S", "SE"],
         "settlement": {
           "value": 30,
           "size": 1
         }
       }
     ],
-    "upgrades": [
-      "448",
-      "611"
-    ]
+    "upgrades": ["448", "611"]
   },
   {
     "id": "437",
-    "color": [
-      "YELLOW"
-    ],
+    "color": ["YELLOW"],
     "segments": [
       {
         "location": "C",
-        "tracks": [
-          "S",
-          "NW"
-        ],
+        "tracks": ["S", "NW"],
         "settlement": {
           "value": 30
         }
@@ -811,16 +500,11 @@
   },
   {
     "id": "438",
-    "color": [
-      "YELLOW"
-    ],
+    "color": ["YELLOW"],
     "segments": [
       {
         "location": "C",
-        "tracks": [
-          "S",
-          "NW"
-        ],
+        "tracks": ["S", "NW"],
         "settlement": {
           "value": 40,
           "size": 1
@@ -828,23 +512,15 @@
       }
     ],
     "label": "H",
-    "upgrades": [
-      "439"
-    ]
+    "upgrades": ["439"]
   },
   {
     "id": "439",
-    "color": [
-      "GREEN"
-    ],
+    "color": ["GREEN"],
     "segments": [
       {
         "location": "C",
-        "tracks": [
-          "S",
-          "NW",
-          "NE"
-        ],
+        "tracks": ["S", "NW", "NE"],
         "settlement": {
           "value": 60,
           "size": 2
@@ -852,23 +528,15 @@
       }
     ],
     "label": "H",
-    "upgrades": [
-      "492"
-    ]
+    "upgrades": ["492"]
   },
   {
     "id": "440",
-    "color": [
-      "GREEN"
-    ],
+    "color": ["GREEN"],
     "segments": [
       {
         "location": "C",
-        "tracks": [
-          "S",
-          "NW",
-          "SW"
-        ],
+        "tracks": ["S", "NW", "SW"],
         "settlement": {
           "value": 40,
           "size": 2
@@ -876,24 +544,15 @@
       }
     ],
     "label": "T",
-    "upgrades": [
-      "466"
-    ]
+    "upgrades": ["466"]
   },
   {
     "id": "448",
-    "color": [
-      "BROWN"
-    ],
+    "color": ["BROWN"],
     "segments": [
       {
         "location": "C",
-        "tracks": [
-          "S",
-          "NW",
-          "SW",
-          "N"
-        ],
+        "tracks": ["S", "NW", "SW", "N"],
         "settlement": {
           "value": 40,
           "size": 2
@@ -904,18 +563,11 @@
   },
   {
     "id": "465",
-    "color": [
-      "BROWN"
-    ],
+    "color": ["BROWN"],
     "segments": [
       {
         "location": "C",
-        "tracks": [
-          "S",
-          "NW",
-          "SW",
-          "N"
-        ],
+        "tracks": ["S", "NW", "SW", "N"],
         "settlement": {
           "value": 60,
           "size": 3
@@ -927,17 +579,11 @@
   },
   {
     "id": "466",
-    "color": [
-      "BROWN"
-    ],
+    "color": ["BROWN"],
     "segments": [
       {
         "location": "C",
-        "tracks": [
-          "S",
-          "NW",
-          "SW"
-        ],
+        "tracks": ["S", "NW", "SW"],
         "settlement": {
           "value": 60,
           "size": 2
@@ -949,20 +595,11 @@
   },
   {
     "id": "492",
-    "color": [
-      "BROWN"
-    ],
+    "color": ["BROWN"],
     "segments": [
       {
         "location": "C",
-        "tracks": [
-          "S",
-          "NW",
-          "SW",
-          "N",
-          "NE",
-          "SE"
-        ],
+        "tracks": ["S", "NW", "SW", "N", "NE", "SE"],
         "settlement": {
           "value": 80,
           "size": 3
@@ -974,19 +611,11 @@
   },
   {
     "id": "611",
-    "color": [
-      "BROWN"
-    ],
+    "color": ["BROWN"],
     "segments": [
       {
         "location": "C",
-        "tracks": [
-          "S",
-          "NW",
-          "SW",
-          "N",
-          "NE"
-        ],
+        "tracks": ["S", "NW", "SW", "N", "NE"],
         "settlement": {
           "value": 40,
           "size": 2

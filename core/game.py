@@ -191,7 +191,7 @@ class Game:
 
         city.build_station(railway.id)
 
-    def change_phase(self, new_phase: Phase):
+    def change_phase(self, new_phase: Phase) -> None:
         """Sets current phase to given phase and enforces train rusting and train limits."""
         # Reccurently change phase to all in-between phases
         # so that we don't miss any rust event
