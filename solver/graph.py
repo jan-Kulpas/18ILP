@@ -9,6 +9,7 @@ from core.enums.settlement_location import SettlementLocation
 from core.game import Game
 from core.hex import Hex
 from core.railway import Railway
+from core.settlement import City
 from core.tile import Segment
 from core.train import Train
 
@@ -94,6 +95,7 @@ class Graph:
 
         self.trains = {idx: train for idx, train in enumerate(railway.trains)}
         self.home_nodes = set(self._get_station_segment_nodes(railway))
+        self.railway: Railway = railway
 
         queue: deque[Node] = deque(self.home_nodes)
 
@@ -126,10 +128,13 @@ class Graph:
         # print(f"Visiting city: {node}")
         self.cities.add(node)
 
+        # Abort if blocked, can't pass through
+        match city := self.game.board.settlement_at(node):
+            case City():
+                if city.is_blocking_for(self.railway):
+                    return
+
         hex = node.hex
-
-        # TODO: check if blocked
-
         # Add outgoing edge to every junction and queue that junction
         for direction in self.game.board.segment_at(node).tracks:
             neighbour = hex.neighbour(direction)
