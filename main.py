@@ -1,5 +1,6 @@
 from __future__ import annotations
 import sys
+import argparse
 
 from PyQt6.QtWidgets import (
     QApplication,
@@ -91,8 +92,12 @@ class Window(QWidget):
     def __init__(self, game: Game):
         super().__init__()
         self.game = game
-        # self.pathfinder = Pathfinder(game)
-        self.pathfinder = Bruteforcer(game)
+
+        if args.bruteforce:
+            print("Running in Bruteforce mode! Expect the app to freeze under heavy load!")
+            self.pathfinder = Bruteforcer(game)
+        else: 
+            self.pathfinder = Pathfinder(game)
 
         self.menu = MenuBar(self)
         self.tile_selector = TileSelector(self)
@@ -146,8 +151,15 @@ class Window(QWidget):
 
 
 if __name__ == "__main__":
+    # Argument parsing
+    parser = argparse.ArgumentParser(description="Run the game.")
+    parser.add_argument("-b", "--bruteforce", action="store_true",
+                        help="Enable brute force mode")
+    args = parser.parse_args()
+
+    # App initialization
     game = Game("1889")
-    game.load("save.json")
+    # game.load("save.json")
 
     app = QApplication(sys.argv)
     window = Window(game)
