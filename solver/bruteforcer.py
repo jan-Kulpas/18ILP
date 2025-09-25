@@ -165,6 +165,7 @@ class Bruteforcer:
         if len(routes) < len(trains):
             raise ValueError("List B must be at least as long as list A")
 
+        # ! why is min here if we're checking for inequality before anyway
         # For every number of actual elements to assign from B (0 to min(len(A), len(B)))
         for k in range(min(len(trains), len(routes)) + 1):
             # All combinations of B elements to use (choose k out of B)

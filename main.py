@@ -25,6 +25,7 @@ from gui.sidebar import SIDEBAR_WIDTH, Sidebar
 from gui.tile_selector import TileSelector
 from gui.train_selector import TrainSelector
 from solver.bruteforcer import Bruteforcer
+from solver.graph import Graph, Solution
 from solver.pathfinder import Pathfinder
 
 WIDTH = 1200
@@ -113,6 +114,8 @@ class Window(QWidget):
         self.canvas = Canvas(self)  # Widget for custom painting
         self.canvas.setMinimumWidth(WIDTH - SIDEBAR_WIDTH)
 
+        # self.canvas.solution = Solution.from_unsolved_graph(Graph(game, game.railways["TR"]))
+
         self.sidebar = Sidebar(
             self.tile_selector, self.train_selector, self.railway_selector, self.logbox
         )
@@ -159,7 +162,7 @@ if __name__ == "__main__":
 
     # App initialization
     game = Game("1889")
-    # game.load("save.json")
+    game.load("islands.json")
 
     app = QApplication(sys.argv)
     window = Window(game)

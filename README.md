@@ -19,7 +19,13 @@ After converting the board state to a graph, 18xx Router creates decision variab
 
 ## Usage
 
-After cloning, set up a venv and install all required dependencies, then run the app using the following command in the cloned folder:
+After cloning, set up a venv and install all required dependencies using the following command in the cloned folder:
+
+``` bash
+pip install -r ./requirements.txt
+```
+
+Then run the app:
 
 ``` bash
 python -m main

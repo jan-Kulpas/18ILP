@@ -223,6 +223,10 @@ class Solution:
         )
 
         return Solution(value, graph, nodes, edges, cities)
+    
+    @classmethod
+    def from_unsolved_graph(cls, graph: Graph) -> Solution:
+        return Solution(0, graph, {0:graph.nodes}, {0:graph.edges}, {0:graph.cities})
 
     @property
     def trains_with_subtour(self) -> dict[int, Train]:

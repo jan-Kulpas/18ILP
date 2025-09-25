@@ -105,9 +105,9 @@ class Renderer:
 
         self.painter.setBrush(QBrush(color))
 
-        # for node in nodes:
-        #     center = node2point(node)
-        #     self.painter.drawEllipse(center, CITY_RADIUS, CITY_RADIUS)
+        for node in nodes:
+            center = node2point(node)
+            self.painter.drawEllipse(center, CITY_RADIUS - 5, CITY_RADIUS - 5)
 
         for edge in edges:
             p1, p2 = (node2point(node) for node in edge)
