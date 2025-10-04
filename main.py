@@ -162,7 +162,7 @@ if __name__ == "__main__":
 
     # App initialization
     game = Game("1889")
-    game.load("islands.json")
+    # game.load("save.json")
 
     app = QApplication(sys.argv)
     window = Window(game)

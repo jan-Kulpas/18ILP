@@ -56,7 +56,7 @@ class Bruteforcer:
         print(f"Train-Route pairings for {len(railway.trains)}: {sum(1 for _ in self._train_route_pairings(railway.trains, merged_routes))}")
 
         best_value = 0
-        best_pairing = None
+        best_pairing = {}
 
         for pairing in self._train_route_pairings(railway.trains, merged_routes):
             value = 0
@@ -73,9 +73,9 @@ class Bruteforcer:
                 best_value = value
                 best_pairing = pairing
 
-        nodes: dict[int, set[Node]] = {}
-        edges: dict[int, set[Edge]] = {}
-        cities: dict[int, set[CityNode]] = {}
+        nodes: dict[int, set[Node]] = {i: set() for i in range(len(railway.trains))}
+        edges: dict[int, set[Edge]] = {i: set() for i in range(len(railway.trains))}
+        cities: dict[int, set[CityNode]] = {i: set() for i in range(len(railway.trains))}
 
         for i, tup in enumerate(best_pairing): # type: ignore
             _, route = tup
@@ -162,8 +162,8 @@ class Bruteforcer:
     def _train_route_pairings(
         self, trains: list[Train], routes: set[Route]
     ) -> Iterator[list[tuple[Train, Route | None]]]:
-        if len(routes) < len(trains):
-            raise ValueError("List B must be at least as long as list A")
+        # if len(routes) < len(trains):
+        #     raise ValueError("List B must be at least as long as list A")
 
         # ! why is min here if we're checking for inequality before anyway
         # For every number of actual elements to assign from B (0 to min(len(A), len(B)))

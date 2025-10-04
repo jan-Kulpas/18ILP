@@ -189,21 +189,37 @@ class Pathfinder:
         solution = Solution.from_ilp(graph, a, v, e, c)
         subtour_counter = 0
 
+        # ? old inefficient constraint
+        # while solution.trains_with_subtour:
+        #     print("DETECTED SUBTOURS - RERUNNING")
+        #     subtour_counter += 1
+
+        #     for train in solution.trains_with_subtour:
+        #         problem += (
+        #             lpSum(e[train][edge] for edge in solution.edges[train])
+        #             <= len(solution.edges[train]) - 1
+        #         )
+
+        #     problem.solve()
+        #     solution = Solution.from_ilp(graph, a, v, e, c)
+
+        # ? new shiny almost improved constraint
+        # TODO: make it not use parts of the old constraint and refactor
         while solution.trains_with_subtour:
             print("DETECTED SUBTOURS - RERUNNING")
             subtour_counter += 1
 
             for train in solution.trains_with_subtour:
                 problem += (
-                    lpSum(e[train][edge] for edge in solution.edges[train])
-                    <= len(solution.edges[train]) - 1
+                    lpSum(e[train][edge] for edge in solution.subtour_edges(train))
+                    <= len(solution.subtour_edges(train)) - 1
                 )
-
+            
             problem.solve()
             solution = Solution.from_ilp(graph, a, v, e, c)
 
         print(solution)
-
+        print(f"RERUNS NEEDED: {subtour_counter}")
         return solution
 
 

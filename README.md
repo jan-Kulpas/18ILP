@@ -30,3 +30,9 @@ Then run the app:
 ``` bash
 python -m main
 ```
+
+The app also provides a naive brute-force implementation of the pathfinding algorithm for testing purposes with you can enable by running the app with the `-b` flag:
+
+``` bash
+python -m main -b
+```

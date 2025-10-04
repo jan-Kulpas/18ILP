@@ -262,6 +262,61 @@ class Solution:
                     stack.append(neighbor)
 
         return len(nodes) != len(visited)
+    
+    # TODO: Cleanup this bandaid solution
+    def subtour_edges(self, idx: int) -> list['Edge']:
+        """
+        Returns a list of edges forming a subtour (cycle) for the given train index,
+        or an empty list if no subtour exists.
+        """
+        nodes = self.nodes[idx]
+        edges = self.edges[idx]
+
+        if len(nodes) == 0 or len(edges) == 0:
+            return []
+
+        # Build adjacency dictionary mapping nodes to edges
+        adjacency: dict[Node, list[Edge]] = {}
+        for edge in edges:
+            u, v = edge.nodes
+            adjacency.setdefault(u, []).append(edge)
+            adjacency.setdefault(v, []).append(edge)
+
+        visited: set[Node] = set()
+        parent: dict[Node, Node | None] = {}
+
+        def dfs(node: 'Node', par: 'Node | None') -> list['Edge'] | None:
+            visited.add(node)
+            parent[node] = par
+            for edge in adjacency[node]:
+                u, v = edge.nodes
+                neighbor = v if u == node else u
+                if neighbor not in visited:
+                    result = dfs(neighbor, node)
+                    if result:
+                        return result
+                elif neighbor != par:
+                    # Found a cycle; reconstruct edges in the cycle
+                    cycle_edges = [edge]
+                    current = node
+                    while current != neighbor:
+                        prev = parent[current]
+                        # Find the edge connecting current and prev
+                        for e in adjacency[current]:
+                            if prev in e.nodes:
+                                cycle_edges.append(e)
+                                break
+                        current = prev
+                    return cycle_edges
+            return None
+
+        for node in nodes:
+            if node not in visited:
+                cycle = dfs(node, None)
+                if cycle:
+                    return cycle
+
+        return []
 
     def __str__(self) -> str:
         s = ""
